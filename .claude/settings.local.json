@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(npx create-next-app@latest:*)",
-      "Bash(npx shadcn@latest:*)"
+      "Bash(npx shadcn@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(npm run:*)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(node:*)",
+      "Bash(mkdir -p /Users/hapi330/kodomo-support-3/public/uploads/pending)",
+      "Bash(mkdir -p /Users/hapi330/kodomo-support-3/src/data)",
+      "Bash(mkdir -p /Users/hapi330/kodomo-support-3/scripts)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(echo \"exit:$?\")"
     ]
   }
 }
