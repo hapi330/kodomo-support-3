@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 export default function Header({ totalXP, childName, streak }: HeaderProps) {
-  const [time, setTime] = useState(() => new Date());
+  const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
@@ -24,11 +24,15 @@ export default function Header({ totalXP, childName, streak }: HeaderProps) {
   const xpPct = Math.min(100, Math.round((xpProgress / xpNeeded) * 100));
 
   const pad = (n: number) => String(n).padStart(2, "0");
-  const timeStr = `${pad(time.getHours())}:${pad(time.getMinutes())}:${pad(time.getSeconds())}`;
-  const dateStr = `${time.getFullYear()}/${pad(time.getMonth() + 1)}/${pad(time.getDate())}`;
+  const timeStr = time
+    ? `${pad(time.getHours())}:${pad(time.getMinutes())}:${pad(time.getSeconds())}`
+    : "--:--:--";
+  const dateStr = time
+    ? `${time.getFullYear()}/${pad(time.getMonth() + 1)}/${pad(time.getDate())}`
+    : "----/--/--";
 
   const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
-  const dayStr = `(${dayNames[time.getDay()]})`;
+  const dayStr = time ? `(${dayNames[time.getDay()]})` : "";
 
   return (
     <header
@@ -66,10 +70,11 @@ export default function Header({ totalXP, childName, streak }: HeaderProps) {
             <div
               className="pixel-font text-2xl font-bold tracking-widest"
               style={{ color: "#7FFF00", textShadow: "0 0 10px rgba(127,255,0,0.5)" }}
+              suppressHydrationWarning
             >
               {timeStr}
             </div>
-            <div className="text-xs" style={{ color: "#A0C878" }}>
+            <div className="text-xs" style={{ color: "#A0C878" }} suppressHydrationWarning>
               {dateStr} {dayStr}
             </div>
           </div>

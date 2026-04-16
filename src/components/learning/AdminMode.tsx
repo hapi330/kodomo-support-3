@@ -1,11 +1,99 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useReducer, useState } from "react";
 import { SUBJECTS, DEFAULT_LEARNER_PROFILE } from "@/lib/config";
-import type { PendingTask } from "@/lib/pending-task";
 import { mcField, mcFieldRaised } from "@/lib/mc-styles";
+import {
+  toFinalOutput,
+  type OcrGenre,
+  type OcrLanguage,
+} from "@/lib/ocr-format";
+import OcrWorkflowPanel from "@/components/learning/OcrWorkflowPanel";
+import { useOcrWorkflow } from "@/components/learning/useOcrWorkflow";
+type TaskSaveStatus = { type: "ok" | "err" | "info"; msg: string };
+const OCR_SUCCESS_MESSAGE = "✅ 暫定文字起こしを作成しました。内容確認後に確定してください。";
+const OCR_FINALIZE_MESSAGE = "✅ 最終確定テキストを反映しました。保存を実行してください。";
+const SAVE_SUCCESS_MESSAGE = "✅ クエストを生成しました。学習タブでそのまま挑戦できます。";
 
 interface AdminModeProps {
   defaultTargetName: string;
+}
+
+type OcrState = {
+  file: File | null;
+  draftText: string;
+  editableText: string;
+  flags: string[];
+  approvalMessage: string;
+  language: OcrLanguage;
+  genre: OcrGenre;
+  reviewNote: string;
+  finalOutput: string;
+};
+
+type OcrAction =
+  | { type: "set-file"; file: File | null }
+  | {
+      type: "apply-result";
+      payload: {
+        draftText: string;
+        flags: string[];
+        approvalMessage: string;
+        language: OcrLanguage;
+        genre: OcrGenre;
+      };
+    }
+  | { type: "set-editable-text"; value: string }
+  | { type: "set-review-note"; value: string }
+  | { type: "set-final-output"; value: string }
+  | { type: "clear-draft" };
+
+const INITIAL_OCR_STATE: OcrState = {
+  file: null,
+  draftText: "",
+  editableText: "",
+  flags: [],
+  approvalMessage: "",
+  language: "日本語",
+  genre: "算数",
+  reviewNote: "",
+  finalOutput: "",
+};
+
+function ocrReducer(state: OcrState, action: OcrAction): OcrState {
+  switch (action.type) {
+    case "set-file":
+      return { ...state, file: action.file };
+    case "apply-result":
+      return {
+        ...state,
+        draftText: action.payload.draftText,
+        editableText: action.payload.draftText,
+        flags: action.payload.flags,
+        approvalMessage: action.payload.approvalMessage,
+        language: action.payload.language,
+        genre: action.payload.genre,
+        reviewNote: "",
+        finalOutput: "",
+      };
+    case "set-editable-text":
+      return { ...state, editableText: action.value };
+    case "set-review-note":
+      return { ...state, reviewNote: action.value };
+    case "set-final-output":
+      return { ...state, finalOutput: action.value };
+    case "clear-draft":
+      return {
+        ...state,
+        draftText: "",
+        editableText: "",
+        flags: [],
+        approvalMessage: "",
+        reviewNote: "",
+        finalOutput: "",
+      };
+    default:
+      return state;
+  }
 }
 
 export default function AdminMode({ defaultTargetName }: AdminModeProps) {
@@ -14,50 +102,102 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
   const [subject, setSubject]           = useState(SUBJECTS[0].key);
   const [title, setTitle]               = useState("");
   const [rawText, setRawText]           = useState("");
-  const [isSaving, setIsSaving]         = useState(false);
-  const [status, setStatus]             = useState<{ type: "ok" | "err" | "info"; msg: string } | null>(null);
-  const [savedTask, setSavedTask]       = useState<PendingTask | null>(null);
+  const [status, setStatus] = useState<TaskSaveStatus | null>(null);
+  const [ocrState, dispatchOcr] = useReducer(ocrReducer, INITIAL_OCR_STATE);
+  const { isRunning: isOcrRunning, progress: ocrProgress, progressLabel: ocrProgressLabel, runOcr } =
+    useOcrWorkflow();
 
-  // 既存の保存済みタスクをロード
-  useEffect(() => {
-    fetch("/api/save-task")
-      .then((r) => r.json())
-      .then((data) => { if (data) setSavedTask(data); })
-      .catch(() => {});
-  }, []);
+  const setErrorStatus = (error: unknown) => {
+    setStatus({ type: "err", msg: `❌ ${error instanceof Error ? error.message : String(error)}` });
+  };
+
+  const clearOcrDraft = () => {
+    dispatchOcr({ type: "clear-draft" });
+  };
 
   const selectedSubject = SUBJECTS.find((s) => s.key === subject) ?? SUBJECTS[0];
 
-  const handleSave = async () => {
-    if (!title.trim()) { setStatus({ type: "err", msg: "タイトルを入力してください" }); return; }
-    if (!rawText.trim()) { setStatus({ type: "err", msg: "テキストを貼り付けてください" }); return; }
+  const handleRunOcr = async () => {
+    if (!ocrState.file) {
+      setStatus({ type: "err", msg: "OCRする画像を選択してください" });
+      return;
+    }
 
-    setIsSaving(true);
-    setStatus({ type: "info", msg: "⏳ 保存中..." });
+    setStatus({ type: "info", msg: "⏳ OCR実行中..." });
     try {
-      const task: Omit<PendingTask, "savedAt"> = {
-        targetName: targetName.trim() || defaultTargetName,
-        targetProfile: targetProfile.trim(),
-        subject,
-        title: title.trim(),
-        rawText: rawText.trim(),
-      };
-      const res = await fetch("/api/save-task", {
+      const ocrResult = await runOcr(ocrState.file);
+      dispatchOcr({
+        type: "apply-result",
+        payload: {
+          draftText: ocrResult.draftText,
+          flags: ocrResult.flags,
+          approvalMessage: ocrResult.approvalMessage,
+          language: ocrResult.language,
+          genre: ocrResult.genre,
+        },
+      });
+      setStatus({ type: "ok", msg: OCR_SUCCESS_MESSAGE });
+    } catch (e) {
+      setErrorStatus(e);
+    }
+  };
+
+  const finalizeOcr = (userEdited: boolean) => {
+    if (!ocrState.editableText.trim()) {
+      setStatus({ type: "err", msg: "確定する本文が空です" });
+      return;
+    }
+
+    const finalText = ocrState.editableText.trim();
+    const finalOutput = toFinalOutput({
+      finalText,
+      language: ocrState.language,
+      genre: ocrState.genre,
+      userEdited,
+    });
+
+    setRawText(finalText);
+    if (!title.trim() && ocrState.file) {
+      setTitle(ocrState.file.name.replace(/\.[^/.]+$/, ""));
+    }
+    dispatchOcr({ type: "set-final-output", value: finalOutput });
+    setStatus({ type: "ok", msg: OCR_FINALIZE_MESSAGE });
+  };
+
+  const handleSave = async () => {
+    const trimmedTitle = title.trim();
+    const trimmedRawText = rawText.trim();
+
+    if (!trimmedTitle) {
+      setStatus({ type: "err", msg: "タイトルを入力してください" });
+      return;
+    }
+    if (!trimmedRawText) {
+      setStatus({ type: "err", msg: "テキストを貼り付けてください" });
+      return;
+    }
+    setStatus({ type: "info", msg: "⏳ クエストを生成中..." });
+    try {
+      const res = await fetch("/api/problems", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(task),
+        body: JSON.stringify({
+          title: trimmedTitle,
+          subject,
+          rawText: trimmedRawText,
+        }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "保存失敗");
+      const payload = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        throw new Error(payload.error ?? "クエスト生成に失敗しました");
+      }
 
-      setSavedTask({ ...task, savedAt: new Date().toISOString() });
+      clearOcrDraft();
       setTitle("");
       setRawText("");
-      setStatus({ type: "ok", msg: "✅ クエストデータを保存しました！あとは Claude に「問題を作って」と伝えるだけです。" });
-    } catch (e) {
-      setStatus({ type: "err", msg: `❌ ${e instanceof Error ? e.message : String(e)}` });
-    } finally {
-      setIsSaving(false);
+      setStatus({ type: "ok", msg: SAVE_SUCCESS_MESSAGE });
+    } catch (error) {
+      setErrorStatus(error);
     }
   };
 
@@ -71,7 +211,7 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
       >
         <div className="font-black text-base mb-1">⚔️ クエスト作成モード</div>
         <div style={{ color: "#9CA3AF" }}>
-          テキストを貼り付けて保存 → Claude に問題生成を依頼
+          OCRで読み込んだテキストを確定し、アプリ内で問題作成します
         </div>
       </div>
 
@@ -111,7 +251,7 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
 
         <div>
           <label className="text-xs mb-1 block" style={{ color: "#9CA3AF" }}>
-            プロフィール <span style={{ color: "#6B7280" }}>（Claude が問題生成時に参照）</span>
+            プロフィール <span style={{ color: "#6B7280" }}>（問題生成時に参照）</span>
           </label>
           <textarea
             value={targetProfile}
@@ -166,6 +306,24 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
           />
         </div>
 
+        <OcrWorkflowPanel
+          isOcrRunning={isOcrRunning}
+          draftText={ocrState.draftText}
+          editableText={ocrState.editableText}
+          flags={ocrState.flags}
+          approvalMessage={ocrState.approvalMessage}
+          reviewNote={ocrState.reviewNote}
+          finalOutput={ocrState.finalOutput}
+          progress={ocrProgress}
+          progressLabel={ocrProgressLabel}
+          onFileChange={(file) => dispatchOcr({ type: "set-file", file })}
+          onRunOcr={handleRunOcr}
+          onEditableTextChange={(value) => dispatchOcr({ type: "set-editable-text", value })}
+          onReviewNoteChange={(value) => dispatchOcr({ type: "set-review-note", value })}
+          onFinalizeOk={() => finalizeOcr(false)}
+          onFinalizeEdited={() => finalizeOcr(true)}
+        />
+
         <div>
           <label className="text-xs mb-1 block" style={{ color: "#9CA3AF" }}>
             本文テキスト
@@ -192,10 +350,9 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
 
         <button
           onClick={handleSave}
-          disabled={isSaving}
-          className="mc-btn mc-btn-gold w-full py-3 text-base font-black disabled:opacity-50"
+          className="mc-btn mc-btn-gold w-full py-3 text-base font-black"
         >
-          {isSaving ? "⏳ 保存中..." : `⚔️ ${targetName || defaultTargetName}くんのクエストを生成！`}
+          ⚔️ {targetName || defaultTargetName}くんのクエストを生成！
         </button>
       </section>
 
@@ -213,49 +370,6 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
         </div>
       )}
 
-      {/* ── 保存済みタスクのプレビュー ── */}
-      {savedTask && (
-        <section
-          className="p-4 rounded-lg space-y-2"
-          style={{ background: "#1A1A2E", border: "2px solid #4A4A6A" }}
-        >
-          <div className="text-xs font-bold" style={{ color: "#A78BFA" }}>
-            📋 直近の保存済みタスク
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <span style={{ color: "#6B7280" }}>対象者: </span>
-              <span style={{ color: "#E8E8E8" }}>{savedTask.targetName}</span>
-            </div>
-            <div>
-              <span style={{ color: "#6B7280" }}>教科: </span>
-              <span style={{ color: "#E8E8E8" }}>{savedTask.subject}</span>
-            </div>
-            <div className="col-span-2">
-              <span style={{ color: "#6B7280" }}>タイトル: </span>
-              <span style={{ color: "#E8E8E8" }}>{savedTask.title}</span>
-            </div>
-            <div className="col-span-2">
-              <span style={{ color: "#6B7280" }}>保存日時: </span>
-              <span style={{ color: "#E8E8E8" }}>
-                {new Date(savedTask.savedAt).toLocaleString("ja-JP")}
-              </span>
-            </div>
-          </div>
-          <div
-            className="p-2 rounded text-xs"
-            style={{ background: "#0D0D1A", color: "#6B7280", fontFamily: "monospace", maxHeight: 80, overflowY: "auto" }}
-          >
-            {savedTask.rawText.slice(0, 200)}{savedTask.rawText.length > 200 ? "…" : ""}
-          </div>
-          <div
-            className="p-2 rounded text-xs text-center"
-            style={{ background: "#1E2E1E", border: "1px solid #17DD62", color: "#17DD62" }}
-          >
-            ターミナルで Claude に「pending_task.json から問題を作って」と伝えてください
-          </div>
-        </section>
-      )}
     </div>
   );
 }

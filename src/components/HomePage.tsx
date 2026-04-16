@@ -43,20 +43,34 @@ const TIMER_MINUTES = [5, 10, 15, 20, 30] as const;
 
 export default function HomePage() {
   const [state, setState] = useState<AppState | null>(null);
+  const [initError, setInitError] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+
+    queueMicrotask(() => {
+      if (cancelled) return;
+      try {
+        const loaded = loadState();
+        const updated = updateStreak(loaded);
+        saveState(updated);
+        setState(updated);
+      } catch (error) {
+        console.error("Failed to initialize app state:", error);
+        setInitError("初期化に失敗しました。再読み込みしてください。");
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const [tab, setTab] = useState<Tab>("home");
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminInput, setAdminInput] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
   const [showAdminPrompt, setShowAdminPrompt] = useState(false);
   const [levelUpMsg, setLevelUpMsg] = useState("");
-
-  useEffect(() => {
-    const loaded = loadState();
-    const updated = updateStreak(loaded);
-    saveState(updated);
-    const t = window.setTimeout(() => setState(updated), 0);
-    return () => window.clearTimeout(t);
-  }, []);
 
   const updateState = useCallback((updater: (prev: AppState) => AppState) => {
     setState((prev) => {
@@ -118,7 +132,7 @@ export default function HomePage() {
         <div className="text-center space-y-4">
           <div className="text-6xl animate-float">⛏️</div>
           <div className="pixel-font text-xl" style={{ color: "#7DC53D" }}>
-            ロード中…
+            {initError ?? "ロード中…"}
           </div>
         </div>
       </div>

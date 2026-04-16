@@ -32,6 +32,6 @@ export function getSubject(key: string): SubjectConfig {
   return SUBJECTS.find((s) => s.key === normalized) ?? SUBJECTS[SUBJECTS.length - 1];
 }
 
-/** 対象者プロファイルのデフォルト（Claude 解析時の参考情報） */
+/** 対象者プロファイルのデフォルト（問題生成時の参考情報） */
 export const DEFAULT_LEARNER_PROFILE =
   "ASD・読み書き学習障害のある小学6年生。漢字の読み書きが苦手。視覚的サポートと段階的ヒントが有効。";

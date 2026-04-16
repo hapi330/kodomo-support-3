@@ -160,7 +160,7 @@ export default function LearnerMode({
             お父さんに写真をお願いしてね 📸
           </div>
           <div className="text-sm mt-3" style={{ color: "#6B7280" }}>
-            写真をアップロードしたら、Claude が問題を作ってくれるよ
+            写真をアップロードしたら、アプリで問題を作るよ
           </div>
         </div>
         <div className="flex justify-center gap-3 text-3xl">
