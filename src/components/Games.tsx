@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { TypingCategoryArt } from "@/components/games/TypingCategoryArt";
+import type { GameThemeId } from "@/lib/game-themes";
 import { playCorrect, playWrong, playClick, speak } from "@/lib/sounds";
 import { mcField } from "@/lib/mc-styles";
 
@@ -11,43 +13,190 @@ interface GamesProps {
   childName: string;
 }
 
-const DADJOKES = [
-  { joke: "なぜスティーブはクリーパーが苦手なの？", punchline: "ちかづくと、どっか～ん！ってするから！💥" },
-  { joke: "マインクラフトで一番やさしいモブは？", punchline: "村人！いつも「うーん」とかいいながら助けてくれる！" },
-  { joke: "エンダーマンが怒る理由は？", punchline: "目が合っちゃったから…照れてるだけだよ！👁" },
-  { joke: "ダイヤモンドを掘りすぎるとどうなる？", punchline: "持ちすぎて…ピカピカしすぎちゃう！💎" },
-  { joke: "ゾンビがマインクラフトを好きな理由は？", punchline: "ブレインズ（脳みそ）じゃなくて、ブロック集めが楽しいから！🧟" },
-  { joke: "スケルトンが算数が得意な理由は？", punchline: "骨（bone）の数を数えるのが上手だから！💀" },
-  { joke: "なぜエンチャントの本は重い？", punchline: "魔法がいっぱい詰まってるから！📖✨" },
+type TypingWord = { word: string; jp: string };
+
+const TYPING_WORD_CATEGORIES: {
+  id: GameThemeId;
+  label: string;
+  icon: string;
+  panelBorder: string;
+  wordColor: string;
+  words: TypingWord[];
+}[] = [
+  {
+    id: "manabi",
+    label: "学び（6年）",
+    icon: "📚",
+    panelBorder: "#3B82F6",
+    wordColor: "#93C5FD",
+    words: [
+      { word: "multiply", jp: "かける（掛け算）" },
+      { word: "divide", jp: "わる（割り算）" },
+      { word: "fraction", jp: "分数" },
+      { word: "kanji", jp: "漢字" },
+      { word: "textbook", jp: "教科書" },
+      { word: "homework", jp: "宿題" },
+      { word: "equation", jp: "式" },
+      { word: "answer", jp: "答え" },
+      { word: "problem", jp: "問題" },
+      { word: "remainder", jp: "あまり" },
+      { word: "decimal", jp: "小数" },
+      { word: "study", jp: "勉強" },
+    ],
+  },
+  {
+    id: "norimono",
+    label: "乗り物",
+    icon: "🚄",
+    panelBorder: "#38BDF8",
+    wordColor: "#7DD3FC",
+    words: [
+      { word: "airplane", jp: "飛行機" },
+      { word: "airport", jp: "空港" },
+      { word: "pilot", jp: "パイロット" },
+      { word: "runway", jp: "滑走路" },
+      { word: "wing", jp: "翼" },
+      { word: "shinkansen", jp: "新幹線" },
+      { word: "plarail", jp: "プラレール" },
+      { word: "train", jp: "電車" },
+      { word: "station", jp: "駅" },
+      { word: "tunnel", jp: "トンネル" },
+      { word: "rail", jp: "レール" },
+      { word: "jet", jp: "ジェット機" },
+    ],
+  },
+  {
+    id: "kyara",
+    label: "キャラクター",
+    icon: "🎭",
+    panelBorder: "#A855F7",
+    wordColor: "#D8B4FE",
+    words: [
+      { word: "minecraft", jp: "マインクラフト" },
+      { word: "creeper", jp: "クリーパー" },
+      { word: "mario", jp: "マリオ" },
+      { word: "mushroom", jp: "キノコ" },
+      { word: "yokai", jp: "妖怪" },
+      { word: "medal", jp: "メダル" },
+      { word: "detective", jp: "探偵" },
+      { word: "mystery", jp: "なぞ" },
+      { word: "survival", jp: "サバイバル" },
+      { word: "science", jp: "科学" },
+      { word: "block", jp: "ブロック" },
+      { word: "hero", jp: "ヒーロー" },
+    ],
+  },
+  {
+    id: "seikatsu",
+    label: "生活",
+    icon: "🏠",
+    panelBorder: "#22C55E",
+    wordColor: "#86EFAC",
+    words: [
+      { word: "safety", jp: "安全" },
+      { word: "health", jp: "健康" },
+      { word: "bicycle", jp: "自転車" },
+      { word: "traffic", jp: "交通" },
+      { word: "manners", jp: "マナー" },
+      { word: "weather", jp: "天気" },
+      { word: "calendar", jp: "カレンダー" },
+      { word: "money", jp: "お金" },
+      { word: "friend", jp: "友だち" },
+      { word: "home", jp: "家" },
+      { word: "cook", jp: "料理" },
+      { word: "sleep", jp: "睡眠" },
+    ],
+  },
 ];
 
-const MINECRAFT_WORDS = [
-  { word: "creeper", jp: "クリーパー" },
-  { word: "diamond", jp: "ダイヤモンド" },
-  { word: "crafting", jp: "クラフト" },
-  { word: "enderman", jp: "エンダーマン" },
-  { word: "skeleton", jp: "スケルトン" },
-  { word: "enchant", jp: "エンチャント" },
-  { word: "nether", jp: "ネザー" },
-  { word: "village", jp: "村" },
-  { word: "zombie", jp: "ゾンビ" },
-  { word: "furnace", jp: "かまど" },
-  { word: "pickaxe", jp: "つるはし" },
-  { word: "redstone", jp: "レッドストーン" },
+type RiddleItem = { question: string; answer: string };
+
+const RIDDLE_CATEGORIES: {
+  id: GameThemeId;
+  label: string;
+  icon: string;
+  panelBorder: string;
+  riddles: RiddleItem[];
+}[] = [
+  {
+    id: "manabi",
+    label: "学び（6年）",
+    icon: "📚",
+    panelBorder: "#3B82F6",
+    riddles: [
+      { question: "漢字「森」は「木」がいくつ並んだ形？", answer: "3つ" },
+      { question: "12÷3の答えは？", answer: "4" },
+      { question: "7×8の答えは？（九九）", answer: "56" },
+      { question: "分数 1/2＋1/4 を計算すると？（答えは分数で）", answer: "3/4" },
+      { question: "割り算で「わる数」が大きいほど答えは？", answer: "小さくなる" },
+      { question: "文章題で「あつめた数」から「つかった数」を引くと？", answer: "のこり" },
+      { question: "国語で「主語」とは文のなかのだれ・なにを指す？", answer: "だれが・なにが" },
+      { question: "小数 0.5 は分数でいうと？", answer: "2分の1" },
+      { question: "三角形の内角の和は何度？", answer: "180度" },
+      { question: "漢字「働」の部首は？", answer: "にんべん" },
+    ],
+  },
+  {
+    id: "norimono",
+    label: "乗り物",
+    icon: "🚄",
+    panelBorder: "#38BDF8",
+    riddles: [
+      { question: "飛行機が離陸する長い道の名前は？", answer: "滑走路" },
+      { question: "飛行機を操縦する人の職業は？", answer: "パイロット" },
+      { question: "プラレールのレールが曲がっている部分は？", answer: "カーブ" },
+      { question: "のぞみやひかりがある、とても速い鉄道は？", answer: "新幹線" },
+      { question: "電車がとまる、人が乗る高い場所は？", answer: "ホーム" },
+      { question: "飛行機の大きな羽の名前は？", answer: "主翼" },
+      { question: "空港で飛行機に乗る前に保安検査を受ける流れをなんという？", answer: "搭乗手続き" },
+      { question: "電車に乗る前にきっぷを見せる場所は？", answer: "改札" },
+      { question: "山の中を通る電車の道は？", answer: "トンネル" },
+      { question: "飛行機が着陸する施設は？", answer: "空港" },
+    ],
+  },
+  {
+    id: "kyara",
+    label: "キャラクター",
+    icon: "🎭",
+    panelBorder: "#A855F7",
+    riddles: [
+      { question: "マインクラフトで緑色で近づくと爆発する敵は？", answer: "クリーパー" },
+      { question: "マリオの双子の弟で緑の服のキャラは？", answer: "ルイージ" },
+      { question: "妖怪ウォッチで赤いネコ型の妖怪の名前は？", answer: "ジバニャン" },
+      { question: "おしりたんていシリーズで、犯人を追うのは？", answer: "たんてい" },
+      { question: "科学漫画サバイバルで、危険な場面を学ぶスタイルの本は？", answer: "サバイバル" },
+      { question: "マリオが食べると大きくなるキノコの色は？（代表的なもの）", answer: "赤" },
+      { question: "妖怪ウォッチでメダルを入れる道具は？", answer: "妖怪ウォッチ" },
+      { question: "マインクラフトで石や木を掘る道具の総称は？", answer: "ツール" },
+      { question: "ピーチ姫が住む建物は？", answer: "お城" },
+      { question: "ジャングルや砂漠で知恵を使って生き残る物語のジャンルは？", answer: "サバイバル" },
+    ],
+  },
+  {
+    id: "seikatsu",
+    label: "生活",
+    icon: "🏠",
+    panelBorder: "#22C55E",
+    riddles: [
+      { question: "地震のときまず身を守る場所は？（学校で練習するやつ）", answer: "机の下" },
+      { question: "火事のときエレベーターに乗ってはいけないのはなぜ？", answer: "閉じ込められるから" },
+      { question: "自転車に乗るとき頭にかぶるのは？", answer: "ヘルメット" },
+      { question: "食べ物を冷蔵庫に入れる主な理由は？", answer: "腐らないように" },
+      { question: "人の家にあがる前に押すのは？", answer: "インターホン" },
+      { question: "ゴミを分ける理由のひとつは？", answer: "リサイクル" },
+      { question: "夜ふかしで不足しやすく、からだの調子に影響するのは？", answer: "睡眠" },
+      { question: "道路を渡るときまず見るのは？", answer: "左右" },
+      { question: "お金を大切に使うことをなんという？", answer: "節約" },
+      { question: "友だちのものを勝手にとってはいけないのは？", answer: "盗み" },
+    ],
+  },
 ];
 
-const MINECRAFT_RIDDLES = [
-  { question: "マインクラフトでダイヤモンドが見つかる一番深い場所は？", answer: "地下" },
-  { question: "クリーパーが緑色なのはなぜ？バグで作られた生き物だから！では、最初に作られたのは何のはずだった？", answer: "ブタ" },
-  { question: "エンダーパールを投げると何ができる？", answer: "テレポート" },
-  { question: "ネザーにいる、炎を投げてくる敵の名前は？", answer: "ブレイズ" },
-  { question: "本と羽ペンを使って作れるものは？", answer: "本と羽ペン（記名済みの本）" },
-  { question: "レッドストーンで作れる基本的な装置は？", answer: "回路（スイッチや扉）" },
-  { question: "エンダードラゴンを倒した後に出てくる柱の上にあるものは？", answer: "エンドクリスタル" },
-  { question: "ウシからとれる食べ物は2種類。牛肉ともう一つは？", answer: "革（かわ）" },
-  { question: "水の中でも呼吸できるようにするエンチャントは？", answer: "水中呼吸" },
-  { question: "砂漠で見つかる、中にお宝が入った建物は？", answer: "砂漠の神殿" },
-];
+function pickRandomRiddleForTheme(theme: GameThemeId): RiddleItem {
+  const cat = RIDDLE_CATEGORIES.find((c) => c.id === theme) ?? RIDDLE_CATEGORIES[0];
+  const pool = cat.riddles;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 const REWARDS = [
   { id: "1", name: "ゲーム30分延長", cost: 200, icon: "🎮" },
@@ -73,9 +222,9 @@ export default function Games({
   speechEnabled,
   childName,
 }: GamesProps) {
-  const [activeGame, setActiveGame] = useState<"menu" | "joke" | "riddle" | "typing" | "reward">("menu");
-  const [jokeIndex, setJokeIndex] = useState(0);
-  const [showPunchline, setShowPunchline] = useState(false);
+  const [activeGame, setActiveGame] = useState<"menu" | "riddle" | "typing" | "reward">("menu");
+  const [riddleCategoryId, setRiddleCategoryId] = useState<GameThemeId>("manabi");
+  const [typingCategoryId, setTypingCategoryId] = useState<GameThemeId>("manabi");
 
   // Riddle state
   const [riddle, setRiddle] = useState<{ question: string; answer: string } | null>(null);
@@ -87,13 +236,20 @@ export default function Games({
   const [typingScore, setTypingScore] = useState(0);
   const [typingStreak, setTypingStreak] = useState(0);
 
-  const currentJoke = DADJOKES[jokeIndex % DADJOKES.length];
-  const currentWord = MINECRAFT_WORDS[currentWordIdx % MINECRAFT_WORDS.length];
+  const typingCategory =
+    TYPING_WORD_CATEGORIES.find((c) => c.id === typingCategoryId) ?? TYPING_WORD_CATEGORIES[0];
+  const typingWords = typingCategory.words;
+  const currentWord = typingWords[currentWordIdx % typingWords.length];
 
-  const fetchRiddle = () => {
+  const riddleCategoryMeta =
+    RIDDLE_CATEGORIES.find((c) => c.id === riddleCategoryId) ?? RIDDLE_CATEGORIES[0];
+
+  const fetchRiddle = (nextTheme?: GameThemeId) => {
     setRiddleResult("none");
     setRiddleAnswer("");
-    const r = MINECRAFT_RIDDLES[Math.floor(Math.random() * MINECRAFT_RIDDLES.length)];
+    const theme = nextTheme ?? riddleCategoryId;
+    if (nextTheme) setRiddleCategoryId(nextTheme);
+    const r = pickRandomRiddleForTheme(theme);
     setRiddle(r);
     if (speechEnabled) speak(r.question);
   };
@@ -122,7 +278,7 @@ export default function Games({
       setTypingScore((s) => s + xp);
       setTypingStreak((s) => s + 1);
       setTypedText("");
-      setCurrentWordIdx((i) => (i + 1) % MINECRAFT_WORDS.length);
+      setCurrentWordIdx((i) => (i + 1) % typingWords.length);
     }
   };
 
@@ -143,9 +299,8 @@ export default function Games({
         <h3 className="text-lg font-black" style={{ color: "#7DC53D" }}>
           あそびと報酬 🎮
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { key: "joke", icon: "😂", label: "デイリーダジャレ", desc: "毎日のジョーク" },
             { key: "riddle", icon: "🧩", label: "AIなぞなぞ", desc: "+50 XP" },
             { key: "typing", icon: "⌨️", label: "タイピング", desc: "+10 XP/word" },
             { key: "reward", icon: "🎁", label: "報酬交換所", desc: `${totalXP.toLocaleString()} XP所持` },
@@ -169,64 +324,52 @@ export default function Games({
     );
   }
 
-  // JOKE
-  if (activeGame === "joke") {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-black" style={{ color: "#FCD34D" }}>😂 デイリーダジャレ</h3>
-          <GamesBackButton onBack={() => setActiveGame("menu")} />
-        </div>
-        <div className="p-6 rounded-xl text-center space-y-4" style={{ background: "#1A1A0D", border: "3px solid #FCD34D" }}>
-          <div className="text-xl font-bold leading-relaxed">{currentJoke.joke}</div>
-          {!showPunchline ? (
-            <button
-              onClick={() => { setShowPunchline(true); if (speechEnabled) speak(currentJoke.punchline); }}
-              className="mc-btn mc-btn-gold px-8 py-3 text-base"
-            >
-              答えを見る！
-            </button>
-          ) : (
-            <>
-              <div
-                className="text-xl font-black animate-slide-up"
-                style={{ color: "#FCD34D" }}
-              >
-                {currentJoke.punchline}
-              </div>
-              <button
-                onClick={() => { setJokeIndex((i) => i + 1); setShowPunchline(false); }}
-                className="mc-btn mc-btn-green px-6 py-2"
-              >
-                つぎのジョーク！
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   // RIDDLE
   if (activeGame === "riddle") {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-black" style={{ color: "#5DECF5" }}>🧩 AIなぞなぞ</h3>
+          <h3 className="font-black" style={{ color: riddleCategoryMeta.panelBorder }}>
+            🧩 AIなぞなぞ
+          </h3>
           <GamesBackButton onBack={() => setActiveGame("menu")} />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {RIDDLE_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => {
+                fetchRiddle(cat.id);
+                if (soundEnabled) playClick();
+              }}
+              className="px-3 py-2 rounded-lg text-sm font-bold transition-all"
+              style={{
+                background: riddleCategoryId === cat.id ? "#0C4A6E" : "#1A1A2E",
+                border: `2px solid ${riddleCategoryId === cat.id ? cat.panelBorder : "#4B5563"}`,
+                color: riddleCategoryId === cat.id ? "#F0F9FF" : "#9CA3AF",
+              }}
+            >
+              <span className="mr-1">{cat.icon}</span>
+              {cat.label}
+            </button>
+          ))}
         </div>
         {riddle ? (
           <div className="space-y-4">
+            <div className="py-2 flex justify-center">
+              <TypingCategoryArt theme={riddleCategoryId} />
+            </div>
             <div
               className="p-5 rounded-xl text-xl font-bold leading-relaxed"
-              style={{ background: "#0D0D1A", border: "3px solid #5DECF5" }}
+              style={{ background: "#0D0D1A", border: `3px solid ${riddleCategoryMeta.panelBorder}` }}
             >
               {riddle.question}
               {speechEnabled && (
                 <button
                   onClick={() => speak(riddle.question)}
                   className="block mt-2 text-sm px-3 py-1 rounded"
-                  style={{ background: "#1A1A2E", color: "#5DECF5" }}
+                  style={{ background: "#1A1A2E", color: riddleCategoryMeta.panelBorder }}
                 >
                   🔊 きく
                 </button>
@@ -260,7 +403,7 @@ export default function Games({
                 <div className="text-xl font-black" style={{ color: riddleResult === "correct" ? "#7FFF00" : "#EF4444" }}>
                   {riddleResult === "correct" ? "せいかい！+50 XP！" : `ざんねん！こたえは「${riddle.answer}」だよ！`}
                 </div>
-                <button onClick={fetchRiddle} className="mt-3 mc-btn mc-btn-blue px-6 py-2">
+                <button type="button" onClick={() => fetchRiddle()} className="mt-3 mc-btn mc-btn-blue px-6 py-2">
                   つぎのなぞなぞ
                 </button>
               </div>
@@ -276,18 +419,57 @@ export default function Games({
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-black" style={{ color: "#A78BFA" }}>⌨️ タイピング練習</h3>
+          <h3 className="font-black" style={{ color: typingCategory.panelBorder }}>⌨️ タイピング練習</h3>
           <GamesBackButton onBack={() => setActiveGame("menu")} />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {TYPING_WORD_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => {
+                setTypingCategoryId(cat.id);
+                setCurrentWordIdx(0);
+                setTypedText("");
+                if (soundEnabled) playClick();
+              }}
+              className="px-3 py-2 rounded-lg text-sm font-bold transition-all"
+              style={{
+                background: typingCategoryId === cat.id ? "#292524" : "#1A1A2E",
+                border: `2px solid ${typingCategoryId === cat.id ? cat.panelBorder : "#4B5563"}`,
+                color: typingCategoryId === cat.id ? "#F9FAFB" : "#9CA3AF",
+              }}
+            >
+              <span className="mr-1">{cat.icon}</span>
+              {cat.label}
+            </button>
+          ))}
         </div>
         <div
           className="p-4 rounded-xl text-center space-y-3"
-          style={{ background: "#0D0D1A", border: "3px solid #A78BFA" }}
+          style={{ background: "#0D0D1A", border: `3px solid ${typingCategory.panelBorder}` }}
         >
-          <div className="flex justify-between text-sm px-2">
-            <span style={{ color: "#9CA3AF" }}>スコア: <span className="pixel-font text-lg" style={{ color: "#7FFF00" }}>{typingScore}</span></span>
-            <span style={{ color: "#9CA3AF" }}>れんぞく: <span className="pixel-font text-lg" style={{ color: "#FCD34D" }}>{typingStreak}</span></span>
+          <div className="py-2">
+            <TypingCategoryArt theme={typingCategoryId} />
           </div>
-          <div className="text-4xl font-black py-4" style={{ color: "#5DECF5", letterSpacing: "0.2em" }}>
+          <div className="flex justify-between text-sm px-2">
+            <span style={{ color: "#9CA3AF" }}>
+              スコア:{" "}
+              <span className="pixel-font text-lg" style={{ color: "#7FFF00" }}>
+                {typingScore}
+              </span>
+            </span>
+            <span style={{ color: "#9CA3AF" }}>
+              れんぞく:{" "}
+              <span className="pixel-font text-lg" style={{ color: "#FCD34D" }}>
+                {typingStreak}
+              </span>
+            </span>
+          </div>
+          <div
+            className="text-4xl font-black py-2 break-all"
+            style={{ color: typingCategory.wordColor, letterSpacing: "0.12em" }}
+          >
             {currentWord.word}
           </div>
           <div className="text-base" style={{ color: "#A0C878" }}>
@@ -302,12 +484,16 @@ export default function Games({
             className="w-full p-3 rounded text-lg text-center font-mono"
             style={{
               background: "#1A1A2E",
-              border: `2px solid ${typedText && currentWord.word.startsWith(typedText.toLowerCase()) ? "#17DD62" : "#EF4444"}`,
+              border: `2px solid ${
+                typedText && currentWord.word.toLowerCase().startsWith(typedText.toLowerCase())
+                  ? "#17DD62"
+                  : "#EF4444"
+              }`,
               color: "#E8E8E8",
             }}
           />
           <div className="text-xs" style={{ color: "#6B7280" }}>
-            問題 {(currentWordIdx % MINECRAFT_WORDS.length) + 1}/{MINECRAFT_WORDS.length}
+            問題 {(currentWordIdx % typingWords.length) + 1}/{typingWords.length}
           </div>
         </div>
       </div>

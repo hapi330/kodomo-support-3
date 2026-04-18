@@ -9,6 +9,10 @@ export interface StudyRecord {
   userAnswer: string;
   isCorrect: boolean;
   timeSpent: number; // seconds
+  /** BGMルーレットによる経験値倍率（未設定時は 1.0） */
+  xpMultiplier?: number;
+  /** セッションBGMサイクル（分） */
+  bgmCycleMinutes?: 5 | 7 | 9;
 }
 
 export interface StudySession {
@@ -61,6 +65,8 @@ export interface UploadedContent {
   editedText: string;
   uploadDate: string;
   questions: GeneratedQuestion[];
+  /** 1周クリア済み（2周目以降は完了時 +100 XP なし。編集で解除可能） */
+  studyCleared?: boolean;
 }
 
 export interface GeneratedQuestion {
@@ -83,6 +89,8 @@ export interface GeneratedQuestion {
   timesCorrect: number;
   lastAnswered?: string;
   nextReviewDate?: string;
+  /** 編集画面で追加・途中挿入した問題（見出しに「差し込み」と番号を付ける） */
+  editorInserted?: boolean;
 }
 
 export interface TimetableEntry {
@@ -187,6 +195,14 @@ export function saveState(state: AppState): void {
   } catch (e) {
     console.warn("Storage save failed:", e);
   }
+}
+
+/** アプリ起動時: 読み込み → 連続記録の更新 → 保存（クライアントの useLayoutEffect から呼ぶ） */
+export function initializeAppState(): AppState {
+  const loaded = loadState();
+  const updated = updateStreak(loaded);
+  saveState(updated);
+  return updated;
 }
 
 export function calcLevel(xp: number): number {

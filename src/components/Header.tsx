@@ -2,13 +2,21 @@
 import { useEffect, useState } from "react";
 import { calcLevel, xpForCurrentLevel, xpForNextLevel } from "@/lib/storage";
 
+export type StudyCycleTimer = {
+  /** 現在の BGM サイクル内の残り秒（5/7/9 分ルーレット） */
+  remainingSec: number;
+  cycleMin: 5 | 7 | 9;
+};
+
 interface HeaderProps {
   totalXP: number;
   childName: string;
   streak: number;
+  /** 勉強セッション中のみ：現時刻の横に「勉強時間」カウントダウンを表示 */
+  studyCycleTimer?: StudyCycleTimer | null;
 }
 
-export default function Header({ totalXP, childName, streak }: HeaderProps) {
+export default function Header({ totalXP, childName, streak, studyCycleTimer = null }: HeaderProps) {
   const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -34,16 +42,21 @@ export default function Header({ totalXP, childName, streak }: HeaderProps) {
   const dayNames = ["日", "月", "火", "水", "木", "金", "土"];
   const dayStr = time ? `(${dayNames[time.getDay()]})` : "";
 
+  const fmtCycle = (sec: number) => {
+    const s = Math.max(0, Math.floor(sec));
+    return `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
+  };
+
   return (
     <header
-      className="sticky top-0 z-50 px-4 py-3"
+      className="sticky top-0 z-50 px-4 sm:px-6 lg:px-10 py-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))]"
       style={{
         background: "linear-gradient(180deg, #1E3A14 0%, #2D2D44 100%)",
         borderBottom: "3px solid #4A8A1A",
         boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
       }}
     >
-      <div className="max-w-6xl mx-auto flex flex-col gap-2">
+      <div className="max-w-6xl lg:max-w-7xl mx-auto flex flex-col gap-2">
         {/* Top row */}
         <div className="flex items-center justify-between gap-4">
           {/* Title */}
@@ -78,6 +91,27 @@ export default function Header({ totalXP, childName, streak }: HeaderProps) {
               {dateStr} {dayStr}
             </div>
           </div>
+
+          {studyCycleTimer && (
+            <div
+              className="text-center px-4 py-2 rounded"
+              style={{ background: "#0D1A14", border: "2px solid #17DD62" }}
+            >
+              <div className="text-xs font-bold" style={{ color: "#86EFAC" }}>
+                勉強時間
+              </div>
+              <div
+                className="pixel-font text-2xl font-bold tracking-widest"
+                style={{ color: "#6EE7B7", textShadow: "0 0 8px rgba(110,231,183,0.45)" }}
+                suppressHydrationWarning
+              >
+                {fmtCycle(studyCycleTimer.remainingSec)}
+              </div>
+              <div className="text-[10px] sm:text-xs" style={{ color: "#6B7280" }}>
+                {studyCycleTimer.cycleMin}分サイクル
+              </div>
+            </div>
+          )}
 
           {/* Streak & XP summary */}
           <div className="flex items-center gap-3">

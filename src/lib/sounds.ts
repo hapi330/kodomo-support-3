@@ -2,7 +2,8 @@
 
 let audioCtx: AudioContext | null = null;
 
-function getAudioContext(): AudioContext {
+/** 効果音・BGMで共有（Web Audio） */
+export function getAudioContext(): AudioContext {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
   }
@@ -46,6 +47,12 @@ export function playCorrect(): void {
   playTone(523, 0.1, "sine", 0.3, 0);
   playTone(659, 0.1, "sine", 0.3, 0.1);
   playTone(784, 0.2, "sine", 0.3, 0.2);
+}
+
+/** クイズのヒント段階・国語向け：短い「ピンポン」2音 */
+export function playPingPong(): void {
+  playTone(1319, 0.07, "sine", 0.28, 0);
+  playTone(988, 0.09, "sine", 0.26, 0.08);
 }
 
 // Wrong answer - Minecraft hurt sound

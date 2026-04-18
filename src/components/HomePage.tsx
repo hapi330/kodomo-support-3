@@ -1,22 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import Header from "@/components/Header";
+import { useCallback, useLayoutEffect, useState } from "react";
+import Header, { type StudyCycleTimer } from "@/components/Header";
 import Timer from "@/components/Timer";
 import AdminMode from "@/components/learning/AdminMode";
 import LearnerMode from "@/components/learning/LearnerMode";
 import LifeManagement from "@/components/LifeManagement";
 import Games from "@/components/Games";
 import Dashboard from "@/components/Dashboard";
+import LanDevDataNotice from "@/components/LanDevDataNotice";
 import {
   AppState,
   CalendarEvent,
   ChoreItem,
   StudyRecord,
   calcLevel,
-  loadState,
+  initializeAppState,
   saveState,
-  updateStreak,
 } from "@/lib/storage";
 import { playLevelUp, speak } from "@/lib/sounds";
 import { mcField } from "@/lib/mc-styles";
@@ -41,36 +41,42 @@ const HOME_QUICK_LINKS: { tab: Tab; icon: string; label: string; color: string; 
 
 const TIMER_MINUTES = [5, 10, 15, 20, 30] as const;
 
+/** タブを閉じるまで「勉強クリア済み」としてあそびを解放（ブラウザを開き直すとまたロック） */
+const GAMES_UNLOCK_SESSION_KEY = "kodomo-games-unlocked";
+
 export default function HomePage() {
   const [state, setState] = useState<AppState | null>(null);
   const [initError, setInitError] = useState<string | null>(null);
-  useEffect(() => {
-    let cancelled = false;
 
-    queueMicrotask(() => {
-      if (cancelled) return;
-      try {
-        const loaded = loadState();
-        const updated = updateStreak(loaded);
-        saveState(updated);
-        setState(updated);
-      } catch (error) {
-        console.error("Failed to initialize app state:", error);
-        setInitError("初期化に失敗しました。再読み込みしてください。");
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
+  // queueMicrotask + cancelled は Strict Mode や Safari で初回 setState が飛ぶことがあるため、
+  // ブラウザでは useLayoutEffect で同期的に初期化する（初回ペイント前に state を確定）
+  useLayoutEffect(() => {
+    try {
+      // localStorage 初期化はマウント直後に1回だけ（Strict Mode でも二重保存は許容）
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- クライアント専用ストアの同期読み込み
+      setState(initializeAppState());
+    } catch (error) {
+      console.error("Failed to initialize app state:", error);
+      setInitError("初期化に失敗しました。再読み込みしてください。");
+    }
   }, []);
 
   const [tab, setTab] = useState<Tab>("home");
+  const [gamesUnlocked, setGamesUnlocked] = useState(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem(GAMES_UNLOCK_SESSION_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+  const [gamesLockHint, setGamesLockHint] = useState<string | null>(null);
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminInput, setAdminInput] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
   const [showAdminPrompt, setShowAdminPrompt] = useState(false);
   const [levelUpMsg, setLevelUpMsg] = useState("");
+  const [studyCycleTimer, setStudyCycleTimer] = useState<StudyCycleTimer | null>(null);
 
   const updateState = useCallback((updater: (prev: AppState) => AppState) => {
     setState((prev) => {
@@ -106,12 +112,39 @@ export default function HomePage() {
         ...prev,
         studyRecords: [...prev.studyRecords, record],
       }));
-      if (record.isCorrect) {
-        addXP(record.question.length > 30 ? 30 : 20);
-      }
     },
-    [updateState, addXP]
+    [updateState]
   );
+
+  const trySetTab = useCallback(
+    (next: Tab) => {
+      if (next === "games") {
+        if (!state) return;
+        const hasPlayableStudy = state.uploadedContent.some((c) => c.questions.length > 0);
+        const canPlayGames = gamesUnlocked || !hasPlayableStudy;
+        if (!canPlayGames) {
+          setGamesLockHint(
+            "まずは📚べんきょうで、問題をぜんぶクリアしよう！（さいごの「🏁 おわり！」まで）"
+          );
+          setTab("learn");
+          window.setTimeout(() => setGamesLockHint(null), 6500);
+          return;
+        }
+      }
+      setGamesLockHint(null);
+      setTab(next);
+    },
+    [state, gamesUnlocked]
+  );
+
+  const unlockGamesFromStudy = useCallback(() => {
+    try {
+      sessionStorage.setItem(GAMES_UNLOCK_SESSION_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    setGamesUnlocked(true);
+  }, []);
 
   const checkAdmin = () => {
     if (!state) return;
@@ -139,12 +172,26 @@ export default function HomePage() {
     );
   }
 
+  const studyBlocksGames =
+    state.uploadedContent.some((c) => c.questions.length > 0) && !gamesUnlocked;
+
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#1A1A2E" }}>
+    <div className="min-h-dvh flex flex-col" style={{ background: "#1A1A2E" }}>
+      <LanDevDataNotice />
+      {gamesLockHint && (
+        <div
+          className="px-4 py-3 text-center text-sm font-bold"
+          style={{ background: "#422006", borderBottom: "2px solid #F59E0B", color: "#FEF3C7" }}
+          role="status"
+        >
+          {gamesLockHint}
+        </div>
+      )}
       <Header
         totalXP={state.totalXP}
         childName={state.settings.childName}
         streak={state.streak}
+        studyCycleTimer={tab === "learn" && !isAdminMode ? studyCycleTimer : null}
       />
 
       {levelUpMsg && (
@@ -189,7 +236,7 @@ export default function HomePage() {
         </div>
       )}
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-4 pb-24">
+      <main className="flex-1 max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-10 py-4 pb-[calc(6rem+env(safe-area-inset-bottom,0px))]">
 
         {tab === "home" && (
           <div className="space-y-4 animate-slide-up">
@@ -226,7 +273,7 @@ export default function HomePage() {
                 <button
                   key={item.tab}
                   type="button"
-                  onClick={() => setTab(item.tab)}
+                  onClick={() => trySetTab(item.tab)}
                   className="mc-panel mc-card-hover p-4 text-left cursor-pointer"
                 >
                   <div className="text-3xl mb-2">{item.icon}</div>
@@ -299,9 +346,12 @@ export default function HomePage() {
             ) : (
               <LearnerMode
                 soundEnabled={state.settings.soundEnabled}
-                speechEnabled={state.settings.speechEnabled}
                 onAnswer={handleAnswer}
+                onXPGain={addXP}
                 childName={state.settings.childName}
+                adminPassword={state.settings.adminPassword}
+                onStudySessionComplete={unlockGamesFromStudy}
+                onStudyTimerChange={setStudyCycleTimer}
               />
             )}
           </div>
@@ -413,7 +463,9 @@ export default function HomePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-bold">音声よみあげ</div>
-                  <div className="text-xs" style={{ color: "#9CA3AF" }}>問題を読み上げる</div>
+                  <div className="text-xs" style={{ color: "#9CA3AF" }}>
+                    あそび・タイマー・ホームなど（勉強では使いません）
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -475,35 +527,43 @@ export default function HomePage() {
       </main>
 
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40"
+        className="fixed bottom-0 left-0 right-0 z-40 pb-[env(safe-area-inset-bottom,0px)]"
         style={{
           background: "linear-gradient(180deg, transparent 0%, #0D0D1A 10%)",
           borderTop: "3px solid #4A4A6A",
           backdropFilter: "blur(10px)",
         }}
       >
-        <div className="max-w-4xl mx-auto px-2 py-2">
-          <div className="flex gap-1">
-            {TABS.map((t) => (
-              <button
-                key={t.key}
-                type="button"
-                onClick={() => setTab(t.key)}
-                className="flex-1 flex flex-col items-center gap-1 py-2 rounded-lg transition-all"
-                style={{
-                  background: tab === t.key ? "#1E3A14" : "transparent",
-                  border: `2px solid ${tab === t.key ? "#5D9E2F" : "transparent"}`,
-                }}
-              >
-                <span className="text-xl">{t.icon}</span>
-                <span
-                  className="text-xs font-bold"
-                  style={{ color: tab === t.key ? "#7DC53D" : "#6B7280" }}
+        <div className="max-w-4xl lg:max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-2 lg:py-3">
+          <div className="flex gap-1 lg:gap-2">
+            {TABS.map((t) => {
+              const isGamesLocked = t.key === "games" && studyBlocksGames;
+              return (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => trySetTab(t.key)}
+                  className="flex-1 flex flex-col items-center gap-1 py-2 lg:py-3 rounded-lg transition-all min-h-[3.25rem] lg:min-h-[3.5rem]"
+                  style={{
+                    background: tab === t.key ? "#1E3A14" : "transparent",
+                    border: `2px solid ${tab === t.key ? "#5D9E2F" : "transparent"}`,
+                    opacity: isGamesLocked ? 0.55 : 1,
+                  }}
+                  aria-disabled={isGamesLocked}
+                  title={isGamesLocked ? "べんきょうをクリアするとあそべるよ" : undefined}
                 >
-                  {t.label}
-                </span>
-              </button>
-            ))}
+                  <span className="text-xl">
+                    {isGamesLocked ? "🔒" : t.icon}
+                  </span>
+                  <span
+                    className="text-xs font-bold"
+                    style={{ color: tab === t.key ? "#7DC53D" : "#6B7280" }}
+                  >
+                    {t.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </nav>

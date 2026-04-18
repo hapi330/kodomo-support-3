@@ -53,7 +53,7 @@ export function useOcrWorkflow() {
       setProgress(75);
       setProgressLabel("認識結果を整形中");
 
-      const payload = (await res.json()) as Partial<OcrApiResponse> & { error?: string };
+      const payload = await parseOcrResponse(res);
       if (!res.ok) {
         throw new Error(payload.error ?? "OCR処理に失敗しました");
       }
@@ -78,9 +78,14 @@ export function useOcrWorkflow() {
       if (error instanceof DOMException && error.name === "AbortError") {
         throw new Error("OCR処理がタイムアウトしました。画像を小さくして再実行してください。");
       }
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("OCR処理に失敗しました");
     } finally {
       setIsRunning(false);
+      setProgress(0);
+      setProgressLabel("準備中");
     }
   };
 
@@ -143,4 +148,22 @@ function loadImage(src: string): Promise<HTMLImageElement> {
     image.onerror = () => reject(new Error("画像の読み込みに失敗しました"));
     image.src = src;
   });
+}
+
+async function parseOcrResponse(res: Response): Promise<Partial<OcrApiResponse> & { error?: string }> {
+  const contentType = res.headers.get("content-type") ?? "";
+  if (contentType.includes("application/json")) {
+    try {
+      return (await res.json()) as Partial<OcrApiResponse> & { error?: string };
+    } catch {
+      return { error: "OCRレスポンスの解析に失敗しました" };
+    }
+  }
+
+  try {
+    const text = await res.text();
+    return { error: text.trim() || "OCR処理に失敗しました" };
+  } catch {
+    return { error: "OCR処理に失敗しました" };
+  }
 }
