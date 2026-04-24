@@ -1020,7 +1020,8 @@
         "timesCorrect": 0
       }
     ],
-    "studyCleared": false
+    "studyCleared": true,
+    "studyClearedAt": "2026-04-24T12:20:49.106Z"
   },
   {
     "id": "content-1776524796464",
@@ -1247,7 +1248,8 @@
         "timesCorrect": 0
       }
     ],
-    "studyCleared": false
+    "studyCleared": true,
+    "studyClearedAt": "2026-04-24T12:13:10.153Z"
   },
   {
     "id": "content-1776498836480",
