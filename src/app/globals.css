@@ -122,14 +122,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+    /* iPad / iPhone Safari: レイアウト高さの算出を安定させる（下端がシステム UI に隠れる緩和） */
+    min-height: 100%;
+    min-height: -webkit-fill-available;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: 'M PLUS Rounded 1c', sans-serif;
     background: #1A1A2E;
     color: #E8E8E8;
-  }
-  html {
-    @apply font-sans;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
   }
 }
 
@@ -202,7 +207,7 @@
   background: #1a1a1a;
   border: 2px solid #333;
   border-radius: 2px;
-  height: 18px;
+  height: 14px;
   position: relative;
   overflow: hidden;
 }

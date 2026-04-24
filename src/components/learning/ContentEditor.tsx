@@ -14,6 +14,8 @@ import {
 import { hasPendingChoiceHintEnrichment } from "@/lib/inserted-enrichment-gate";
 import type { UploadedContent } from "@/lib/storage";
 import { validateUploadedContent } from "@/lib/validate-study-content";
+import { formatJaDateTime } from "@/lib/format-ja-datetime";
+import { XP_FIRST_CONTENT_CLEAR_BONUS } from "@/lib/xp-economy";
 
 interface ContentEditorProps {
   draft: UploadedContent;
@@ -24,6 +26,49 @@ interface ContentEditorProps {
   /** ヒント・三択の AI 生成（保存→API→下書き更新）。未設定ならボタンを出さない */
   onAiEnrichHintChoices?: () => void | Promise<void>;
   aiEnrichBusy?: boolean;
+}
+
+function stringifyHotspots(
+  hotspots: { label: string; x: number; y: number; w: number; h: number }[] | undefined
+): string {
+  if (!hotspots || hotspots.length === 0) return "";
+  return JSON.stringify(hotspots, null, 2);
+}
+
+function parseHotspotsJson(
+  raw: string
+): { hotspots: { label: string; x: number; y: number; w: number; h: number }[]; error?: string } {
+  const trimmed = raw.trim();
+  if (!trimmed) return { hotspots: [] };
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(trimmed) as unknown;
+  } catch {
+    return { hotspots: [], error: "注目ポイントJSONの形式が不正です。保存形式を確認してください。" };
+  }
+
+  if (!Array.isArray(parsed)) {
+    return { hotspots: [], error: "注目ポイントJSONは配列形式で入力してください。" };
+  }
+
+  const hotspots = parsed
+    .map((v) => ({
+      label: String((v as { label?: unknown }).label ?? "").trim(),
+      x: Number((v as { x?: unknown }).x ?? 0),
+      y: Number((v as { y?: unknown }).y ?? 0),
+      w: Number((v as { w?: unknown }).w ?? 0),
+      h: Number((v as { h?: unknown }).h ?? 0),
+    }))
+    .filter(
+      (v) =>
+        v.label &&
+        Number.isFinite(v.x) &&
+        Number.isFinite(v.y) &&
+        Number.isFinite(v.w) &&
+        Number.isFinite(v.h)
+    );
+  return { hotspots };
 }
 
 export default function ContentEditor({
@@ -43,22 +88,42 @@ export default function ContentEditor({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={onCancel} className="mc-btn mc-btn-gray text-sm px-3 py-2">
-            ← もどる
-          </button>
-          <span className="text-sm font-black" style={{ color: "#A0C878" }}>
-            問題の編集
-          </span>
+      {/* 長いフォームでも Mac / iPad で「保存」に届くよう、スクロールに追従するツールバー */}
+      <div
+        className="sticky top-0 z-20 -mx-1 px-1 py-2 mb-1 rounded-lg"
+        style={{
+          background: "rgba(26, 26, 46, 0.96)",
+          borderBottom: "2px solid rgba(74, 74, 106, 0.85)",
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2 min-w-0">
+            <button type="button" onClick={onCancel} className="mc-btn mc-btn-gray text-sm px-3 py-2 shrink-0">
+              ← もどる
+            </button>
+            <span className="text-sm font-black truncate" style={{ color: "#A0C878" }}>
+              問題の編集
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center justify-end gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setCheckResult(validateUploadedContent(draft))}
+              className="mc-btn mc-btn-blue text-sm px-3 py-2 font-black"
+            >
+              構成をチェック
+            </button>
+            <button
+              type="button"
+              onClick={onSave}
+              disabled={busy || !draft.title.trim() || draft.questions.length === 0}
+              className="mc-btn mc-btn-green text-sm px-4 py-2 font-black disabled:opacity-50 [touch-action:manipulation]"
+            >
+              {saving ? "保存中…" : "保存する"}
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setCheckResult(validateUploadedContent(draft))}
-          className="mc-btn mc-btn-blue text-sm px-3 py-2 font-black shrink-0"
-        >
-          構成をチェック
-        </button>
       </div>
 
       <div
@@ -90,6 +155,32 @@ export default function ContentEditor({
             </option>
           ))}
         </select>
+      </div>
+
+      <div
+        className="p-4 rounded-xl flex flex-wrap items-start justify-between gap-3"
+        style={{ background: "#0D1A14", border: "2px solid #5D9E2F" }}
+      >
+        <div className="min-w-0 flex-1">
+          <div className="text-xs font-black mb-1" style={{ color: "#86EFAC" }}>
+            まなぶ一覧のタブ（自動）
+          </div>
+          <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
+            勉強で<strong style={{ color: "#BBF7D0" }}>最後まで終える</strong>と「クリア済み」へ移動します。下の「勉強のクリア状態」から
+            <strong style={{ color: "#FCD34D" }}> クリア解除</strong>
+            すると「チャレンジ！」に戻ります。
+          </p>
+        </div>
+        <span
+          className="text-xs font-black px-3 py-2 rounded-lg shrink-0 text-center leading-tight"
+          style={{
+            background: draft.studyCleared ? "#14532D" : "#1F2937",
+            color: draft.studyCleared ? "#86EFAC" : "#9CA3AF",
+            border: `2px solid ${draft.studyCleared ? "#22C55E" : "#4B5563"}`,
+          }}
+        >
+          {draft.studyCleared ? "✅ クリア済み" : "⚔️ チャレンジ！"}
+        </span>
       </div>
 
       {checkResult && (
@@ -134,14 +225,20 @@ export default function ContentEditor({
           style={{ background: "#1A0D0D", border: "2px solid #92400E" }}
         >
           <div className="text-xs font-bold" style={{ color: "#FCD34D" }}>
-            勉強のクリア状態
+            勉強のクリア状態（一覧タブと連動）
           </div>
           <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
-            クリア済みの教材は、最後まで終えても完了 +100 XP はもらえません。動作確認のあと、もう一度ボーナスを有効にするには解除してください。
+            クリア済みの教材は一覧の「クリア済み」に表示され、最後まで終えても完了 +{XP_FIRST_CONTENT_CLEAR_BONUS}{" "}
+            XP はもらえません。動作確認のあと、もう一度ボーナスを有効にするには解除してください（「チャレンジ！」に戻ります）。
           </p>
+          {draft.studyClearedAt && (
+            <p className="text-xs" style={{ color: "#86EFAC" }}>
+              初回クリア: {formatJaDateTime(draft.studyClearedAt)}
+            </p>
+          )}
           <button
             type="button"
-            onClick={() => onDraftChange({ ...draft, studyCleared: false })}
+            onClick={() => onDraftChange({ ...draft, studyCleared: false, studyClearedAt: undefined })}
             className="mc-btn mc-btn-gray text-sm px-3 py-2"
           >
             （勉強）クリア解除
@@ -247,6 +344,171 @@ export default function ContentEditor({
                 }
                 className="w-full px-3 py-2 rounded-lg text-sm"
                 style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
+              />
+              <label className="block text-xs font-bold mt-2" style={{ color: "#9CA3AF" }}>
+                読解の本文・資料（任意・国語）
+              </label>
+              <p className="text-[11px] leading-relaxed mb-1" style={{ color: "#6B7280" }}>
+                プリントの読み取り文章を貼ると、勉強画面に「本文・資料」として表示されます。段落分けしない場合はこの欄だけでOKです。
+              </p>
+              <textarea
+                value={nq.readingPassage ?? ""}
+                onChange={(e) =>
+                  onDraftChange(
+                    updateQuestionAt(draft, qi, (x) => ({ ...x, readingPassage: e.target.value }))
+                  )
+                }
+                rows={8}
+                placeholder="（長文をここに貼り付け）"
+                className="w-full px-3 py-2 rounded-lg text-base leading-relaxed"
+                style={{ background: "#0D0D1A", border: "2px solid #3B82F6", color: "#E8E8E8" }}
+              />
+              <div className="mt-2 space-y-2">
+                <div className="text-xs font-bold" style={{ color: "#93C5FD" }}>
+                  段落ごとに読み上げボタンを付ける（任意）
+                </div>
+                {(nq.readingBlocks ?? []).map((block, bi) => (
+                  <div
+                    key={bi}
+                    className="p-3 rounded-lg space-y-2"
+                    style={{ background: "#111827", border: "1px solid #4B5563" }}
+                  >
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <input
+                        type="text"
+                        value={block.label}
+                        placeholder="見出し（例: 状況説明）"
+                        onChange={(e) => {
+                          const next = [...(nq.readingBlocks ?? [])];
+                          next[bi] = { ...next[bi], label: e.target.value };
+                          onDraftChange(updateQuestionAt(draft, qi, (x) => ({ ...x, readingBlocks: next })));
+                        }}
+                        className="flex-1 min-w-[8rem] px-2 py-1.5 rounded text-sm"
+                        style={{ background: "#0D0D1A", border: "1px solid #6B7280", color: "#E8E8E8" }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = (nq.readingBlocks ?? []).filter((_, j) => j !== bi);
+                          onDraftChange(
+                            updateQuestionAt(draft, qi, (x) => ({
+                              ...x,
+                              readingBlocks: next.length ? next : undefined,
+                            }))
+                          );
+                        }}
+                        className="mc-btn mc-btn-red text-xs px-2 py-1"
+                      >
+                        削除
+                      </button>
+                    </div>
+                    <textarea
+                      value={block.text}
+                      onChange={(e) => {
+                        const next = [...(nq.readingBlocks ?? [])];
+                        next[bi] = { ...next[bi], text: e.target.value };
+                        onDraftChange(updateQuestionAt(draft, qi, (x) => ({ ...x, readingBlocks: next })));
+                      }}
+                      rows={5}
+                      className="w-full px-2 py-2 rounded text-base leading-relaxed"
+                      style={{ background: "#0D0D1A", border: "1px solid #4A4A6A", color: "#E8E8E8" }}
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() =>
+                    onDraftChange(
+                      updateQuestionAt(draft, qi, (x) => ({
+                        ...x,
+                        readingBlocks: [
+                          ...(x.readingBlocks ?? []),
+                          {
+                            label: `パート${(x.readingBlocks?.length ?? 0) + 1}`,
+                            text: "",
+                          },
+                        ],
+                      }))
+                    )
+                  }
+                  className="mc-btn mc-btn-blue text-xs px-3 py-2"
+                >
+                  ＋ 段落を追加
+                </button>
+              </div>
+              <label className="block text-xs font-bold mt-2" style={{ color: "#9CA3AF" }}>
+                図式問題: 図画像URL（任意）
+              </label>
+              <input
+                type="text"
+                value={nq.diagramImageUrl ?? ""}
+                onChange={(e) =>
+                  onDraftChange(
+                    updateQuestionAt(draft, qi, (x) => ({ ...x, diagramImageUrl: e.target.value }))
+                  )
+                }
+                placeholder="/problems/math/fig-001.png"
+                className="w-full px-3 py-2 rounded-lg text-sm"
+                style={{ background: "#0D0D1A", border: "2px solid #3B82F6", color: "#E8E8E8" }}
+              />
+              <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
+                図の説明（任意）
+              </label>
+              <input
+                type="text"
+                value={nq.diagramAlt ?? ""}
+                onChange={(e) =>
+                  onDraftChange(
+                    updateQuestionAt(draft, qi, (x) => ({ ...x, diagramAlt: e.target.value }))
+                  )
+                }
+                placeholder="例: 三角形。底辺6cm、高さ3cm"
+                className="w-full px-3 py-2 rounded-lg text-sm"
+                style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
+              />
+              <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
+                単位（任意）
+              </label>
+              <input
+                type="text"
+                value={nq.answerUnit ?? ""}
+                onChange={(e) =>
+                  onDraftChange(
+                    updateQuestionAt(draft, qi, (x) => ({ ...x, answerUnit: e.target.value }))
+                  )
+                }
+                placeholder="cm²"
+                className="w-full px-3 py-2 rounded-lg text-sm"
+                style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
+              />
+              <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
+                注目ポイント（任意・JSON）
+              </label>
+              <p className="text-[11px] leading-relaxed mb-1" style={{ color: "#6B7280" }}>
+                座標は画像全体の0-100%で指定します。例:
+                [{`{"label":"底辺","x":18,"y":72,"w":58,"h":12}`}]。
+              </p>
+              <textarea
+                key={`hotspots-${nq.id}`}
+                defaultValue={stringifyHotspots(nq.diagramHotspots)}
+                onBlur={(e) => {
+                  const { hotspots, error } = parseHotspotsJson(e.target.value);
+                  if (error) {
+                    window.alert(error);
+                    return;
+                  }
+                  if (hotspots.length === 0) {
+                    onDraftChange(
+                      updateQuestionAt(draft, qi, (x) => ({ ...x, diagramHotspots: undefined }))
+                    );
+                    return;
+                  }
+                  onDraftChange(updateQuestionAt(draft, qi, (x) => ({ ...x, diagramHotspots: hotspots })));
+                }}
+                rows={5}
+                placeholder='[{"label":"高さ","x":43,"y":26,"w":10,"h":42}]'
+                className="w-full px-3 py-2 rounded-lg text-xs"
+                style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8", fontFamily: "monospace" }}
               />
               <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
                 正解
@@ -354,16 +616,24 @@ export default function ContentEditor({
         })}
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-3 pt-1 border-t border-[#4A4A6A]/60">
+        <p className="w-full text-xs mb-1" style={{ color: "#6B7280" }}>
+          上のバーからも保存できます。下は一覧の最後まで編集したあと用です。
+        </p>
         <button
           type="button"
           onClick={onSave}
           disabled={busy || !draft.title.trim() || draft.questions.length === 0}
-          className="mc-btn mc-btn-green flex-1 min-w-[8rem] py-3 disabled:opacity-50"
+          className="mc-btn mc-btn-green flex-1 min-w-[8rem] py-3 disabled:opacity-50 [touch-action:manipulation]"
         >
           {saving ? "保存中…" : "保存する"}
         </button>
-        <button type="button" onClick={onCancel} disabled={busy} className="mc-btn mc-btn-gray py-3 px-6">
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={busy}
+          className="mc-btn mc-btn-gray py-3 px-6 [touch-action:manipulation]"
+        >
           キャンセル
         </button>
       </div>

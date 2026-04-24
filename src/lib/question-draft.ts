@@ -64,6 +64,27 @@ export function normalizeQuestion(q: GeneratedQuestion): GeneratedQuestion {
     question: q.question ?? "",
     answer: q.answer ?? "",
     editorInserted: q.editorInserted,
+    diagramImageUrl: q.diagramImageUrl ? String(q.diagramImageUrl).trim() : undefined,
+    diagramAlt: q.diagramAlt ? String(q.diagramAlt).trim() : undefined,
+    answerUnit: q.answerUnit ? String(q.answerUnit).trim() : undefined,
+    diagramHotspots: Array.isArray(q.diagramHotspots)
+      ? q.diagramHotspots
+          .map((hs) => ({
+            label: String(hs?.label ?? "").trim(),
+            x: Number(hs?.x ?? 0),
+            y: Number(hs?.y ?? 0),
+            w: Number(hs?.w ?? 0),
+            h: Number(hs?.h ?? 0),
+          }))
+          .filter(
+            (hs) =>
+              hs.label.length > 0 &&
+              Number.isFinite(hs.x) &&
+              Number.isFinite(hs.y) &&
+              Number.isFinite(hs.w) &&
+              Number.isFinite(hs.h)
+          )
+      : undefined,
   };
 }
 

@@ -1,6 +1,11 @@
 "use client";
 import { useState } from "react";
-import { CalendarEvent, ChoreItem, TimetableEntry } from "@/lib/storage";
+import {
+  CalendarEvent,
+  ChoreItem,
+  DEFAULT_WEEKDAY_TIMETABLE,
+  TimetableEntry,
+} from "@/lib/storage";
 import { playXPGain, speak } from "@/lib/sounds";
 import { mcFieldRaised } from "@/lib/mc-styles";
 
@@ -10,9 +15,26 @@ interface LifeManagementProps {
   timetable: TimetableEntry[];
   onEventsChange: (events: CalendarEvent[]) => void;
   onChoresChange: (chores: ChoreItem[]) => void;
+  onTimetableChange: (timetable: TimetableEntry[]) => void;
   onXPGain: (xp: number) => void;
   soundEnabled: boolean;
   speechEnabled: boolean;
+}
+
+function upsertTimetableCell(
+  timetable: TimetableEntry[],
+  day: number,
+  period: number,
+  subject: string
+): TimetableEntry[] {
+  const next = subject.trim();
+  const rest = timetable.filter((t) => !(t.day === day && t.period === period));
+  if (!next) return rest;
+  return [...rest, { day, period, subject: next }];
+}
+
+function subjectColor(subj: string): string {
+  return SUBJECT_COLORS[subj] ?? "#6B7280";
 }
 
 const DAYS = ["月", "火", "水", "木", "金"];
@@ -36,11 +58,13 @@ export default function LifeManagement({
   timetable,
   onEventsChange,
   onChoresChange,
+  onTimetableChange,
   onXPGain,
   soundEnabled,
   speechEnabled,
 }: LifeManagementProps) {
   const [activeTab, setActiveTab] = useState<"calendar" | "timetable" | "chores">("calendar");
+  const [timetableEditing, setTimetableEditing] = useState(false);
   const [showAddEvent, setShowAddEvent] = useState(false);
   const [newEvent, setNewEvent] = useState<Partial<CalendarEvent>>({
     type: "other",
@@ -227,8 +251,44 @@ export default function LifeManagement({
 
       {/* Timetable */}
       {activeTab === "timetable" && (
-        <div>
-          <h3 className="font-black mb-3" style={{ color: "#7DC53D" }}>学校の時間割</h3>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="font-black" style={{ color: "#7DC53D" }}>学校の時間割</h3>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setTimetableEditing((v) => !v)}
+                className={`mc-btn text-sm px-3 py-2 ${timetableEditing ? "mc-btn-green" : "mc-btn-blue"}`}
+              >
+                {timetableEditing ? "✓ 表示だけみる" : "✏️ 時間割を編集"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    confirm(
+                      "アプリにはじめから入っているサンプル時間割にもどします。よいですか？"
+                    )
+                  ) {
+                    onTimetableChange(DEFAULT_WEEKDAY_TIMETABLE.map((t) => ({ ...t })));
+                  }
+                }}
+                className="mc-btn mc-btn-gray text-sm px-3 py-2"
+              >
+                初期値に戻す
+              </button>
+            </div>
+          </div>
+          <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
+            {timetableEditing
+              ? "各マスに教科名を入力（空欄は —）。下の候補から選んでも自由入力でもOK。保存は自動でこの端末に記録されます。"
+              : "「時間割を編集」で自分の学校の時間割にかえられます。"}
+          </p>
+          <datalist id="timetable-subject-suggestions">
+            {Object.keys(SUBJECT_COLORS).map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
@@ -252,19 +312,41 @@ export default function LifeManagement({
                     </td>
                     {DAYS.map((_, dayIdx) => {
                       const subj = getSubjectForCell(dayIdx, period);
-                      const color = SUBJECT_COLORS[subj] ?? "#4B5563";
+                      const color = subjectColor(subj);
                       return (
-                        <td key={dayIdx} className="p-1">
-                          <div
-                            className="rounded text-center py-2 text-sm font-bold"
-                            style={{
-                              background: subj ? color + "22" : "#1A1A2E",
-                              border: `2px solid ${subj ? color + "66" : "#2D2D44"}`,
-                              color: subj ? color : "#4B5563",
-                            }}
-                          >
-                            {subj || "—"}
-                          </div>
+                        <td key={dayIdx} className="p-1 align-top">
+                          {timetableEditing ? (
+                            <input
+                              type="text"
+                              name={`tt-${dayIdx}-${period}`}
+                              list="timetable-subject-suggestions"
+                              value={subj}
+                              onChange={(e) =>
+                                onTimetableChange(
+                                  upsertTimetableCell(timetable, dayIdx, period, e.target.value)
+                                )
+                              }
+                              placeholder="—"
+                              autoComplete="off"
+                              className="w-full min-w-[4.5rem] max-w-[8rem] rounded py-2 px-1 text-center text-xs font-bold mx-auto block"
+                              style={{
+                                background: subj ? color + "18" : "#1A1A2E",
+                                border: `2px solid ${subj ? color + "88" : "#4B5563"}`,
+                                color: subj ? color : "#9CA3AF",
+                              }}
+                            />
+                          ) : (
+                            <div
+                              className="rounded text-center py-2 text-sm font-bold min-h-[2.5rem] flex items-center justify-center"
+                              style={{
+                                background: subj ? color + "22" : "#1A1A2E",
+                                border: `2px solid ${subj ? color + "66" : "#2D2D44"}`,
+                                color: subj ? color : "#4B5563",
+                              }}
+                            >
+                              {subj || "—"}
+                            </div>
+                          )}
                         </td>
                       );
                     })}

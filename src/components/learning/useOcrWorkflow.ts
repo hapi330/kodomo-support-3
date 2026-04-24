@@ -4,6 +4,7 @@ import {
   type OcrLanguage,
   type OcrGenre,
 } from "@/lib/ocr-format";
+import { clientApiUrl } from "@/lib/problems-client";
 
 interface OcrWorkflowResult {
   draftText: string;
@@ -41,8 +42,10 @@ export function useOcrWorkflow() {
       const timeoutId = window.setTimeout(() => controller.abort(), OCR_REQUEST_TIMEOUT_MS);
       let res: Response;
       try {
-        res = await fetch("/api/ocr", {
+        res = await fetch(clientApiUrl("/api/ocr"), {
           method: "POST",
+          credentials: "same-origin",
+          cache: "no-store",
           body: formData,
           signal: controller.signal,
         });

@@ -1,0 +1,18 @@
+ASDCommPractice — Xcode への取り込み手順（骨組み）
+
+1) Xcode で「App」テンプレート（SwiftUI / iOS）を新規作成する。
+
+2) 生成されたデフォルトの App / ContentView があれば、本フォルダ内の同名ファイルで置き換えるか、ターゲットへファイルを追加する。
+
+3) ios-prototype/ASDCommPractice 以下のすべての .swift ファイルをプロジェクトに追加し、ターゲットのメンバーシップにチェックを入れる。
+
+4) Data/characters.json をプロジェクトに追加し、「Target Membership」にチェックする。さらに Build Phases > Copy Bundle Resources に characters.json が含まれることを確認する。
+
+5) フレームワーク: AVFoundation は Swift で import するだけで通常は自動リンクされる。
+
+6) API キー（どちらか一方を使用する場合）:
+   - OpenAI: Xcode の Scheme > Edit Scheme > Run > Arguments > Environment Variables に OPENAI_API_KEY を追加する。
+     または Info.plist にキー OPENAI_API_KEY（String）を追加する（本番では Keychain 等への移行を推奨）。
+   - Gemini: 同様に GEMINI_API_KEY。
+
+7) 日本語の声: 設定 > アクセシビリティ > 読み上げコンテンツ > 声 で「Kyoko」「Otoya」など高品質音声をダウンロードしておくと自然に聞こえます。voiceIdentifier は端末に存在する声に合わせて VirtualBuddy / JSON を調整してください。

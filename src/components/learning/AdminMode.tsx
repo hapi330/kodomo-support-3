@@ -9,6 +9,7 @@ import {
 } from "@/lib/ocr-format";
 import OcrWorkflowPanel from "@/components/learning/OcrWorkflowPanel";
 import { useOcrWorkflow } from "@/components/learning/useOcrWorkflow";
+import { clientApiUrl } from "@/lib/problems-client";
 type TaskSaveStatus = { type: "ok" | "err" | "info"; msg: string };
 const OCR_SUCCESS_MESSAGE = "✅ 暫定文字起こしを作成しました。内容確認後に確定してください。";
 const OCR_FINALIZE_MESSAGE = "✅ 最終確定テキストを反映しました。保存を実行してください。";
@@ -178,8 +179,10 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
     }
     setStatus({ type: "info", msg: "⏳ クエストを生成中..." });
     try {
-      const res = await fetch("/api/problems", {
+      const res = await fetch(clientApiUrl("/api/problems"), {
         method: "POST",
+        credentials: "same-origin",
+        cache: "no-store",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: trimmedTitle,

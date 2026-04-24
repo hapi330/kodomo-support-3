@@ -12,6 +12,7 @@ import {
   resolveAnswerInChoices,
   shuffleChoices,
 } from "@/lib/question-claude-helpers";
+import { sanitizeHintsForStudy } from "@/lib/hint-policy";
 import { isEligibleForChoiceHintAiEnrichment } from "@/lib/inserted-enrichment-gate";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 
@@ -37,17 +38,18 @@ type InferPayload = EnrichPayload & {
 
 function buildEnrichSystemPrompt(): string {
   return `あなたは日本の小学校向け教材の教員です。ユーザーが渡す「問題文」と「正解」は固定であり、変更してはいけません。
-あなたの仕事は、ヒント3段階（やさしい順）と、正解を含む三択の選択肢（正解1＋紛らわしい不正解2）だけを生成することです。
+あなたの仕事は、ヒント（0〜3段階・やさしい順）と、正解を含む三択の選択肢（正解1＋紛らわしい不正解2）だけを生成することです。
 
 ## ルール
 - choices はちょうど3要素。必ず1つが正解文字列と完全一致するようにする（表記ゆれを作らない）。
-- ヒントはやさしい順から3つ。3つ目は学習のために正解が分かるようにしてよい。
+- ヒントは問題に応じて0〜3個。やさしい順にする。
+- ヒントには最終答え（answer の文字列）を直接書かない。
 - questionFurigana / answerFurigana は国語などで必要なときだけ。不要なら空文字 "" にする。
 - 出力は有効なJSONオブジェクトのみ。説明文・マークダウン・コードフェンスは付けない。
 
 ## JSONスキーマ
 {
-  "hints": ["ヒント1", "ヒント2", "ヒント3"],
+  "hints": ["ヒント1（任意）", "ヒント2（任意）", "ヒント3（任意）"],
   "choices": ["不正解候補1", "正解（ユーザー指定と同一）", "不正解候補2"],
   "questionFurigana": "",
   "answerFurigana": ""
@@ -61,14 +63,15 @@ function buildInferFromQuestionSystemPrompt(): string {
 ## ルール
 - answer は短く明確に（1語〜短い文）。
 - choices はちょうど3つ。必ず1つが answer と文字列完全一致。
-- ヒントはやさしい順から3つ。
+- ヒントは問題に応じて0〜3個。やさしい順にする。
+- ヒントには最終答え（answer の文字列）を直接書かない。
 - questionFurigana / answerFurigana は国語で必要なら。不要なら "" 。
 - 出力は有効なJSONのみ。コードフェンス禁止。
 
 ## JSONスキーマ
 {
   "answer": "正解",
-  "hints": ["ヒント1", "ヒント2", "ヒント3"],
+  "hints": ["ヒント1（任意）", "ヒント2（任意）", "ヒント3（任意）"],
   "choices": ["不正解1", "正解と同一文字列", "不正解2"],
   "questionFurigana": "",
   "answerFurigana": ""
@@ -112,7 +115,7 @@ async function generateHintsAndChoices(params: {
 }> {
   const userMessage = `教科: ${params.subjectLabel}
 
-次の問題文と正解は**固定**です。変えずに、ヒント3つと三択（正解を含む）だけを生成してください。
+次の問題文と正解は**固定**です。変えずに、ヒント0〜3つと三択（正解を含む）だけを生成してください。
 
 問題文:
 ---
@@ -139,10 +142,6 @@ ${params.question}
     ? parsed.choices.map((c) => String(c).trim())
     : [];
 
-  while (hintsIn.length < 3) {
-    hintsIn.push("もう一度、問題のねらいを思い出してみよう。");
-  }
-
   if (choicesIn.length !== 3) {
     throw new Error("選択肢が3つではありませんでした");
   }
@@ -157,7 +156,7 @@ ${params.question}
   }
 
   const { choices, correctIndex } = shuffleChoices(resolved, choicesIn);
-  const hints = hintsIn.slice(0, 3);
+  const hints = sanitizeHintsForStudy(hintsIn, params.answer, { allowZeroHints: true });
 
   return {
     hints,
@@ -182,7 +181,7 @@ async function inferAnswerHintsChoicesFromQuestion(params: {
 }> {
   const userMessage = `教科: ${params.subjectLabel}
 
-問題文のみ与えられています。正解・ヒント3つ・三択（正解含む）を決めてください。
+問題文のみ与えられています。正解・ヒント0〜3つ・三択（正解含む）を決めてください。
 
 問題文:
 ---
@@ -211,9 +210,6 @@ ${params.question}
     ? parsed.choices.map((c) => String(c).trim())
     : [];
 
-  while (hintsIn.length < 3) {
-    hintsIn.push("もう一度、問題のねらいを思い出してみよう。");
-  }
   if (choicesIn.length !== 3) {
     throw new Error("選択肢が3つではありませんでした");
   }
@@ -228,7 +224,7 @@ ${params.question}
   }
 
   const { choices, correctIndex } = shuffleChoices(resolved, choicesIn);
-  const hints = hintsIn.slice(0, 3);
+  const hints = sanitizeHintsForStudy(hintsIn, answer, { allowZeroHints: true });
 
   return {
     answer,

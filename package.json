@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node scripts/ensure-next-dev-clean.mjs && next dev --hostname localhost",
-    "dev:lan": "node scripts/dev-lan.mjs",
+    "dev": "node scripts/ensure-next-dev-clean.mjs && WATCHPACK_POLLING=true next dev --webpack --hostname localhost",
+    "dev:lan": "node scripts/dev-lan.mjs --stable",
     "dev:stable": "node scripts/ensure-next-dev-clean.mjs && WATCHPACK_POLLING=true next dev --webpack --hostname localhost",
     "dev:stable:lan": "node scripts/dev-lan.mjs --stable",
     "dev:trace": "node scripts/ensure-next-dev-clean.mjs && NEXT_TURBOPACK_TRACING=1 next dev --hostname localhost",

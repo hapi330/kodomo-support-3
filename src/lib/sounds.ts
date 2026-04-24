@@ -1,5 +1,7 @@
 // Sound effects using Web Audio API (Minecraft-style)
 
+import { prepareJapaneseSpeechText } from "@/lib/speech-text-ja";
+
 let audioCtx: AudioContext | null = null;
 
 /** 効果音・BGMで共有（Web Audio） */
@@ -109,14 +111,53 @@ export function playXPGain(): void {
   playTone(550, 0.08, "sine", 0.2, 0.08);
 }
 
-// Speech synthesis
+// --- Speech synthesis（Web Speech API。設定の声は setSpeechVoiceURI で指定） ---
+
+let preferredSpeechVoiceURI: string | null = null;
+
+/** 読み上げに使う声（`getJapaneseSpeechVoices()` の `voiceURI`）。null でブラウザ既定。 */
+export function setSpeechVoiceURI(uri: string | null): void {
+  const t = uri?.trim();
+  preferredSpeechVoiceURI = t ? t : null;
+}
+
+export function getSpeechVoiceURI(): string | null {
+  return preferredSpeechVoiceURI;
+}
+
+function langMatchesJapanese(lang: string): boolean {
+  const l = lang.toLowerCase().replace(/_/g, "-");
+  return l.startsWith("ja") || l === "jp";
+}
+
+/** 日本語向けに使える声一覧（設定 UI 用）。Safari では初回空のことがあるので `voiceschanged` で再取得すること。 */
+export function getJapaneseSpeechVoices(): SpeechSynthesisVoice[] {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return [];
+  return window.speechSynthesis.getVoices().filter((v) => langMatchesJapanese(v.lang));
+}
+
+function pickVoiceForUtterance(): SpeechSynthesisVoice | null {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (preferredSpeechVoiceURI) {
+    const found = voices.find((v) => v.voiceURI === preferredSpeechVoiceURI);
+    if (found) return found;
+  }
+  return voices.find((v) => langMatchesJapanese(v.lang)) ?? null;
+}
+
 export function speak(text: string, rate = 0.9, pitch = 1.1): void {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(prepareJapaneseSpeechText(text));
   utterance.lang = "ja-JP";
   utterance.rate = rate;
   utterance.pitch = pitch;
   utterance.volume = 0.9;
+  const voice = pickVoiceForUtterance();
+  if (voice) {
+    utterance.voice = voice;
+    if (voice.lang) utterance.lang = voice.lang;
+  }
   window.speechSynthesis.speak(utterance);
 }

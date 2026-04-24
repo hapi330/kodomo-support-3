@@ -4,6 +4,12 @@ import { TypingCategoryArt } from "@/components/games/TypingCategoryArt";
 import type { GameThemeId } from "@/lib/game-themes";
 import { playCorrect, playWrong, playClick, speak } from "@/lib/sounds";
 import { mcField } from "@/lib/mc-styles";
+import {
+  REWARD_EXCHANGE_COSTS,
+  XP_RIDDLE_CORRECT,
+  XP_TYPING_BASE,
+  xpForTypingWord,
+} from "@/lib/xp-economy";
 
 interface GamesProps {
   totalXP: number;
@@ -109,7 +115,24 @@ const TYPING_WORD_CATEGORIES: {
   },
 ];
 
-type RiddleItem = { question: string; answer: string };
+/** 自由記述（choices なし）または学びカテゴリの3択 */
+type RiddleItem = {
+  question: string;
+  answer: string;
+  choices?: readonly [string, string, string];
+  correctIndex?: 0 | 1 | 2;
+};
+
+type RiddleMcOption = { text: string; correct: boolean };
+
+function shuffleRiddleMcOptions(opts: RiddleMcOption[]): RiddleMcOption[] {
+  const a = [...opts];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 const RIDDLE_CATEGORIES: {
   id: GameThemeId;
@@ -124,16 +147,66 @@ const RIDDLE_CATEGORIES: {
     icon: "📚",
     panelBorder: "#3B82F6",
     riddles: [
-      { question: "漢字「森」は「木」がいくつ並んだ形？", answer: "3つ" },
-      { question: "12÷3の答えは？", answer: "4" },
-      { question: "7×8の答えは？（九九）", answer: "56" },
-      { question: "分数 1/2＋1/4 を計算すると？（答えは分数で）", answer: "3/4" },
-      { question: "割り算で「わる数」が大きいほど答えは？", answer: "小さくなる" },
-      { question: "文章題で「あつめた数」から「つかった数」を引くと？", answer: "のこり" },
-      { question: "国語で「主語」とは文のなかのだれ・なにを指す？", answer: "だれが・なにが" },
-      { question: "小数 0.5 は分数でいうと？", answer: "2分の1" },
-      { question: "三角形の内角の和は何度？", answer: "180度" },
-      { question: "漢字「働」の部首は？", answer: "にんべん" },
+      {
+        question: "漢字「森」は「木」がいくつ並んだ形？",
+        answer: "3つ",
+        choices: ["3つ", "2つ", "4つ"],
+        correctIndex: 0,
+      },
+      {
+        question: "12÷3の答えは？",
+        answer: "4",
+        choices: ["4", "3", "36"],
+        correctIndex: 0,
+      },
+      {
+        question: "7×8の答えは？（九九）",
+        answer: "56",
+        choices: ["56", "54", "63"],
+        correctIndex: 0,
+      },
+      {
+        question: "分数 1/2＋1/4 を計算すると？（答えは分数で）",
+        answer: "3/4",
+        choices: ["3/4", "2/4", "3/8"],
+        correctIndex: 0,
+      },
+      {
+        question: "割り算で「わる数」が大きいほど答えは？",
+        answer: "小さくなる",
+        choices: ["小さくなる", "大きくなる", "かわらない"],
+        correctIndex: 0,
+      },
+      {
+        question: "文章題で「あつめた数」から「つかった数」を引くと？",
+        answer: "のこり",
+        choices: ["のこり", "わる", "たす"],
+        correctIndex: 0,
+      },
+      {
+        question: "国語で「主語」とは文のなかのだれ・なにを指す？",
+        answer: "だれが・なにが",
+        choices: ["だれが・なにが", "どうし", "じゅつご"],
+        correctIndex: 0,
+      },
+      {
+        question: "小数 0.5 は分数でいうと？",
+        answer: "2分の1",
+        choices: ["2分の1", "1分の2", "5分の10"],
+        correctIndex: 0,
+      },
+      {
+        question: "三角形の内角の和は何度？",
+        answer: "180度",
+        choices: ["180度", "90度", "360度"],
+        correctIndex: 0,
+      },
+      {
+        question: "漢字「働」の部首は？",
+        answer: "にんべん",
+        choices: ["にんべん", "りっしんべん", "てんてん"],
+        correctIndex: 0,
+      },
     ],
   },
   {
@@ -198,14 +271,22 @@ function pickRandomRiddleForTheme(theme: GameThemeId): RiddleItem {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-const REWARDS = [
-  { id: "1", name: "ゲーム30分延長", cost: 200, icon: "🎮" },
-  { id: "2", name: "好きなおやつを選ぶ権利", cost: 150, icon: "🍫" },
-  { id: "3", name: "ご飯のメニューを決める", cost: 300, icon: "🍕" },
-  { id: "4", name: "マインクラフトの新しいMOD", cost: 500, icon: "📦" },
-  { id: "5", name: "映画を選ぶ権利", cost: 250, icon: "🎬" },
-  { id: "6", name: "特別なお出かけ", cost: 800, icon: "🎡" },
-];
+const REWARD_DEFS = [
+  { id: "1", name: "ゲーム30分延長", icon: "🎮" },
+  { id: "2", name: "好きなおやつを選ぶ権利", icon: "🍫" },
+  { id: "3", name: "ご飯のメニューを決める", icon: "🍕" },
+  { id: "4", name: "マインクラフトの新しいMOD", icon: "📦" },
+  { id: "5", name: "映画を選ぶ権利", icon: "🎬" },
+  { id: "6", name: "特別なお出かけ", icon: "🎡" },
+] as const;
+
+const REWARDS = REWARD_DEFS.map((r, i) => ({
+  ...r,
+  cost: REWARD_EXCHANGE_COSTS[i] ?? REWARD_EXCHANGE_COSTS[0],
+}));
+
+const RIDDLE_MC_BADGE = ["#3B82F6", "#D97706", "#EF4444"] as const;
+const RIDDLE_MC_LETTERS = ["A", "B", "C"] as const;
 
 function GamesBackButton({ onBack }: { onBack: () => void }) {
   return (
@@ -227,7 +308,8 @@ export default function Games({
   const [typingCategoryId, setTypingCategoryId] = useState<GameThemeId>("manabi");
 
   // Riddle state
-  const [riddle, setRiddle] = useState<{ question: string; answer: string } | null>(null);
+  const [riddle, setRiddle] = useState<RiddleItem | null>(null);
+  const [riddleMcShuffled, setRiddleMcShuffled] = useState<RiddleMcOption[] | null>(null);
   const [riddleAnswer, setRiddleAnswer] = useState("");
   const [riddleResult, setRiddleResult] = useState<"none" | "correct" | "wrong">("none");
   // Typing state
@@ -247,11 +329,31 @@ export default function Games({
   const fetchRiddle = (nextTheme?: GameThemeId) => {
     setRiddleResult("none");
     setRiddleAnswer("");
+    setRiddleMcShuffled(null);
     const theme = nextTheme ?? riddleCategoryId;
     if (nextTheme) setRiddleCategoryId(nextTheme);
     const r = pickRandomRiddleForTheme(theme);
     setRiddle(r);
+    if (r.choices !== undefined && r.correctIndex !== undefined) {
+      const built: RiddleMcOption[] = r.choices.map((text, i) => ({
+        text,
+        correct: i === r.correctIndex,
+      }));
+      setRiddleMcShuffled(shuffleRiddleMcOptions(built));
+    }
     if (speechEnabled) speak(r.question);
+  };
+
+  const resolveRiddleMc = (isCorrect: boolean) => {
+    if (!riddle) return;
+    setRiddleResult(isCorrect ? "correct" : "wrong");
+    if (isCorrect) {
+      onXPGain(XP_RIDDLE_CORRECT);
+      if (soundEnabled) playCorrect();
+      if (speechEnabled) speak(`せいかい！すごい！${XP_RIDDLE_CORRECT}ポイントゲット！`);
+    } else if (soundEnabled) {
+      playWrong();
+    }
   };
 
   const checkRiddle = () => {
@@ -261,9 +363,9 @@ export default function Games({
       riddle.answer.includes(riddleAnswer.trim());
     setRiddleResult(correct ? "correct" : "wrong");
     if (correct) {
-      onXPGain(50);
+      onXPGain(XP_RIDDLE_CORRECT);
       if (soundEnabled) playCorrect();
-      if (speechEnabled) speak("せいかい！すごい！50ポイントゲット！");
+      if (speechEnabled) speak(`せいかい！すごい！${XP_RIDDLE_CORRECT}ポイントゲット！`);
     } else {
       if (soundEnabled) playWrong();
     }
@@ -272,7 +374,7 @@ export default function Games({
   const handleTyping = (val: string) => {
     setTypedText(val);
     if (val.toLowerCase() === currentWord.word.toLowerCase()) {
-      const xp = 10 + typingStreak * 2;
+      const xp = xpForTypingWord(typingStreak);
       onXPGain(xp);
       if (soundEnabled) playCorrect();
       setTypingScore((s) => s + xp);
@@ -295,14 +397,19 @@ export default function Games({
 
   if (activeGame === "menu") {
     return (
-      <div className="space-y-4" aria-label={`${childName}くんのあそび`}>
+      <div className="space-y-3" aria-label={`${childName}くんのあそび`}>
         <h3 className="text-lg font-black" style={{ color: "#7DC53D" }}>
           あそびと報酬 🎮
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
-            { key: "riddle", icon: "🧩", label: "AIなぞなぞ", desc: "+50 XP" },
-            { key: "typing", icon: "⌨️", label: "タイピング", desc: "+10 XP/word" },
+            { key: "riddle", icon: "🧩", label: "AIなぞなぞ", desc: `+${XP_RIDDLE_CORRECT} XP` },
+            {
+              key: "typing",
+              icon: "⌨️",
+              label: "タイピング",
+              desc: `+${XP_TYPING_BASE}〜 XP/語（連続で増える）`,
+            },
             { key: "reward", icon: "🎁", label: "報酬交換所", desc: `${totalXP.toLocaleString()} XP所持` },
           ].map((g) => (
             <button
@@ -327,14 +434,14 @@ export default function Games({
   // RIDDLE
   if (activeGame === "riddle") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-black" style={{ color: riddleCategoryMeta.panelBorder }}>
             🧩 AIなぞなぞ
           </h3>
           <GamesBackButton onBack={() => setActiveGame("menu")} />
         </div>
-        <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
           {RIDDLE_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
@@ -355,8 +462,13 @@ export default function Games({
             </button>
           ))}
         </div>
+        {riddleCategoryId === "manabi" && (
+          <p className="text-xs" style={{ color: "#93C5FD" }}>
+            学び：3つの選択肢（A・B・C）から正解をタップ！
+          </p>
+        )}
         {riddle ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="py-2 flex justify-center">
               <TypingCategoryArt theme={riddleCategoryId} />
             </div>
@@ -375,22 +487,52 @@ export default function Games({
                 </button>
               )}
             </div>
-            {riddleResult === "none" && (
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={riddleAnswer}
-                  onChange={(e) => setRiddleAnswer(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && checkRiddle()}
-                  placeholder="こたえを入力…"
-                  className="flex-1 p-3 rounded text-base"
-                  style={mcField}
-                />
-                <button onClick={checkRiddle} className="mc-btn mc-btn-green px-5">
-                  こたえる！
-                </button>
-              </div>
-            )}
+            {riddleResult === "none" &&
+              (riddleMcShuffled && riddleMcShuffled.length === 3 ? (
+                <div className="grid grid-cols-3 gap-2 sm:gap-3" role="group" aria-label="三択">
+                  {riddleMcShuffled.map((opt, idx) => (
+                    <button
+                      key={`${opt.text}-${idx}`}
+                      type="button"
+                      onClick={() => resolveRiddleMc(opt.correct)}
+                      className="flex flex-col items-center justify-start gap-2 min-h-[6rem] sm:min-h-[7rem] rounded-xl p-2 sm:p-3 font-bold text-center transition-transform touch-manipulation active:scale-[0.98]"
+                      style={{
+                        background: "#1A1A2E",
+                        border: `3px solid ${RIDDLE_MC_BADGE[idx % 3]}`,
+                        color: "#E8E8E8",
+                      }}
+                    >
+                      <span
+                        className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg text-xs sm:text-sm font-black"
+                        style={{
+                          background: RIDDLE_MC_BADGE[idx % 3],
+                          color: "#0D0D1A",
+                        }}
+                      >
+                        {RIDDLE_MC_LETTERS[idx]}
+                      </span>
+                      <span className="w-full min-h-0 flex-1 overflow-y-auto text-[11px] sm:text-xs leading-snug break-words [scrollbar-width:thin]">
+                        {opt.text}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={riddleAnswer}
+                    onChange={(e) => setRiddleAnswer(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && checkRiddle()}
+                    placeholder="こたえを入力…"
+                    className="flex-1 p-3 rounded text-base"
+                    style={mcField}
+                  />
+                  <button type="button" onClick={checkRiddle} className="mc-btn mc-btn-green px-5">
+                    こたえる！
+                  </button>
+                </div>
+              ))}
             {riddleResult !== "none" && (
               <div
                 className="p-4 rounded-xl text-center animate-slide-up"
@@ -401,7 +543,9 @@ export default function Games({
               >
                 <div className="text-3xl mb-2">{riddleResult === "correct" ? "🎉" : "💥"}</div>
                 <div className="text-xl font-black" style={{ color: riddleResult === "correct" ? "#7FFF00" : "#EF4444" }}>
-                  {riddleResult === "correct" ? "せいかい！+50 XP！" : `ざんねん！こたえは「${riddle.answer}」だよ！`}
+                  {riddleResult === "correct"
+                    ? `せいかい！+${XP_RIDDLE_CORRECT} XP！`
+                    : `ざんねん！こたえは「${riddle.answer}」だよ！`}
                 </div>
                 <button type="button" onClick={() => fetchRiddle()} className="mt-3 mc-btn mc-btn-blue px-6 py-2">
                   つぎのなぞなぞ
@@ -417,7 +561,7 @@ export default function Games({
   // TYPING
   if (activeGame === "typing") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-black" style={{ color: typingCategory.panelBorder }}>⌨️ タイピング練習</h3>
           <GamesBackButton onBack={() => setActiveGame("menu")} />
@@ -503,7 +647,7 @@ export default function Games({
   // REWARDS
   if (activeGame === "reward") {
     return (
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="font-black" style={{ color: "#FFD700" }}>🎁 ほうびこうかんじょ</h3>
           <GamesBackButton onBack={() => setActiveGame("menu")} />

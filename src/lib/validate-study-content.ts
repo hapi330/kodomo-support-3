@@ -49,11 +49,23 @@ function validateQuestion(q: GeneratedQuestion, index: number, draft: UploadedCo
   }
 
   const hints = padHints(nq.hints ?? []);
-  hints.forEach((h, hi) => {
-    if (!String(h).trim()) {
-      push(issues, "error", index, `「${label}」: ヒント ${hi + 1} が空です。`);
-    }
-  });
+  const nonEmptyHints = hints.map((h) => String(h).trim()).filter(Boolean);
+  if (nonEmptyHints.length < 1) {
+    push(issues, "warning", index, `「${label}」: ヒントは未設定です（0件のままでも保存できます）。`);
+  }
+  if (nonEmptyHints.length > 0) {
+    const answerLower = answerText.toLowerCase();
+    nonEmptyHints.forEach((hint, hi) => {
+      if (answerLower && hint.toLowerCase().includes(answerLower)) {
+        push(
+          issues,
+          "warning",
+          index,
+          `「${label}」: ヒント ${hi + 1} に正解が含まれている可能性があります。`
+        );
+      }
+    });
+  }
 
   const choices = padChoices(nq.choices ?? []);
   const trimmedChoices = choices.map((c) => String(c).trim());
@@ -95,10 +107,42 @@ function validateQuestion(q: GeneratedQuestion, index: number, draft: UploadedCo
     }
   }
 
-  const hintSet = new Set(hints.map((h) => String(h).trim()).filter(Boolean));
-  if (hintSet.size < 3 && hints.every((h) => String(h).trim())) {
+  const hintSet = new Set(nonEmptyHints);
+  if (hintSet.size >= 2 && hintSet.size < nonEmptyHints.length) {
     push(issues, "warning", index, `「${label}」: ヒントの内容が一部同じです。`);
   }
+
+  const imageUrl = String(nq.diagramImageUrl ?? "").trim();
+  if (imageUrl && !/^https?:\/\/|^\//.test(imageUrl)) {
+    push(
+      issues,
+      "warning",
+      index,
+      `「${label}」: 図画像URLは「/」始まりか https:// で指定してください。`
+    );
+  }
+
+  const unit = String(nq.answerUnit ?? "").trim();
+  if (unit.length > 0 && unit.length > 12) {
+    push(issues, "warning", index, `「${label}」: 単位が長すぎる可能性があります。`);
+  }
+
+  (nq.diagramHotspots ?? []).forEach((hs, hi) => {
+    if (hs.w <= 0 || hs.h <= 0) {
+      push(issues, "warning", index, `「${label}」: 注目領域${hi + 1}の幅/高さが0以下です。`);
+      return;
+    }
+    const outOfRange =
+      hs.x < 0 || hs.y < 0 || hs.w < 0 || hs.h < 0 || hs.x + hs.w > 100 || hs.y + hs.h > 100;
+    if (outOfRange) {
+      push(
+        issues,
+        "warning",
+        index,
+        `「${label}」: 注目領域${hi + 1}は0-100%の範囲に収まるよう調整してください。`
+      );
+    }
+  });
 
   return issues;
 }

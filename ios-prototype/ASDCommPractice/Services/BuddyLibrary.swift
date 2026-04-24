@@ -1,0 +1,79 @@
+import Combine
+import Foundation
+
+/// `characters.json` からキャラクターを読み込み、ロールと性別で解決する。
+final class BuddyLibrary: ObservableObject {
+    @Published private(set) var buddies: [VirtualBuddy] = []
+    @Published var loadError: String?
+
+    init() {
+        loadFromBundle()
+    }
+
+    func loadFromBundle() {
+        if let url = Bundle.main.url(forResource: "characters", withExtension: "json"),
+           let data = try? Data(contentsOf: url),
+           let decoded = try? JSONDecoder().decode([VirtualBuddy].self, from: data) {
+            buddies = decoded
+            loadError = nil
+            return
+        }
+
+        loadError = "characters.json を読み込めませんでした。埋め込みの例データを表示します。"
+        buddies = BuddyLibrary.embeddedFallbackBuddies()
+    }
+
+    /// JSON が無い・壊れているときの最低限の例（タケル・サオリ・佐藤先生・父兄）。
+    private static func embeddedFallbackBuddies() -> [VirtualBuddy] {
+        [
+            VirtualBuddy(
+                id: "takeru_m",
+                name: "タケル",
+                role: "小6",
+                gender: .male,
+                visualDescription: "元気な小学6年生の男子。スポーツ帽をかぶっている。",
+                toneDescription: "元気で砕けた口調。語尾は「〜だぜ！」をときどき使う。相手を励ます。",
+                voiceIdentifier: "com.apple.ttsbundle.Otoya-compact",
+                voiceRate: 0.55,
+                voicePitch: 1.2
+            ),
+            VirtualBuddy(
+                id: "saori_f",
+                name: "サオリ",
+                role: "中1",
+                gender: .female,
+                visualDescription: "明るい中学1年生の女子。リボンをつけている。",
+                toneDescription: "明るく親しみやすい口調。語尾は「〜だよね！」をときどき使う。共感を示す。",
+                voiceIdentifier: "com.apple.ttsbundle.Kyoko-compact",
+                voiceRate: 0.52,
+                voicePitch: 1.3
+            ),
+            VirtualBuddy(
+                id: "sato_teacher_f",
+                name: "佐藤先生",
+                role: "先生",
+                gender: .female,
+                visualDescription: "厳格だが公平な担任の先生。眼鏡をかけている。",
+                toneDescription: "落ち着いた敬語ベースで、語尾は「〜しなさい。」を適宜使う。指示は短く具体的に。",
+                voiceIdentifier: "com.apple.ttsbundle.Kyoko-compact",
+                voiceRate: 0.45,
+                voicePitch: 0.9
+            ),
+            VirtualBuddy(
+                id: "kenta_parent_m",
+                name: "ケンタのお父さん",
+                role: "父兄",
+                gender: .male,
+                visualDescription: "穏やかな父親。カジュアルな服装。",
+                toneDescription: "穏やかで丁寧な口調。心配を示しつつ、一歩ずつ具体的に確認する。",
+                voiceIdentifier: "com.apple.ttsbundle.Otoya-compact",
+                voiceRate: 0.48,
+                voicePitch: 0.95
+            ),
+        ]
+    }
+
+    func buddy(role: BuddyRole, gender: Gender) -> VirtualBuddy? {
+        buddies.first { $0.role == role.rawValue && $0.gender == gender }
+    }
+}

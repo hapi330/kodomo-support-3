@@ -69,6 +69,7 @@ export async function PATCH(req: Request) {
 
     const next = [...current];
     const prev = current[idx];
+    const cleared = typeof body.studyCleared === "boolean" ? body.studyCleared : Boolean(prev.studyCleared);
     next[idx] = {
       ...body,
       id,
@@ -78,8 +79,13 @@ export async function PATCH(req: Request) {
       editedText: body.editedText ?? "",
       uploadDate: body.uploadDate ?? prev.uploadDate,
       questions: body.questions,
-      studyCleared:
-        typeof body.studyCleared === "boolean" ? body.studyCleared : Boolean(prev.studyCleared),
+      studyCleared: cleared,
+      studyClearedAt:
+        !cleared
+          ? undefined
+          : typeof body?.studyClearedAt === "string" && body.studyClearedAt.trim()
+            ? body.studyClearedAt.trim()
+            : prev.studyClearedAt,
     };
 
     await writeProblemsJson(next);

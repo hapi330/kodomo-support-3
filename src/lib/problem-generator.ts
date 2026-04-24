@@ -13,6 +13,7 @@ import {
   resolveAnswerInChoices,
   shuffleChoices,
 } from "@/lib/question-claude-helpers";
+import { sanitizeHintsForStudy } from "@/lib/hint-policy";
 import { estimateTranscribedProblemCount } from "@/lib/transcribed-problem-count";
 
 /** 文字起こしの設問数に追従できるよう余裕を持たせる（出力トークン上限内） */
@@ -117,7 +118,7 @@ ${params.rawText}
     if (!q) continue;
 
     const { choices, correctIndex } = shuffleChoices(q.answer, q.choices);
-    const hints = padHints(q.hints);
+    const hints = sanitizeHintsForStudy(q.hints, q.answer, { allowZeroHints: true });
 
     const question: GeneratedQuestion = {
       id: `q-${params.contentId}-${out.length + 1}`,
@@ -191,19 +192,6 @@ function sanitizeQuestion(q: string): string {
     .map((l) => l.trimEnd())
     .join("\n")
     .replace(/\n{3,}/g, "\n\n");
-}
-
-function padHints(hints: string[]): string[] {
-  const defaults = [
-    "問題のねらいを思い出してみよう。",
-    "教材の用語や手順を確認してみよう。",
-    "もう一度だけ、答えの形を確認してみよう。",
-  ];
-  const h = [...hints];
-  while (h.length < 3) {
-    h.push(defaults[h.length]);
-  }
-  return h.slice(0, 3);
 }
 
 function parseQuestionsJson(raw: string): ParsedWrapper {

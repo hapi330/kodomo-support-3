@@ -11,7 +11,14 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import { StudyRecord, StudySession, GeneratedQuestion, UploadedContent } from "@/lib/storage";
+import { formatJaDateTime } from "@/lib/format-ja-datetime";
+import {
+  StudyRecord,
+  StudySession,
+  GeneratedQuestion,
+  UploadedContent,
+  type ContentClearLog,
+} from "@/lib/storage";
 import { percent } from "@/lib/percent";
 
 interface DashboardProps {
@@ -20,6 +27,7 @@ interface DashboardProps {
   streak: number;
   totalXP: number;
   content: UploadedContent[];
+  clearLogs: ContentClearLog[];
 }
 
 function DashboardChartTooltip({
@@ -46,6 +54,7 @@ export default function Dashboard({
   streak,
   totalXP,
   content,
+  clearLogs,
 }: DashboardProps) {
   const [showReview, setShowReview] = useState(false);
 
@@ -104,8 +113,51 @@ export default function Dashboard({
     [sessions]
   );
 
+  const sortedClearLogs = useMemo(
+    () => [...clearLogs].sort((a, b) => b.clearedAt.localeCompare(a.clearedAt)),
+    [clearLogs]
+  );
+
   return (
     <div className="space-y-6">
+      {/* 教材クリア履歴 */}
+      <div className="mc-panel p-4">
+        <h3 className="font-black mb-3" style={{ color: "#22C55E" }}>
+          🏁 教材クリアのきろく
+        </h3>
+        {sortedClearLogs.length === 0 ? (
+          <p className="text-sm text-center py-4" style={{ color: "#9CA3AF" }}>
+            まだ記録がありません。勉強で教材を最後まで終えると、ここに日時が残ります。
+          </p>
+        ) : (
+          <ul className="space-y-2 max-h-72 overflow-y-auto [scrollbar-width:thin]">
+            {sortedClearLogs.map((log) => (
+              <li
+                key={log.id}
+                className="p-3 rounded-lg text-sm leading-snug"
+                style={{ background: "#0D1A0D", border: "2px solid #166534" }}
+              >
+                <div className="font-bold" style={{ color: "#BBF7D0" }}>
+                  {formatJaDateTime(log.clearedAt)}
+                  {log.firstClearBonus ? (
+                    <span className="ml-2 text-xs font-black" style={{ color: "#FCD34D" }}>
+                      （初回ボーナスあり）
+                    </span>
+                  ) : (
+                    <span className="ml-2 text-xs" style={{ color: "#9CA3AF" }}>
+                      （2周目〜）
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1" style={{ color: "#E8E8E8" }}>
+                  {log.subject} — {log.title}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[

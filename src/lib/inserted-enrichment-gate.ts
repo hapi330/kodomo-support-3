@@ -1,15 +1,12 @@
-import { padChoices, padHints } from "@/lib/question-draft";
+import { padChoices } from "@/lib/question-draft";
 import { resolveAnswerInChoices } from "@/lib/question-claude-helpers";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 
 /**
- * ヒント3つ・三択が学習に使える状態か。
- * 空・重複・正解不一致のいずれかなら AI 補完の対象とする。
+ * ヒント（0〜3）・三択が学習に使える状態か。
+ * 三択の空・重複・正解不一致のいずれかなら AI 補完の対象とする。
  */
 export function lacksFilledHintsAndChoices(q: GeneratedQuestion): boolean {
-  const h = padHints(q.hints ?? []);
-  if (h.some((x) => !String(x).trim())) return true;
-
   const ch = padChoices(q.choices ?? []);
   const trimmed = ch.map((c) => String(c).trim());
   if (trimmed.some((c) => !c)) return true;
@@ -33,6 +30,12 @@ export function isEligibleForChoiceHintAiEnrichment(q: GeneratedQuestion): boole
 export function hasPendingChoiceHintEnrichment(content: UploadedContent): boolean {
   return content.questions.some(isEligibleForChoiceHintAiEnrichment);
 }
+
+/**
+ * 旧名の互換エイリアス（`hasPendingChoiceHintEnrichment` と同一）。
+ * 古い import やキャッシュで `hasInsertedQuestionsPendingEnrichment` が参照されてもビルドが通るようにする。
+ */
+export const hasInsertedQuestionsPendingEnrichment = hasPendingChoiceHintEnrichment;
 
 /** 学習画面で出題可能か（ヒント・三択・正解の整合が取れているか） */
 export function isQuestionPlayableInStudy(q: GeneratedQuestion): boolean {

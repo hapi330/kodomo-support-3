@@ -18,18 +18,49 @@ async function parseJsonError(res: Response): Promise<string> {
   }
 }
 
-/** GET /api/problems */
+function problemsRequestInit(): RequestInit {
+  return {
+    credentials: "same-origin",
+    cache: "no-store",
+  };
+}
+
+/** PWA / モバイル Safari で相対 URL の fetch が不安定なときに使う */
+export function clientApiUrl(path: string): string {
+  if (typeof window === "undefined") return path;
+  return new URL(path, window.location.origin).href;
+}
+
+/** GET /api/problems（モバイル Safari 向けに絶対 URL・no-store・短い再試行） */
 export async function fetchProblems(): Promise<UploadedContent[]> {
-  const res = await fetch("/api/problems");
-  if (!res.ok) throw new Error(await parseJsonError(res));
-  const data = (await res.json()) as unknown;
-  return Array.isArray(data) ? (data as UploadedContent[]) : [];
+  const url = clientApiUrl("/api/problems");
+  const init = problemsRequestInit();
+  const maxAttempts = 3;
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, init);
+      if (!res.ok) throw new Error(await parseJsonError(res));
+      const data = (await res.json()) as unknown;
+      return Array.isArray(data) ? (data as UploadedContent[]) : [];
+    } catch (e) {
+      lastError = e;
+      if (attempt < maxAttempts - 1) {
+        await new Promise((r) => setTimeout(r, 280 * (attempt + 1)));
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error(String(lastError));
 }
 
 /** PATCH /api/problems */
 export async function saveProblemContent(content: UploadedContent): Promise<void> {
-  const res = await fetch("/api/problems", {
+  const res = await fetch(clientApiUrl("/api/problems"), {
     method: "PATCH",
+    credentials: "same-origin",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(content),
   });
@@ -38,8 +69,10 @@ export async function saveProblemContent(content: UploadedContent): Promise<void
 
 /** POST /api/problems/enrich-inserted — 差し込み問題のヒント・三択を AI 補完 */
 export async function enrichInsertedProblemsAfterSave(contentId: string): Promise<EnrichInsertedResult> {
-  const res = await fetch("/api/problems/enrich-inserted", {
+  const res = await fetch(clientApiUrl("/api/problems/enrich-inserted"), {
     method: "POST",
+    credentials: "same-origin",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: contentId }),
   });
@@ -59,8 +92,10 @@ export async function enrichInsertedProblemsAfterSave(contentId: string): Promis
 
 /** DELETE /api/problems */
 export async function deleteProblemContent(id: string): Promise<void> {
-  const res = await fetch("/api/problems", {
+  const res = await fetch(clientApiUrl("/api/problems"), {
     method: "DELETE",
+    credentials: "same-origin",
+    cache: "no-store",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id }),
   });

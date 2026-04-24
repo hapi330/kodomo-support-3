@@ -107,8 +107,8 @@ export default function Timer({
     : 0;
 
   return (
-    <div className="mc-panel p-4 rounded animate-slide-up">
-      <h2 className="text-lg font-black mb-3 flex items-center gap-2" style={{ color: "#7DC53D" }}>
+    <div className="mc-panel p-3 sm:p-4 rounded animate-slide-up">
+      <h2 className="text-base sm:text-lg font-black mb-2 flex items-center gap-2" style={{ color: "#7DC53D" }}>
         ⏰ タイマー
       </h2>
 

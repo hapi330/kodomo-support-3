@@ -39,11 +39,29 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
   const refreshContent = useCallback(async () => {
     const data = await fetchProblems();
     setContent(sortUploadedContentForStudyList(data));
+    setFetchError("");
   }, []);
+
+  /** 手動リカバリー用（ボタンから） */
+  const retryLoad = useCallback(async () => {
+    setFetchError("");
+    setIsLoading(true);
+    try {
+      await refreshContent();
+    } catch {
+      setFetchError(
+        "問題データの読み込みに失敗しました。通信を確認して、もう一度お試しください。"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [refreshContent]);
 
   useEffect(() => {
     refreshContent()
-      .catch(() => setFetchError("問題データの読み込みに失敗しました"))
+      .catch(() =>
+        setFetchError("問題データの読み込みに失敗しました。通信を確認して、もう一度お試しください。")
+      )
       .finally(() => setIsLoading(false));
   }, [refreshContent]);
 
@@ -157,6 +175,7 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
     isLoading,
     fetchError,
     refreshContent,
+    retryLoad,
     editDraft,
     setEditDraft,
     editSaving,
