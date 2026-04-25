@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# こどもサポート-3
 
-## Getting Started
+親は Mac で更新し、子どもは iPad ホーム画面からアプリのように使う想定の学習アプリです。
 
-First, run the development server:
+## ローカル開発
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Mac から: `http://localhost:3000`
+- iPad から（同一Wi-Fi）: `npm run dev:lan` を使い、表示された `http://192.168.x.x:3000` を開く
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 本番運用（公開URL + PWA）
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+ネットワーク変更のたびに IP を確認しないため、公開URL運用を推奨します。
 
-## Learn More
+### 1) Vercel にデプロイ
 
-To learn more about Next.js, take a look at the following resources:
+1. GitHub に push
+2. [Vercel](https://vercel.com/) でこのリポジトリを Import
+3. Framework は Next.js のまま Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2) 永続データ用の Blob を有効化
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+このアプリの教材データ API（`/api/problems`）は、以下の優先順で保存先を使います。
 
-## Deploy on Vercel
+1. `BLOB_READ_WRITE_TOKEN` がある場合: Vercel Blob に保存
+2. ない場合: `src/data/current_problems.json` に保存（ローカル開発向け）
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vercel Project Settings -> Storage で Blob を作成し、Environment Variables に次を設定してください。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `BLOB_READ_WRITE_TOKEN`（必須）
+- `PROBLEMS_BLOB_PATHNAME`（任意。未設定時は `kodomo-support/current_problems.json`）
+
+AI機能を使う場合は既存の API Key（OpenAI/Claude など）も Vercel 環境変数へ設定してください。
+
+### 3) iPad にホーム画面追加
+
+1. iPad Safari で公開URL（例: `https://xxxxx.vercel.app`）を開く
+2. 共有 -> **ホーム画面に追加**
+3. 以後はホーム画面アイコンから起動
+
+`manifest` と `sw.js` は実装済みなので、そのまま PWA として使えます。
+
+## 費用の目安
+
+- **ローカルLAN運用**: 0円（ただし IP 変更ごとに再設定が必要）
+- **Vercel + Blob運用**: 無料枠から開始可能（アクセス・保存量増加で従量課金の可能性）
+- **AI API（利用時）**: OpenAI/Claude などは別途従量課金
+
+## 運用ルール（推奨）
+
+- 実装更新: Mac で開発 -> `git push`
+- 反映: Vercel 自動デプロイ完了後に iPad で再起動
+- データバックアップ: 必要に応じて Blob データを定期エクスポート
