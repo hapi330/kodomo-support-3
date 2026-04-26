@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TypingCategoryArt } from "@/components/games/TypingCategoryArt";
 import type { GameThemeId } from "@/lib/game-themes";
 import { playCorrect, playWrong, playClick, speak } from "@/lib/sounds";
 import { mcField } from "@/lib/mc-styles";
+import { formatJaDateTime } from "@/lib/format-ja-datetime";
 import {
   REWARD_EXCHANGE_COSTS,
   XP_RIDDLE_CORRECT,
@@ -124,6 +125,16 @@ type RiddleItem = {
 };
 
 type RiddleMcOption = { text: string; correct: boolean };
+type SavedStory = {
+  id: string;
+  title: string;
+  words: string;
+  length: 300 | 500 | 800;
+  text: string;
+  createdAt: string;
+};
+
+const STORY_STORAGE_KEY = "mc_story_library_v1";
 
 function shuffleRiddleMcOptions(opts: RiddleMcOption[]): RiddleMcOption[] {
   const a = [...opts];
@@ -303,9 +314,18 @@ export default function Games({
   speechEnabled,
   childName,
 }: GamesProps) {
-  const [activeGame, setActiveGame] = useState<"menu" | "riddle" | "typing" | "reward">("menu");
+  const [activeGame, setActiveGame] = useState<"menu" | "riddle" | "typing" | "reward" | "story">("menu");
   const [riddleCategoryId, setRiddleCategoryId] = useState<GameThemeId>("manabi");
   const [typingCategoryId, setTypingCategoryId] = useState<GameThemeId>("manabi");
+  // Story state
+  const [storyTitle, setStoryTitle] = useState("");
+  const [storyWords, setStoryWords] = useState("");
+  const [storyLength, setStoryLength] = useState<300 | 500 | 800>(300);
+  const [storyText, setStoryText] = useState("");
+  const [storyLoading, setStoryLoading] = useState(false);
+  const [storyError, setStoryError] = useState("");
+  const [savedStories, setSavedStories] = useState<SavedStory[]>([]);
+  const [currentStoryId, setCurrentStoryId] = useState<string | null>(null);
 
   // Riddle state
   const [riddle, setRiddle] = useState<RiddleItem | null>(null);
@@ -325,6 +345,26 @@ export default function Games({
 
   const riddleCategoryMeta =
     RIDDLE_CATEGORIES.find((c) => c.id === riddleCategoryId) ?? RIDDLE_CATEGORIES[0];
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORY_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as SavedStory[];
+      if (!Array.isArray(parsed)) return;
+      setSavedStories(parsed);
+    } catch {
+      // ignore storage parse errors
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORY_STORAGE_KEY, JSON.stringify(savedStories));
+    } catch {
+      // ignore storage write errors
+    }
+  }, [savedStories]);
 
   const fetchRiddle = (nextTheme?: GameThemeId) => {
     setRiddleResult("none");
@@ -395,6 +435,89 @@ export default function Games({
     alert(`「${name}」と交換しました！お家の人に見せてね！🎉`);
   };
 
+  const generateStory = async (isSequel: boolean) => {
+    if (!storyTitle.trim()) {
+      setStoryError("タイトルを入力してね。");
+      return;
+    }
+    if (!storyWords.trim()) {
+      setStoryError("ワードを1つ以上入力してね。");
+      return;
+    }
+    setStoryLoading(true);
+    setStoryError("");
+    try {
+      const res = await fetch("/api/story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: storyTitle.trim(),
+          words: storyWords.trim(),
+          length: storyLength,
+          childName,
+          previousStory: isSequel ? storyText : "",
+        }),
+      });
+      const data = (await res.json()) as { story?: string; error?: string };
+      if (!res.ok || !data.story) {
+        throw new Error(data.error ?? "物語の生成に失敗しました");
+      }
+      setStoryText(data.story);
+      setCurrentStoryId(null);
+      if (soundEnabled) playCorrect();
+      if (speechEnabled) speak(isSequel ? "続編を作ったよ！" : "物語ができたよ！");
+    } catch (e) {
+      setStoryError(e instanceof Error ? e.message : "物語の生成に失敗しました");
+      if (soundEnabled) playWrong();
+    } finally {
+      setStoryLoading(false);
+    }
+  };
+
+  const saveCurrentStory = () => {
+    if (!storyText.trim()) return;
+    const payload: SavedStory = {
+      id: currentStoryId ?? crypto.randomUUID(),
+      title: storyTitle.trim() || "無題の物語",
+      words: storyWords.trim(),
+      length: storyLength,
+      text: storyText,
+      createdAt: new Date().toISOString(),
+    };
+    setSavedStories((prev) => [payload, ...prev.filter((s) => s.id !== payload.id)].slice(0, 50));
+    setCurrentStoryId(payload.id);
+    if (soundEnabled) playCorrect();
+    if (speechEnabled) speak("物語を保存したよ！");
+  };
+
+  const deleteCurrentStory = () => {
+    if (currentStoryId) {
+      setSavedStories((prev) => prev.filter((s) => s.id !== currentStoryId));
+    }
+    setCurrentStoryId(null);
+    setStoryText("");
+    if (soundEnabled) playClick();
+  };
+
+  const openSavedStory = (story: SavedStory) => {
+    setStoryTitle(story.title);
+    setStoryWords(story.words);
+    setStoryLength(story.length);
+    setStoryText(story.text);
+    setCurrentStoryId(story.id);
+    setStoryError("");
+  };
+
+  const startAnotherStory = () => {
+    setStoryTitle("");
+    setStoryWords("");
+    setStoryLength(300);
+    setStoryText("");
+    setStoryError("");
+    setCurrentStoryId(null);
+    if (soundEnabled) playClick();
+  };
+
   if (activeGame === "menu") {
     return (
       <div className="space-y-3" aria-label={`${childName}くんのあそび`}>
@@ -410,6 +533,7 @@ export default function Games({
               label: "タイピング",
               desc: `+${XP_TYPING_BASE}〜 XP/語（連続で増える）`,
             },
+            { key: "story", icon: "📖", label: "物語づくり", desc: "ワードからお話を作る" },
             { key: "reward", icon: "🎁", label: "報酬交換所", desc: `${totalXP.toLocaleString()} XP所持` },
           ].map((g) => (
             <button
@@ -694,6 +818,146 @@ export default function Games({
               </div>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+
+  // STORY
+  if (activeGame === "story") {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="font-black" style={{ color: "#F59E0B" }}>📖 物語づくり</h3>
+          <GamesBackButton onBack={() => setActiveGame("menu")} />
+        </div>
+        <div className="mc-panel p-4 space-y-3" style={{ borderColor: "#F59E0B" }}>
+          <div>
+            <label className="text-xs font-bold block mb-1" style={{ color: "#9CA3AF" }}>
+              タイトル
+            </label>
+            <input
+              type="text"
+              value={storyTitle}
+              onChange={(e) => setStoryTitle(e.target.value)}
+              placeholder="タイトルを記入して"
+              className="w-full p-3 rounded text-base"
+              style={mcField}
+            />
+          </div>
+          <div>
+            <label className="text-xs font-bold block mb-1" style={{ color: "#9CA3AF" }}>
+              物語のワード・ポイント（カンマ区切り）
+            </label>
+            <input
+              type="text"
+              value={storyWords}
+              onChange={(e) => setStoryWords(e.target.value)}
+              placeholder="物語のワード・ポイントを記入して"
+              className="w-full p-3 rounded text-base"
+              style={mcField}
+            />
+          </div>
+          <div>
+            <label className="text-xs font-bold block mb-1" style={{ color: "#9CA3AF" }}>
+              文章の長さ
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {[300, 500, 800].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setStoryLength(n as 300 | 500 | 800)}
+                  className={`mc-btn ${storyLength === n ? "mc-btn-green" : "mc-btn-gray"} py-2`}
+                >
+                  {n}文字
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => void generateStory(false)}
+              disabled={storyLoading}
+              className="mc-btn mc-btn-blue py-3 disabled:opacity-50"
+            >
+              {storyLoading ? "生成中..." : "物語を作る"}
+            </button>
+            <button
+              type="button"
+              onClick={() => void generateStory(true)}
+              disabled={storyLoading || !storyText}
+              className="mc-btn mc-btn-gold py-3 disabled:opacity-50"
+            >
+              続編を作る
+            </button>
+          </div>
+          {storyError && (
+            <div className="text-sm font-bold p-3 rounded" style={{ background: "#3A0D0D", border: "2px solid #EF4444", color: "#FCA5A5" }}>
+              {storyError}
+            </div>
+          )}
+        </div>
+        {storyText && (
+          <div className="space-y-3">
+            <div className="mc-panel p-5" style={{ borderColor: "#F59E0B", background: "#0D0D1A" }}>
+              <div className="text-lg font-black mb-2" style={{ color: "#FCD34D" }}>
+                {storyTitle || "物語"}
+              </div>
+              <div className="text-lg sm:text-xl leading-loose whitespace-pre-wrap" style={{ color: "#E8E8E8" }}>
+                {storyText}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button type="button" onClick={saveCurrentStory} className="mc-btn mc-btn-green py-3">
+                保存
+              </button>
+              <button type="button" onClick={deleteCurrentStory} className="mc-btn mc-btn-gray py-3">
+                削除
+              </button>
+            </div>
+            {currentStoryId && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button type="button" onClick={() => void generateStory(true)} className="mc-btn mc-btn-gold py-3">
+                  続編
+                </button>
+                <button type="button" onClick={startAnotherStory} className="mc-btn mc-btn-blue py-3">
+                  別の物語
+                </button>
+                <button type="button" onClick={() => setActiveGame("menu")} className="mc-btn mc-btn-gray py-3">
+                  ホームに戻る
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        <div className="mc-panel p-4 space-y-2" style={{ borderColor: "#F59E0B", background: "#121326" }}>
+          <div className="text-sm font-black" style={{ color: "#FCD34D" }}>保存した物語一覧</div>
+          {savedStories.length === 0 ? (
+            <div className="text-sm" style={{ color: "#9CA3AF" }}>まだ保存された物語はありません。</div>
+          ) : (
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              {savedStories.map((story) => (
+                <button
+                  key={story.id}
+                  type="button"
+                  onClick={() => openSavedStory(story)}
+                  className="w-full text-left p-3 rounded-lg border-2 transition-colors"
+                  style={{
+                    background: currentStoryId === story.id ? "#172554" : "#1A1A2E",
+                    borderColor: currentStoryId === story.id ? "#60A5FA" : "#374151",
+                    color: "#E5E7EB",
+                  }}
+                >
+                  <div className="font-bold text-sm">{story.title}</div>
+                  <div className="text-xs mt-1" style={{ color: "#A5B4FC" }}>
+                    {story.length}文字 / {formatJaDateTime(story.createdAt)}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );

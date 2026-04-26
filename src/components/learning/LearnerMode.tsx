@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { formatJaDateTime } from "@/lib/format-ja-datetime";
 import { GeneratedQuestion, StudyRecord, UploadedContent, type StudySessionCompletePayload } from "@/lib/storage";
 import { playCorrect, playExplosion, playPingPong, playWrong } from "@/lib/sounds";
@@ -71,11 +72,13 @@ function DiagramFigure({ q }: { q: GeneratedQuestion }) {
         className="relative w-full max-w-2xl mx-auto rounded-xl overflow-hidden"
         style={{ border: "2px solid #4A4A6A", background: "#111827" }}
       >
-        <img
+        <Image
           src={q.diagramImageUrl}
           alt={q.diagramAlt || "図式問題の図"}
+          width={1200}
+          height={800}
           className="w-full h-auto block"
-          loading="lazy"
+          unoptimized
         />
         {hotspots.map((hs, i) => (
           <button
