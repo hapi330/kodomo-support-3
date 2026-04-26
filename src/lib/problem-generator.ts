@@ -13,6 +13,7 @@ import {
   resolveAnswerInChoices,
   shuffleChoices,
 } from "@/lib/question-claude-helpers";
+import { getSubject } from "@/lib/config";
 import { sanitizeHintsForStudy } from "@/lib/hint-policy";
 import { estimateTranscribedProblemCount } from "@/lib/transcribed-problem-count";
 
@@ -76,6 +77,7 @@ async function generateQuestionsWithClaude(params: {
   targetQuestionCount: number;
 }): Promise<GeneratedQuestion[]> {
   const subjectLabel = normalizeSubjectLabel(params.subject);
+  const isMath = getSubject(params.subject).key === "さんすう";
   const n = params.targetQuestionCount;
   const userMessage = `教科: ${subjectLabel}
 
@@ -90,7 +92,8 @@ ${params.rawText}
 - 教材に設問が ${MAX_QUESTIONS} より多いときは、**先頭から ${MAX_QUESTIONS} 件**を出力する。
 
 上記に基づき問題を生成し、指定スキーマのJSONのみを返してください。
-各要素の question フィールドは、上記テキスト中の**該当する問題ブロックを省略せず**写した文字列とし、正解語だけ・漢字1語だけに要約しないこと。`;
+各要素の question フィールドは、上記テキスト中の**該当する問題ブロックを省略せず**写した文字列とし、正解語だけ・漢字1語だけに要約しないこと。
+各要素の question では OCR由来の記号（□, ( ), [図], [表], [判読不明]）を保持し、判読不明は補完しないこと。`;
 
   const response = await params.anthropic.messages.create({
     model: CLAUDE_SONNET_4_5,
@@ -118,13 +121,15 @@ ${params.rawText}
     if (!q) continue;
 
     const { choices, correctIndex } = shuffleChoices(q.answer, q.choices);
-    const hints = sanitizeHintsForStudy(q.hints, q.answer, { allowZeroHints: true });
+    const studySteps = isMath
+      ? sanitizeMathStudySteps(q.studySteps)
+      : sanitizeHintsForStudy(q.studySteps, q.answer, { allowZeroHints: true });
 
     const question: GeneratedQuestion = {
       id: `q-${params.contentId}-${out.length + 1}`,
       question: q.question,
       answer: q.answer,
-      hints,
+      hints: studySteps,
       choices,
       correctIndex,
       timesAnswered: 0,
@@ -148,6 +153,7 @@ type ClaudeQuestionPayload = {
   answer?: string;
   answerFurigana?: string;
   choices?: string[];
+  steps?: string[];
   hints?: string[];
 };
 
@@ -157,7 +163,7 @@ function normalizePayload(raw: ClaudeQuestionPayload): {
   question: string;
   answer: string;
   choices: string[];
-  hints: string[];
+  studySteps: string[];
   questionFurigana?: string;
   answerFurigana?: string;
 } | null {
@@ -174,11 +180,17 @@ function normalizePayload(raw: ClaudeQuestionPayload): {
   const unique = new Set(choicesIn);
   if (unique.size < 3) return null;
 
+  const stepsIn = Array.isArray(raw.steps)
+    ? raw.steps.map((s) => String(s).trim())
+    : Array.isArray(raw.hints)
+      ? raw.hints.map((h) => String(h).trim())
+      : [];
+
   return {
     question,
     answer,
     choices: choicesIn,
-    hints: Array.isArray(raw.hints) ? raw.hints.map((h) => String(h).trim()) : [],
+    studySteps: stepsIn,
     questionFurigana: optionalFurigana(raw.questionFurigana),
     answerFurigana: optionalFurigana(raw.answerFurigana),
   };
@@ -204,5 +216,24 @@ function parseQuestionsJson(raw: string): ParsedWrapper {
 
 function normalizeText(raw: string): string {
   return raw.replace(/\r\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function sanitizeMathStudySteps(steps: string[]): string[] {
+  const uniqRaw = new Set<string>();
+  const uniqNormalized = new Set<string>();
+  return steps
+    .map((s) => String(s ?? "").trim())
+    .filter(Boolean)
+    .filter((s) => {
+      const normalized = s
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .replace(/[。．.!！?？、,]/g, "");
+      if (uniqRaw.has(s) || uniqNormalized.has(normalized)) return false;
+      uniqRaw.add(s);
+      uniqNormalized.add(normalized);
+      return true;
+    })
+    .slice(0, 3);
 }
 

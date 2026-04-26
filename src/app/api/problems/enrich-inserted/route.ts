@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { enrichInsertedQuestionsInContent } from "@/lib/enrich-inserted-questions";
-import { hasPendingChoiceHintEnrichment } from "@/lib/inserted-enrichment-gate";
+import { hasPendingChoiceEnrichment } from "@/lib/inserted-enrichment-gate";
 import { readProblemsJson, writeProblemsJson } from "@/lib/problems-json-file";
 
-/** 差し込み問題のヒント・三択を AI で補完して再保存 */
+/** 差し込み問題の三択・解き方ステップを AI で補完して再保存 */
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as { id?: string };
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     const item = current[idx];
-    if (!hasPendingChoiceHintEnrichment(item)) {
+    if (!hasPendingChoiceEnrichment(item)) {
       return NextResponse.json({
         message: "差し込みの未生成はありません",
         content: item,
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       message:
         failures.length > 0
           ? `一部の問題で生成に失敗しました（${failures.length}件）`
-          : "ヒント・選択肢を生成しました",
+          : "選択肢・解き方ステップを生成しました",
       content: enriched,
       skipped: false,
       enrichmentFailures: failures,

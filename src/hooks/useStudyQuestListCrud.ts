@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { UploadedContent } from "@/lib/storage";
 import { sortUploadedContentForStudyList } from "@/lib/study-content-sort";
-import { hasPendingChoiceHintEnrichment } from "@/lib/inserted-enrichment-gate";
+import { hasPendingChoiceEnrichment } from "@/lib/inserted-enrichment-gate";
 import {
   deleteProblemContent,
   enrichInsertedProblemsAfterSave,
@@ -17,6 +17,8 @@ type QuestListCrudOptions = {
   /** 編集を閉じる・保存完了後 */
   onLeaveEditMode: () => void;
 };
+
+const AI_ENRICH_ACTION_LABEL = "三択・解き方ステップを AI で生成";
 
 /**
  * 学習タブ「まなぶ」クエスト一覧の取得・編集・削除・パスワードゲート
@@ -100,11 +102,13 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
     onLeaveEditMode();
   }, [onLeaveEditMode]);
 
-  /** 現在の下書きを保存したうえでヒント・三択を AI 生成し、編集を続けたまま反映する */
+  /** 現在の下書きを保存したうえで三択・解き方ステップを AI 生成し、編集を続けたまま反映する */
   const alertEnrichFailures = useCallback((failures: { label: string; message: string }[]) => {
     if (failures.length === 0) return;
     const lines = failures.map((f) => `${f.label}: ${f.message}`).join("\n");
-    window.alert(`次の問題で AI 生成に失敗しました。編集で内容を確認し、もう一度「ヒント・三択を AI で生成」を試してください。\n\n${lines}`);
+    window.alert(
+      `次の問題で AI 生成に失敗しました。編集で内容を確認し、もう一度「${AI_ENRICH_ACTION_LABEL}」を試してください。\n\n${lines}`
+    );
   }, []);
 
   const runAiEnrichOnEditDraft = useCallback(async () => {
@@ -134,15 +138,15 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
     setEditSaving(true);
     try {
       await saveProblemContent(editDraft);
-      if (hasPendingChoiceHintEnrichment(editDraft)) {
+      if (hasPendingChoiceEnrichment(editDraft)) {
         try {
           const { enrichmentFailures } = await enrichInsertedProblemsAfterSave(editDraft.id);
           alertEnrichFailures(enrichmentFailures);
         } catch (e) {
           alert(
             e instanceof Error
-              ? `${e.message}（本文の保存は完了しています。編集画面の「ヒント・三択を AI で生成」で再試行できます）`
-              : "ヒント・選択肢の自動生成に失敗しました（保存は完了しています）"
+              ? `${e.message}（本文の保存は完了しています。編集画面の「${AI_ENRICH_ACTION_LABEL}」で再試行できます）`
+              : "解き方ステップ・選択肢の自動生成に失敗しました（保存は完了しています）"
           );
         }
       }

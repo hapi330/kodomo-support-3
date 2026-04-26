@@ -11,7 +11,7 @@ import {
   removeQuestionAt,
   updateQuestionAt,
 } from "@/lib/question-draft";
-import { hasPendingChoiceHintEnrichment } from "@/lib/inserted-enrichment-gate";
+import { hasPendingChoiceEnrichment } from "@/lib/inserted-enrichment-gate";
 import type { UploadedContent } from "@/lib/storage";
 import { validateUploadedContent } from "@/lib/validate-study-content";
 import { formatJaDateTime } from "@/lib/format-ja-datetime";
@@ -23,8 +23,8 @@ interface ContentEditorProps {
   onSave: () => void;
   onCancel: () => void;
   saving: boolean;
-  /** ヒント・三択の AI 生成（保存→API→下書き更新）。未設定ならボタンを出さない */
-  onAiEnrichHintChoices?: () => void | Promise<void>;
+  /** 三択の AI 生成（保存→API→下書き更新）。未設定ならボタンを出さない */
+  onAiEnrichChoices?: () => void | Promise<void>;
   aiEnrichBusy?: boolean;
 }
 
@@ -77,11 +77,11 @@ export default function ContentEditor({
   onSave,
   onCancel,
   saving,
-  onAiEnrichHintChoices,
+  onAiEnrichChoices,
   aiEnrichBusy = false,
 }: ContentEditorProps) {
   const busy = saving || aiEnrichBusy;
-  const showAiEnrich = Boolean(onAiEnrichHintChoices) && hasPendingChoiceHintEnrichment(draft);
+  const showAiEnrich = Boolean(onAiEnrichChoices) && hasPendingChoiceEnrichment(draft);
   const [checkResult, setCheckResult] = useState<ReturnType<typeof validateUploadedContent> | null>(
     null
   );
@@ -252,25 +252,25 @@ export default function ContentEditor({
           style={{ background: "#0D1A14", border: "2px solid #17DD62" }}
         >
           <div className="text-xs font-bold" style={{ color: "#86EFAC" }}>
-            ヒント・三択がまだ空、または不正な問題があります
+            三択・解き方ステップが未設定、または不正な問題があります
           </div>
           <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
-            問題文があれば対象です（正解が空でも AI が正解・ヒント・三択を推測します）。下のボタンでいつでも AI
+            問題文があれば対象です（正解が空でも AI が正解・三択・解き方ステップを推測します）。下のボタンでいつでも AI
             生成できます（先に現在の内容をサーバーに保存してから実行します）。
           </p>
           <button
             type="button"
-            onClick={() => void onAiEnrichHintChoices?.()}
+            onClick={() => void onAiEnrichChoices?.()}
             disabled={busy}
             className="mc-btn mc-btn-green w-full py-3 text-sm font-black disabled:opacity-50"
           >
-            {aiEnrichBusy ? "AI 生成中…" : "ヒント・三択を AI で生成（後から実行）"}
+            {aiEnrichBusy ? "AI 生成中…" : "三択・解き方ステップを AI で生成（後から実行）"}
           </button>
         </div>
       )}
 
       <p className="text-xs leading-relaxed" style={{ color: "#9CA3AF" }}>
-        途中に空の問題を差し込めます。「先頭」「各問題の直下」のボタンで位置を選び、差し込み分は見出しに番号が付きます。問題文を入れたら、保存時または上の「後から実行」でヒントと三択を AI
+        途中に空の問題を差し込めます。「先頭」「各問題の直下」のボタンで位置を選び、差し込み分は見出しに番号が付きます。問題文を入れたら、保存時または上の「後から実行」で三択・解き方ステップを AI
         が作ります（正解が空でも AI が推測します）。
       </p>
 
@@ -538,23 +538,22 @@ export default function ContentEditor({
                 className="w-full px-3 py-2 rounded-lg text-sm"
                 style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
               />
-              {[0, 1, 2].map((hi) => (
-                <div key={hi}>
+              {[0, 1, 2].map((si) => (
+                <div key={`step-${si}`}>
                   <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
-                    ヒント {hi + 1}
+                    解き方ステップ {si + 1}（任意）
                   </label>
                   <textarea
-                    value={nq.hints[hi] ?? ""}
+                    value={nq.hints[si] ?? ""}
                     onChange={(e) => {
-                      const nextHints = [...padHints(nq.hints)];
-                      nextHints[hi] = e.target.value;
-                      onDraftChange(
-                        updateQuestionAt(draft, qi, (x) => ({ ...x, hints: nextHints }))
-                      );
+                      const nextSteps = [...padHints(nq.hints)];
+                      nextSteps[si] = e.target.value;
+                      onDraftChange(updateQuestionAt(draft, qi, (x) => ({ ...x, hints: nextSteps })));
                     }}
                     rows={2}
                     className="w-full px-3 py-2 rounded-lg text-sm"
-                    style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
+                    style={{ background: "#0D0D1A", border: "2px solid #3B82F6", color: "#E8E8E8" }}
+                    placeholder="例: 0.45 = 9/20"
                   />
                 </div>
               ))}

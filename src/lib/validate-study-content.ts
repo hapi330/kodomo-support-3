@@ -1,9 +1,9 @@
 import { resolveAnswerInChoices } from "@/lib/question-claude-helpers";
+import { getSubject } from "@/lib/config";
 import {
   formatQuestionBlockTitle,
   normalizeQuestion,
   padChoices,
-  padHints,
 } from "@/lib/question-draft";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 
@@ -47,24 +47,10 @@ function validateQuestion(q: GeneratedQuestion, index: number, draft: UploadedCo
   if (!answerText) {
     push(issues, "error", index, `「${label}」: 正解が空です。`);
   }
-
-  const hints = padHints(nq.hints ?? []);
-  const nonEmptyHints = hints.map((h) => String(h).trim()).filter(Boolean);
-  if (nonEmptyHints.length < 1) {
-    push(issues, "warning", index, `「${label}」: ヒントは未設定です（0件のままでも保存できます）。`);
-  }
-  if (nonEmptyHints.length > 0) {
-    const answerLower = answerText.toLowerCase();
-    nonEmptyHints.forEach((hint, hi) => {
-      if (answerLower && hint.toLowerCase().includes(answerLower)) {
-        push(
-          issues,
-          "warning",
-          index,
-          `「${label}」: ヒント ${hi + 1} に正解が含まれている可能性があります。`
-        );
-      }
-    });
+  const isMath = getSubject(draft.subject).key === "さんすう";
+  const stepCount = (nq.hints ?? []).map((h) => String(h).trim()).filter(Boolean).length;
+  if (isMath && stepCount === 0) {
+    push(issues, "warning", index, `「${label}」: 算数は解き方ステップが未設定です。`);
   }
 
   const choices = padChoices(nq.choices ?? []);
@@ -105,11 +91,6 @@ function validateQuestion(q: GeneratedQuestion, index: number, draft: UploadedCo
         }
       }
     }
-  }
-
-  const hintSet = new Set(nonEmptyHints);
-  if (hintSet.size >= 2 && hintSet.size < nonEmptyHints.length) {
-    push(issues, "warning", index, `「${label}」: ヒントの内容が一部同じです。`);
   }
 
   const imageUrl = String(nq.diagramImageUrl ?? "").trim();

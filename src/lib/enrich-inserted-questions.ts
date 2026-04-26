@@ -13,7 +13,7 @@ import {
   shuffleChoices,
 } from "@/lib/question-claude-helpers";
 import { sanitizeHintsForStudy } from "@/lib/hint-policy";
-import { isEligibleForChoiceHintAiEnrichment } from "@/lib/inserted-enrichment-gate";
+import { isEligibleForChoiceAiEnrichment } from "@/lib/inserted-enrichment-gate";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 
 const ENRICH_MAX_TOKENS = 4096;
@@ -257,7 +257,7 @@ export async function enrichInsertedQuestionsInContent(
 
   for (let index = 0; index < content.questions.length; index++) {
     const q = content.questions[index];
-    if (!isEligibleForChoiceHintAiEnrichment(q)) {
+    if (!isEligibleForChoiceAiEnrichment(q)) {
       questions.push(q);
       continue;
     }

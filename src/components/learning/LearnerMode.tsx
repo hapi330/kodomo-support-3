@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { formatJaDateTime } from "@/lib/format-ja-datetime";
 import { GeneratedQuestion, StudyRecord, UploadedContent, type StudySessionCompletePayload } from "@/lib/storage";
 import { playCorrect, playExplosion, playPingPong, playWrong } from "@/lib/sounds";
@@ -19,7 +19,6 @@ import { isQuestionPlayableInStudy } from "@/lib/inserted-enrichment-gate";
 import { saveProblemContent } from "@/lib/problems-client";
 import {
   XP_FIRST_CONTENT_CLEAR_BONUS,
-  XP_HINT_MISS,
   XP_PREP_CLEAR_BONUS,
   XP_PREP_MISS,
   XP_QUIZ_MISS,
@@ -45,12 +44,10 @@ const SR_ONLY =
   "absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0";
 const DIAGRAM_ACTIVE_BG = "rgba(34,197,94,0.35)";
 const DIAGRAM_IDLE_BG = "rgba(34,197,94,0.12)";
-const normalizeHintForDedup = (hint: string): string =>
-  hint
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .replace(/[。．.!！?？、,]/g, "");
-
+const getNowMs = (): number => Date.now();
+const STEP_SCROLL_DELAY_MS = 220;
+const STEP_WRONG_RESET_MS = 500;
+const QUIZ_RETRY_RESET_MS = 700;
 function assistiveQuestionText(q: GeneratedQuestion): string {
   const extra =
     q.questionFurigana && q.questionFurigana !== q.question
@@ -157,58 +154,214 @@ function QuestionCard({ q, speechEnabled = false }: { q: GeneratedQuestion; spee
   );
 }
 
-/** 出題＋ヒントを1枚のカードにまとめる（別カードの重複感を減らす） */
-function QuestionAndHintsCard({
-  q,
-  hintStepCount,
-  hintLevel,
-  visibleHints,
-  speechEnabled,
+function collectStudySteps(q: GeneratedQuestion): string[] {
+  const seen = new Set<string>();
+  return (q.hints ?? [])
+    .map((h) => String(h).trim())
+    .filter(Boolean)
+    .filter((step) => {
+      const key = step.toLowerCase().replace(/\s+/g, "");
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function splitStudyFormula(text: string): { left: string; right: string | null } {
+  const normalized = text.replace(/\s+/g, " ").trim();
+  const eqIndex = normalized.indexOf("=");
+  if (eqIndex < 0) return { left: normalized, right: null };
+  const left = normalized.slice(0, eqIndex).trim();
+  const right = normalized.slice(eqIndex + 1).trim();
+  if (!left || !right) return { left: normalized, right: null };
+  return { left, right };
+}
+
+function buildStepQuizChoices(answerRaw: string, index: number): string[] {
+  const answer = answerRaw.trim();
+  const choices = new Set<string>([answer]);
+  const frac = answer.match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
+  if (frac) {
+    const n = Number(frac[1]);
+    const d = Number(frac[2]);
+    choices.add(`${n + 1}/${d}`);
+    choices.add(`${Math.max(0, n - 1)}/${d}`);
+  } else {
+    const firstNumber = answer.match(/-?\d+(?:\.\d+)?/);
+    if (firstNumber) {
+      const raw = firstNumber[0];
+      const num = Number(raw);
+      const p = String(Number((num + 1).toFixed(2)));
+      const m = String(Number((num - 1).toFixed(2)));
+      choices.add(answer.replace(raw, p));
+      choices.add(answer.replace(raw, m));
+    } else {
+      choices.add(`${answer} + 1`);
+      choices.add(`${answer} - 1`);
+    }
+  }
+  const arr = Array.from(choices).slice(0, 3);
+  if (arr.length < 3) {
+    while (arr.length < 3) arr.push(`${answer} (${arr.length})`);
+  }
+  const rot = index % arr.length;
+  return [...arr.slice(rot), ...arr.slice(0, rot)];
+}
+
+function StudyStepGuide({
+  steps,
+  revealedCount,
+  onRevealNext,
 }: {
-  q: GeneratedQuestion;
-  hintStepCount: number;
-  hintLevel: number;
-  visibleHints: string[];
-  speechEnabled: boolean;
+  steps: string[];
+  revealedCount: number;
+  onRevealNext: () => void;
 }) {
-  const hintLabelColors = ["#17DD62", "#60A5FA", "#FCD34D"] as const;
-  const hintIcons = ["🌱", "💡", "🔥"] as const;
+  const [openIndex, setOpenIndex] = useState<number>(0);
+  const [stepResolved, setStepResolved] = useState<Record<number, boolean>>({});
+  const [stepSelectedChoice, setStepSelectedChoice] = useState<Record<number, number | null>>({});
+  const [stepResultText, setStepResultText] = useState<Record<number, string>>({});
+  const stepRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const visibleSteps = steps.slice(0, revealedCount);
+  const done = revealedCount >= steps.length;
+  const activeOpenIndex =
+    openIndex >= 0 && openIndex < visibleSteps.length
+      ? openIndex
+      : Math.max(0, visibleSteps.length - 1);
+
+  if (steps.length === 0) return null;
 
   return (
     <div
-      className="p-5 rounded-xl"
-      style={{ background: "#0D0D1A", border: "3px solid #4A4A6A" }}
+      className="p-4 rounded-xl space-y-3"
+      style={{ background: "#0D0D1A", border: "2px solid #3B82F6" }}
       role="region"
-      aria-label="問題とヒント"
+      aria-label="とき方ステップ"
     >
-      <ReadingPassagePanel q={q} speechEnabled={speechEnabled} />
-      <QuestionBody q={q} />
-
-      <div className="mt-5 pt-4 border-t border-white/10 space-y-4">
-        {hintStepCount > 1 && (
-          <div className="text-center text-sm sm:text-base font-bold" style={{ color: "#93C5FD" }}>
-            ステップ {hintLevel + 1} / {hintStepCount}
-          </div>
-        )}
-        {visibleHints.length === 0 && (
-          <p className="text-base sm:text-lg leading-relaxed text-center" style={{ color: "#9CA3AF" }}>
-            この問題はヒントなしでチャレンジ！
-          </p>
-        )}
-        {visibleHints.map((hint, i) => (
-          <div key={i}>
-            <span
-              className="text-sm sm:text-base font-bold"
-              style={{ color: hintLabelColors[i] ?? "#A0C878" }}
-            >
-              ヒント {Math.min(hintLevel + 1, 3)} {hintIcons[Math.min(hintLevel, 2)] ?? "📌"}
-            </span>
-            <p className="text-lg sm:text-xl mt-2 leading-relaxed" style={{ color: "#D1D5DB" }}>
-              <FractionText text={hint} />
-            </p>
-          </div>
-        ))}
+      <div className="text-sm font-black" style={{ color: "#93C5FD" }}>
+        💡 とき方ステップ
       </div>
+      {visibleSteps.map((step, i) => {
+        const isOpen = i === activeOpenIndex;
+        const formula = splitStudyFormula(step);
+        return (
+          <div
+            key={`study-step-${i}`}
+            className="rounded-lg overflow-hidden"
+            style={{ border: "1px solid #60A5FA", background: "#172554" }}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenIndex((prev) => (prev === i ? -1 : i))}
+              className="w-full flex items-center gap-2 px-3 py-2 text-left"
+              style={{ background: isOpen ? "#1E3A8A" : "#172554", color: "#DBEAFE" }}
+              aria-expanded={isOpen}
+            >
+              <span className="text-xs font-black px-2 py-0.5 rounded" style={{ background: "#2563EB", color: "#EFF6FF" }}>
+                {`(${i + 1})`}
+              </span>
+              <span className="text-sm font-bold flex-1">ステップ {i + 1}</span>
+              <span className="text-xs" style={{ color: "#BFDBFE" }}>{isOpen ? "▲" : "▼"}</span>
+            </button>
+            {isOpen && (
+              <div className="px-3 py-3 border-t" style={{ borderColor: "#60A5FA", color: "#DBEAFE" }}>
+                {formula.right ? (
+                  (() => {
+                    const solved = Boolean(stepResolved[i]);
+                    const selected = stepSelectedChoice[i] ?? null;
+                    const quizChoices = buildStepQuizChoices(formula.right, i);
+                    return (
+                      <div
+                        ref={(el) => {
+                          stepRefs.current[i] = el;
+                        }}
+                        className="space-y-2"
+                      >
+                        <div className="text-sm sm:text-base font-bold leading-relaxed flex flex-wrap items-center gap-2">
+                          <FractionText text={formula.left} />
+                          <span style={{ color: "#C4B5FD" }}>=</span>
+                          <span
+                            className="inline-block px-3 py-0.5 rounded"
+                            style={{
+                              background: solved ? "#14532D" : "#374151",
+                              color: solved ? "#86EFAC" : "#D1D5DB",
+                              fontWeight: 900,
+                            }}
+                          >
+                            {solved ? <FractionText text={formula.right} /> : "?"}
+                          </span>
+                        </div>
+                        {!solved && (
+                          <div className="space-y-2">
+                            <div className="text-xs font-bold" style={{ color: "#BFDBFE" }}>
+                              ミニ3択：どれが入る？
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              {quizChoices.map((choice, choiceIdx) => (
+                                <button
+                                  key={`step-${i}-choice-${choiceIdx}`}
+                                  type="button"
+                                  disabled={selected !== null}
+                                  onClick={() => {
+                                    const correct = choice === formula.right;
+                                    setStepSelectedChoice((prev) => ({ ...prev, [i]: choiceIdx }));
+                                    if (correct) {
+                                      setStepResolved((prev) => ({ ...prev, [i]: true }));
+                                      setStepResultText((prev) => ({ ...prev, [i]: "✅ 正解！" }));
+                                      const nextIndex = i + 1;
+                                      if (nextIndex < steps.length && revealedCount <= nextIndex) {
+                                        onRevealNext();
+                                      }
+                                      window.setTimeout(() => {
+                                        setOpenIndex(nextIndex < steps.length ? nextIndex : i);
+                                        const target = stepRefs.current[nextIndex];
+                                        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+                                      }, STEP_SCROLL_DELAY_MS);
+                                    } else {
+                                      setStepResultText((prev) => ({ ...prev, [i]: "❌ ちがうよ。もう一度ステップを読もう。" }));
+                                      window.setTimeout(() => {
+                                        setStepSelectedChoice((prev) => ({ ...prev, [i]: null }));
+                                      }, STEP_WRONG_RESET_MS);
+                                    }
+                                  }}
+                                  className="px-2 py-2 rounded-lg text-xs sm:text-sm font-bold disabled:opacity-60"
+                                  style={{ background: "#1E3A8A", border: "1px solid #60A5FA", color: "#DBEAFE" }}
+                                >
+                                  <FractionText text={choice} />
+                                </button>
+                              ))}
+                            </div>
+                            {stepResultText[i] && (
+                              <div
+                                className="text-xs font-bold"
+                                style={{ color: stepResolved[i] ? "#86EFAC" : "#FCA5A5" }}
+                              >
+                                {stepResultText[i]}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="text-sm sm:text-base leading-relaxed">
+                    <FractionText text={step} />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
+      <button
+        type="button"
+        onClick={onRevealNext}
+        disabled={done}
+        className="mc-btn mc-btn-blue w-full py-2 text-sm font-black disabled:opacity-50"
+      >
+        {done ? "すべて表示しました" : `つぎのステップを見る (${revealedCount + 1}/${steps.length})`}
+      </button>
     </div>
   );
 }
@@ -358,7 +511,7 @@ interface LearnerModeProps {
   onStudyTimerChange?: (v: null | { remainingSec: number; cycleMin: BgmCycleMinutes }) => void;
 }
 
-type Step = "select" | "edit" | "hint" | "quiz" | "result";
+type Step = "select" | "edit" | "quiz" | "result";
 
 export default function LearnerMode({
   soundEnabled,
@@ -394,7 +547,6 @@ export default function LearnerMode({
 
   const [selectedContent, setSelectedContent] = useState<UploadedContent | null>(null);
   const [currentQ, setCurrentQ] = useState<GeneratedQuestion | null>(null);
-  const [hintLevel, setHintLevel] = useState(0);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showExplosion, setShowExplosion] = useState(false);
@@ -425,9 +577,10 @@ export default function LearnerMode({
     netXpGained: number;
   } | null>(null);
   /** セッション集計（startContent でリセット） */
-  const [sessionHintMisses, setSessionHintMisses] = useState(0);
   const [sessionQuizMisses, setSessionQuizMisses] = useState(0);
   const [sessionQuizXpSum, setSessionQuizXpSum] = useState(0);
+  const [revealedStepCount, setRevealedStepCount] = useState(0);
+  const [retryNotice, setRetryNotice] = useState("");
 
   /** 勉強中の「やめる」・エラー戻り・最終問題クリア後に共通 */
   const leaveStudySessionToSelect = useCallback(() => {
@@ -446,12 +599,6 @@ export default function LearnerMode({
   useEffect(() => {
     setStudySessionBgmMuted(studyBgmMuted);
   }, [studyBgmMuted]);
-
-  useEffect(() => {
-    if (!soundEnabled || selectedContent === null || bgmRoulette === null) {
-      setStudyBgmMuted(false);
-    }
-  }, [soundEnabled, selectedContent, bgmRoulette]);
 
   /** クエスト開始〜一覧に戻るまで：BGMサイクル（本試験は 8/10/12 分、予習は3分） */
   useEffect(() => {
@@ -501,7 +648,7 @@ export default function LearnerMode({
     }
     const tick = () => {
       const cycleMs = bgmRoulette.minutes * 60 * 1000;
-      const elapsed = Date.now() - studyCycleClockStart;
+      const elapsed = getNowMs() - studyCycleClockStart;
       const remMs = cycleMs - (elapsed % cycleMs);
       const remainingSec = Math.max(0, Math.ceil(remMs / 1000));
       onStudyTimerChange?.({ remainingSec, cycleMin: bgmRoulette.minutes });
@@ -521,7 +668,6 @@ export default function LearnerMode({
 
   const startContent = (c: UploadedContent, selectedRoulette: BgmRouletteResult) => {
     setSessionClearSummaryModal(null);
-    setSessionHintMisses(0);
     setSessionQuizMisses(0);
     setSessionQuizXpSum(0);
     setSessionCorrect(0);
@@ -532,7 +678,7 @@ export default function LearnerMode({
     setRoulettePhase(null);
     setRouletteSpinCount(0);
     void Promise.resolve().then(() => {
-      setStudyCycleClockStart(Date.now());
+      setStudyCycleClockStart(getNowMs());
     });
     const queue = [...c.questions];
     setQuestionQueue(queue);
@@ -547,7 +693,7 @@ export default function LearnerMode({
     setRoulettePhase("choose");
   };
 
-  /** 予習：本試験と同じヒント→3択。プリント清書なし（アプリのみ） */
+  /** 予習：3択で進行。プリント清書なし（アプリのみ） */
   const startPrepSession = (c: UploadedContent) => {
     startContent(c, PREP_BGM_RESULT);
   };
@@ -599,34 +745,12 @@ export default function LearnerMode({
   /** 勉強中は speechSynthesis を使わない（答えの先読み・誤読み上げを防ぐ） */
   const loadQuestion = (q: GeneratedQuestion) => {
     setCurrentQ(q);
-    setStep("hint");
-    setHintLevel(0);
+    setStep("quiz");
     setSelectedChoice(null);
     setIsCorrect(null);
-    setStartTime(Date.now());
-  };
-
-  /** ヒント段階では最終答えを表示しない。ヒントを順に見た後で本番クイズへ進む。 */
-  const nextHintStep = () => {
-    if (!currentQ || step !== "hint") return;
-    const seen = new Set<string>();
-    const usableHints = currentQ.hints
-      .map((h) => String(h).trim())
-      .filter(Boolean)
-      .filter((hint) => {
-        const normalized = normalizeHintForDedup(hint);
-        if (seen.has(normalized)) return false;
-        seen.add(normalized);
-        return true;
-      });
-    const lastHintIndex = Math.max(0, usableHints.length - 1);
-    if (hintLevel < lastHintIndex) {
-      if (soundEnabled) playCorrect();
-      setHintLevel((h) => h + 1);
-      return;
-    }
-    if (soundEnabled) playCorrect();
-    setStep("quiz");
+    setStartTime(getNowMs());
+    setRevealedStepCount(0);
+    setRetryNotice("");
   };
 
   const handleAnswer = (choiceIdx: number) => {
@@ -635,11 +759,11 @@ export default function LearnerMode({
     const correct = choiceIdx === currentQ.correctIndex;
     setIsCorrect(correct);
 
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+    const timeSpent = Math.floor((getNowMs() - startTime) / 1000);
     const mult = bgmRoulette?.xpMultiplier ?? 1;
     const gained = correct ? xpForQuizCorrect(mult) : 0;
     const record: StudyRecord = {
-      id: `r-${Date.now()}`,
+      id: `r-${getNowMs()}`,
       date: new Date().toISOString(),
       subject: selectedContent?.subject ?? "",
       question: currentQ.question,
@@ -673,14 +797,21 @@ export default function LearnerMode({
       if (soundEnabled) { playWrong(); setTimeout(() => playExplosion(), 300); }
       setShowExplosion(true);
       setTimeout(() => setShowExplosion(false), 1000);
+      setRetryNotice("もう一度チャレンジしよう！");
     }
     setSessionTotal((s) => s + 1);
-    const isLastQuestion = queueIndex + 1 >= questionQueue.length;
-    if (!correct && isLastQuestion) {
-      setSelectedChoice(null);
-      setIsCorrect(null);
+    if (!correct) {
+      // 不正解時は次の問題へ進めず、同じ問題を解き直す
+      window.setTimeout(() => {
+        setSelectedChoice(null);
+        setIsCorrect(null);
+      }, QUIZ_RETRY_RESET_MS);
       setStep("quiz");
       return;
+    }
+    const isLastQuestion = queueIndex + 1 >= questionQueue.length;
+    if (!isLastQuestion) {
+      setRetryNotice("");
     }
     setStep("result");
   };
@@ -694,11 +825,10 @@ export default function LearnerMode({
       const isPrepSession = bgmRoulette?.minutes === PREP_SESSION_MINUTES;
 
       if (isPrepSession && contentAtEnd) {
-        const hintM = sessionHintMisses;
         const quizM = sessionQuizMisses;
         const quizSum = sessionQuizXpSum;
-        const missPenaltyXp = (hintM + quizM) * Math.abs(XP_PREP_MISS);
-        const missCount = hintM + quizM;
+        const missPenaltyXp = quizM * Math.abs(XP_PREP_MISS);
+        const missCount = quizM;
         const netXpGained = quizSum + XP_PREP_CLEAR_BONUS - missPenaltyXp;
         onXPGain(XP_PREP_CLEAR_BONUS);
         setSessionClearSummaryModal({
@@ -714,12 +844,10 @@ export default function LearnerMode({
 
       const skipBonus = Boolean(contentAtEnd?.studyCleared);
       const rouletteResolved = bgmRoulette ?? DEFAULT_BGM_WITHOUT_ROULETTE;
-      const hintM = sessionHintMisses;
       const quizM = sessionQuizMisses;
       const quizSum = sessionQuizXpSum;
-      const missPenaltyXp =
-        hintM * Math.abs(XP_HINT_MISS) + quizM * Math.abs(XP_QUIZ_MISS);
-      const missCount = hintM + quizM;
+      const missPenaltyXp = quizM * Math.abs(XP_QUIZ_MISS);
+      const missCount = quizM;
       const firstBonusXp = !skipBonus ? XP_FIRST_CONTENT_CLEAR_BONUS : 0;
       const netXpGained = quizSum + firstBonusXp - missPenaltyXp;
 
@@ -820,7 +948,7 @@ export default function LearnerMode({
           onSave={() => void quest.saveEdit()}
           onCancel={quest.cancelEdit}
           saving={quest.editSaving}
-          onAiEnrichHintChoices={() => void quest.runAiEnrichOnEditDraft()}
+          onAiEnrichChoices={() => void quest.runAiEnrichOnEditDraft()}
           aiEnrichBusy={quest.editAiEnrichBusy}
         />
       </div>
@@ -1088,11 +1216,11 @@ export default function LearnerMode({
         >
           <div className="text-5xl">⚠️</div>
           <div className="text-xl font-black" style={{ color: "#FCA5A5" }}>
-            この問題はヒント・選択肢が未設定です
+            この問題は選択肢が未設定です
           </div>
           <p className="text-sm leading-relaxed" style={{ color: "#D1D5DB" }}>
             問題文だけのまま保存されているか、AI
-            生成に失敗している可能性があります。編集で「正解」を入れるか、「ヒント・三択を AI
+            生成に失敗している可能性があります。編集で「正解」を入れるか、「三択を AI
             で生成（後から実行）」を押してから続きをプレイしてください。
           </p>
           <button type="button" onClick={leaveStudySessionToSelect} className="mc-btn mc-btn-green px-8 py-3">
@@ -1103,32 +1231,17 @@ export default function LearnerMode({
     );
   }
 
-  const isKokugoSingleHint = selectedContent
-    ? getSubject(selectedContent.subject).key === "こくご"
-    : false;
-  const seenHints = new Set<string>();
-  const nonEmptyHints = currentQ.hints
-    .map((h) => String(h).trim())
-    .filter(Boolean)
-    .filter((hint) => {
-      const normalized = normalizeHintForDedup(hint);
-      if (seenHints.has(normalized)) return false;
-      seenHints.add(normalized);
-      return true;
-    });
-  const hintStepCount = isKokugoSingleHint ? Math.min(1, nonEmptyHints.length) : nonEmptyHints.length;
-  const visibleHints = hintStepCount === 0
-    ? []
-    : [isKokugoSingleHint ? nonEmptyHints[0] : nonEmptyHints[Math.min(hintLevel, hintStepCount - 1)]];
-
   const progress = questionQueue.length > 0
     ? Math.round((queueIndex / questionQueue.length) * 100)
     : 0;
 
+  const isMathSubject = selectedContent
+    ? getSubject(selectedContent.subject).key === "さんすう"
+    : false;
+  const studySteps = currentQ ? collectStudySteps(currentQ) : [];
+
   const isPrepSession = bgmRoulette?.minutes === PREP_SESSION_MINUTES;
-  const missPenaltyPointsShown = isPrepSession
-    ? Math.abs(XP_PREP_MISS)
-    : Math.abs(XP_HINT_MISS);
+  const missPenaltyPointsShown = isPrepSession ? Math.abs(XP_PREP_MISS) : Math.abs(XP_QUIZ_MISS);
 
   return (
     <div className="space-y-3 relative">
@@ -1238,25 +1351,6 @@ export default function LearnerMode({
         </div>
       )}
 
-      {step === "hint" && (
-        <div className="space-y-3">
-          <QuestionAndHintsCard
-            q={currentQ}
-            hintStepCount={hintStepCount}
-            hintLevel={hintLevel}
-            visibleHints={visibleHints}
-            speechEnabled={speechEnabled}
-          />
-          <button
-            type="button"
-            onClick={nextHintStep}
-            className="mc-btn mc-btn-blue w-full py-3 text-base font-black"
-          >
-            {hintLevel + 1 >= hintStepCount ? "本番クイズへ進む" : "つぎのヒントを見る"}
-          </button>
-        </div>
-      )}
-
       {step === "quiz" && (
         <div className="space-y-3">
           <QuestionAssistiveOnly q={currentQ} />
@@ -1269,6 +1363,13 @@ export default function LearnerMode({
             <ReadingPassagePanel q={currentQ} speechEnabled={speechEnabled} />
             <QuestionBody q={currentQ} />
           </div>
+          {isMathSubject && (
+            <StudyStepGuide
+              steps={studySteps}
+              revealedCount={revealedStepCount}
+              onRevealNext={() => setRevealedStepCount((n) => Math.min(n + 1, studySteps.length))}
+            />
+          )}
           <TripleChoiceButtons
             choices={currentQ.choices}
             mode="final"
@@ -1279,6 +1380,14 @@ export default function LearnerMode({
               isCorrect,
             }}
           />
+          {retryNotice && (
+            <div
+              className="text-sm font-black text-center py-2 rounded"
+              style={{ background: "#3A0D0D", border: "2px solid #EF4444", color: "#FCA5A5" }}
+            >
+              {retryNotice}
+            </div>
+          )}
         </div>
       )}
 
@@ -1297,14 +1406,14 @@ export default function LearnerMode({
           <div className="text-2xl font-black mb-2" style={{ color: isCorrect ? "#7FFF00" : "#EF4444" }}>
             {isCorrect ? "せいかい！" : "ざんねん…"}
           </div>
-          {!isPrepSession && (
+          {isCorrect && (
             <AnswerForWorksheetCopy
               answer={currentQ.answer}
               answerFurigana={currentQ.answerFurigana}
               answerUnit={currentQ.answerUnit}
             />
           )}
-          {isPrepSession && (
+          {isPrepSession && !isCorrect && (
             <p className="text-xs leading-relaxed mb-3 px-1" style={{ color: "#9CA3AF" }}>
               本試験では、ここに出た答えをプリントに清書します。予習はアプリだけで OK です。
             </p>
