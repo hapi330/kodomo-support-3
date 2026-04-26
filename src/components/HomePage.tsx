@@ -99,6 +99,8 @@ export default function HomePage() {
   } | null>(null);
   const [studyCycleTimer, setStudyCycleTimer] = useState<StudyCycleTimer | null>(null);
   const [rewardRitualOpen, setRewardRitualOpen] = useState(false);
+  const [isRefreshingApp, setIsRefreshingApp] = useState(false);
+  const [refreshHint, setRefreshHint] = useState<string | null>(null);
 
   const updateState = useCallback((updater: (prev: AppState) => AppState) => {
     setState((prev) => {
@@ -226,6 +228,29 @@ export default function HomePage() {
       alert("パスワードが違います");
     }
   };
+
+  const refreshAppOnIPad = useCallback(async () => {
+    if (isRefreshingApp) return;
+    setIsRefreshingApp(true);
+    setRefreshHint("最新データを確認中…");
+    try {
+      if ("serviceWorker" in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((reg) => reg.update()));
+      }
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      }
+      setRefreshHint("更新を反映します。");
+      const url = new URL(window.location.href);
+      url.searchParams.set("refresh", String(Date.now()));
+      window.location.replace(url.toString());
+    } catch {
+      setRefreshHint("更新に失敗。通常リロードします。");
+      window.location.reload();
+    }
+  }, [isRefreshingApp]);
 
   if (!state) {
     return (
@@ -713,6 +738,19 @@ export default function HomePage() {
 
             <div className="mc-panel p-4">
               <h3 className="font-black mb-3" style={{ color: "#EF4444" }}>⚠️ データ管理</h3>
+              <button
+                type="button"
+                onClick={() => void refreshAppOnIPad()}
+                className="mc-btn mc-btn-blue w-full py-3 mb-3 disabled:opacity-60"
+                disabled={isRefreshingApp}
+              >
+                🔄 iPadでデータ更新
+              </button>
+              {refreshHint && (
+                <p className="text-xs mb-3" style={{ color: "#93C5FD" }}>
+                  {refreshHint}
+                </p>
+              )}
               <button
                 type="button"
                 onClick={() => {
