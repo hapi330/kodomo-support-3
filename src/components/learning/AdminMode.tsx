@@ -190,9 +190,10 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
           rawText: trimmedRawText,
         }),
       });
-      const payload = (await res.json()) as { error?: string };
+      const payload = (await res.json()) as { error?: string; detail?: string };
       if (!res.ok) {
-        throw new Error(payload.error ?? "クエスト生成に失敗しました");
+        const msg = [payload.error, payload.detail].filter(Boolean).join(" / ");
+        throw new Error(msg || "クエスト生成に失敗しました");
       }
 
       clearOcrDraft();

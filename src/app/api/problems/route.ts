@@ -39,8 +39,9 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("/api/problems POST error:", error);
+    const detail = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "問題データの保存に失敗しました", detail: String(error) },
+      { error: `問題データの保存に失敗しました: ${detail}`, detail },
       { status: 500 }
     );
   }

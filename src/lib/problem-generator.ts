@@ -32,22 +32,30 @@ export async function buildUploadedContent(input: {
   const subject = input.subject.trim() || "その他";
 
   const anthropic = getAnthropicClient();
-  if (!anthropic) {
-    throw new Error("ANTHROPIC_API_KEY が未設定です");
-  }
 
   const targetQuestionCount = Math.min(
     MAX_QUESTIONS,
     Math.max(1, estimateTranscribedProblemCount(normalized))
   );
 
-  const questions = await generateQuestionsWithClaude({
-    anthropic,
-    rawText: normalized,
-    subject,
-    contentId,
-    targetQuestionCount,
-  });
+  let questions: GeneratedQuestion[];
+  if (!anthropic) {
+    questions = buildLocalQuestionsFallback(normalized, subject, contentId);
+  } else {
+    try {
+      questions = await generateQuestionsWithClaude({
+        anthropic,
+        rawText: normalized,
+        subject,
+        contentId,
+        targetQuestionCount,
+      });
+    } catch (error) {
+      const fallback = buildLocalQuestionsFallback(normalized, subject, contentId);
+      if (fallback.length === 0) throw error;
+      questions = fallback;
+    }
+  }
 
   const lines = normalized
     .split("\n")
@@ -235,5 +243,183 @@ function sanitizeMathStudySteps(steps: string[]): string[] {
       return true;
     })
     .slice(0, 3);
+}
+
+type Fraction = { n: number; d: number };
+
+function gcd(a: number, b: number): number {
+  let x = Math.abs(a);
+  let y = Math.abs(b);
+  while (y !== 0) {
+    const t = x % y;
+    x = y;
+    y = t;
+  }
+  return x || 1;
+}
+
+function reduceFraction(f: Fraction): Fraction {
+  if (f.d === 0) return f;
+  const sign = f.d < 0 ? -1 : 1;
+  const n = f.n * sign;
+  const d = Math.abs(f.d);
+  const g = gcd(n, d);
+  return { n: n / g, d: d / g };
+}
+
+function parseFractionToken(token: string): Fraction | null {
+  const t = token.trim();
+  const m = t.match(/^(-?\d+)\s*\/\s*(-?\d+)$/);
+  if (m) {
+    const n = Number.parseInt(m[1], 10);
+    const d = Number.parseInt(m[2], 10);
+    if (!Number.isFinite(n) || !Number.isFinite(d) || d === 0) return null;
+    return reduceFraction({ n, d });
+  }
+  if (/^-?\d+$/.test(t)) {
+    const n = Number.parseInt(t, 10);
+    return { n, d: 1 };
+  }
+  return null;
+}
+
+function calcBinaryExpr(expr: string): Fraction | null {
+  const compact = expr.replace(/[＝=].*$/, "").replace(/\s+/g, "");
+  const m = compact.match(/^(-?\d+(?:\/-?\d+)?)\s*([+\-×xX*÷/])\s*(-?\d+(?:\/-?\d+)?)$/);
+  if (!m) return null;
+  const left = parseFractionToken(m[1]);
+  const op = m[2];
+  const right = parseFractionToken(m[3]);
+  if (!left || !right) return null;
+
+  let out: Fraction | null = null;
+  if (op === "+") out = { n: left.n * right.d + right.n * left.d, d: left.d * right.d };
+  if (op === "-") out = { n: left.n * right.d - right.n * left.d, d: left.d * right.d };
+  if (op === "×" || op === "x" || op === "X" || op === "*") out = { n: left.n * right.n, d: left.d * right.d };
+  if (op === "÷") out = right.n === 0 ? null : { n: left.n * right.d, d: left.d * right.n };
+  // "/" は a/b 形式と衝突しやすいので演算子としては使わない
+  if (!out || out.d === 0) return null;
+  return reduceFraction(out);
+}
+
+function fractionToAnswer(f: Fraction): string {
+  const r = reduceFraction(f);
+  if (r.d === 1) return String(r.n);
+  return `${r.n}/${r.d}`;
+}
+
+function createNearbyChoices(correct: Fraction): string[] {
+  const c = reduceFraction(correct);
+  const a1 = reduceFraction({ n: c.n + c.d, d: c.d });
+  const a2 = reduceFraction({ n: c.n - c.d, d: c.d });
+  const list = [fractionToAnswer(c), fractionToAnswer(a1), fractionToAnswer(a2)].filter(Boolean);
+  const uniq = Array.from(new Set(list));
+  if (uniq.length >= 3) return uniq.slice(0, 3);
+  if (!uniq.includes("1")) uniq.push("1");
+  if (!uniq.includes("0")) uniq.push("0");
+  return uniq.slice(0, 3);
+}
+
+function buildFallbackQuestions(rawText: string, subject: string, contentId: string): GeneratedQuestion[] {
+  const isMath = getSubject(subject).key === "さんすう";
+  if (!isMath) return [];
+
+  const lines = rawText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const out: GeneratedQuestion[] = [];
+  for (const line of lines) {
+    const expr = line.replace(/^[（(]?\d+[)）.]?\s*/, "");
+    const result = calcBinaryExpr(expr);
+    if (!result) continue;
+    const choices = createNearbyChoices(result);
+    if (choices.length !== 3) continue;
+    const answer = fractionToAnswer(result);
+    const correctIndex = choices.findIndex((c) => c === answer);
+    if (correctIndex < 0) continue;
+
+    out.push({
+      id: `q-${contentId}-${out.length + 1}`,
+      question: line,
+      answer,
+      hints: [
+        "通分または約分を確認しよう",
+        `${expr} = ?`,
+        `答えは ${answer}`,
+      ],
+      choices,
+      correctIndex,
+      timesAnswered: 0,
+      timesCorrect: 0,
+    });
+    if (out.length >= MAX_QUESTIONS) break;
+  }
+  return out;
+}
+
+function buildLocalQuestionsFallback(rawText: string, subject: string, contentId: string): GeneratedQuestion[] {
+  const math = buildFallbackQuestions(rawText, subject, contentId);
+  if (math.length > 0) return math;
+  return buildGenericQuestionsFromText(rawText, contentId);
+}
+
+function buildGenericQuestionsFromText(rawText: string, contentId: string): GeneratedQuestion[] {
+  const lines = rawText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !/^問題\d+\s*$/.test(line));
+
+  const blocks: string[] = [];
+  let cur: string[] = [];
+  for (const line of lines) {
+    const isNew = /^[（(]?\d+[)）.]?\s*/.test(line) || /^問\d+/.test(line);
+    if (isNew && cur.length > 0) {
+      blocks.push(cur.join("\n"));
+      cur = [line];
+      continue;
+    }
+    cur.push(line);
+  }
+  if (cur.length > 0) blocks.push(cur.join("\n"));
+
+  const source = (blocks.length > 0 ? blocks : lines).slice(0, 8);
+  const out: GeneratedQuestion[] = source.map((text, idx) => {
+    const answer = `本文を読んで答えよう ${idx + 1}`;
+    return {
+      id: `q-${contentId}-${idx + 1}`,
+      question: text,
+      answer,
+      hints: [
+        "本文のキーワードを確認しよう",
+        "文の前後関係に注目しよう",
+        "わからないときは音読して整理しよう",
+      ],
+      choices: [answer, "わからない", "もう一度読む"],
+      correctIndex: 0,
+      timesAnswered: 0,
+      timesCorrect: 0,
+    };
+  });
+
+  if (out.length > 0) return out;
+  return [
+    {
+      id: `q-${contentId}-1`,
+      question: rawText.slice(0, 300) || "本文が空です。",
+      answer: "本文を読んで答えよう 1",
+      hints: [
+        "まずは本文を最後まで読もう",
+        "大事な語に印をつけよう",
+        "自分の言葉で説明してみよう",
+      ],
+      choices: ["本文を読んで答えよう 1", "わからない", "もう一度読む"],
+      correctIndex: 0,
+      timesAnswered: 0,
+      timesCorrect: 0,
+    },
+  ];
 }
 

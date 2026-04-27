@@ -6,9 +6,18 @@ import type { UploadedContent } from "@/lib/storage";
 const PROBLEMS_FILE = path.join(process.cwd(), "src", "data", "current_problems.json");
 const PROBLEMS_BLOB_PATHNAME = process.env.PROBLEMS_BLOB_PATHNAME ?? "kodomo-support/current_problems.json";
 const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+const IS_VERCEL = process.env.VERCEL === "1";
 
 function shouldUseBlobStorage(): boolean {
   return typeof BLOB_TOKEN === "string" && BLOB_TOKEN.trim().length > 0;
+}
+
+function assertStorageConfigForRuntime() {
+  if (IS_VERCEL && !shouldUseBlobStorage()) {
+    throw new Error(
+      "BLOB_READ_WRITE_TOKEN が未設定です。Vercel本番では problems 保存に Blob 設定が必要です。"
+    );
+  }
 }
 
 async function readFromBlob(): Promise<UploadedContent[]> {
@@ -27,6 +36,7 @@ async function readFromBlob(): Promise<UploadedContent[]> {
 }
 
 export async function readProblemsJson(): Promise<UploadedContent[]> {
+  assertStorageConfigForRuntime();
   if (shouldUseBlobStorage()) {
     try {
       return await readFromBlob();
@@ -44,6 +54,7 @@ export async function readProblemsJson(): Promise<UploadedContent[]> {
 }
 
 export async function writeProblemsJson(items: UploadedContent[]): Promise<void> {
+  assertStorageConfigForRuntime();
   if (shouldUseBlobStorage()) {
     await put(PROBLEMS_BLOB_PATHNAME, JSON.stringify(items, null, 2), {
       access: "public",
