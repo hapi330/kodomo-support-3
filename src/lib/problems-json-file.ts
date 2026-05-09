@@ -1,6 +1,7 @@
 import { list, put } from "@vercel/blob";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import bundledProblemsJson from "@/data/current_problems.json";
 import type { UploadedContent } from "@/lib/storage";
 
 const PROBLEMS_FILE = path.join(process.cwd(), "src", "data", "current_problems.json");
@@ -18,6 +19,30 @@ function assertStorageConfigForRuntime() {
       "BLOB_READ_WRITE_TOKEN が未設定です。Vercel本番では problems 保存に Blob 設定が必要です。"
     );
   }
+}
+
+function asProblemArray(value: unknown): UploadedContent[] {
+  return Array.isArray(value) ? (value as UploadedContent[]) : [];
+}
+
+function mergeBundledAndStoredProblems(stored: UploadedContent[]): UploadedContent[] {
+  const storedById = new Map(stored.filter((item) => item?.id).map((item) => [item.id, item]));
+  const seen = new Set<string>();
+  const merged: UploadedContent[] = [];
+
+  for (const item of asProblemArray(bundledProblemsJson)) {
+    if (!item?.id || seen.has(item.id)) continue;
+    seen.add(item.id);
+    merged.push(storedById.get(item.id) ?? item);
+  }
+
+  for (const item of stored) {
+    if (!item?.id || seen.has(item.id)) continue;
+    seen.add(item.id);
+    merged.push(item);
+  }
+
+  return merged;
 }
 
 async function readFromBlob(): Promise<UploadedContent[]> {
@@ -39,17 +64,17 @@ export async function readProblemsJson(): Promise<UploadedContent[]> {
   assertStorageConfigForRuntime();
   if (shouldUseBlobStorage()) {
     try {
-      return await readFromBlob();
+      return mergeBundledAndStoredProblems(await readFromBlob());
     } catch {
-      return [];
+      return asProblemArray(bundledProblemsJson);
     }
   }
   try {
     const raw = await readFile(PROBLEMS_FILE, "utf-8");
     const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as UploadedContent[]) : [];
+    return asProblemArray(parsed);
   } catch {
-    return [];
+    return asProblemArray(bundledProblemsJson);
   }
 }
 
