@@ -8,27 +8,18 @@
 import { spawn, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import os from "node:os";
+import {
+  getLanIpv4Addresses,
+  writeIpadOpenDevHtml,
+  printAirDropConsoleHint,
+} from "./write-ipad-open-dev-html.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, "..");
 
-function lanIpv4Addresses() {
-  const out = [];
-  for (const nets of Object.values(os.networkInterfaces())) {
-    if (!nets) continue;
-    for (const net of nets) {
-      if (net.family === "IPv4" && !net.internal) {
-        out.push(net.address);
-      }
-    }
-  }
-  return [...new Set(out)];
-}
-
 function printLanBanner({ reminder = false } = {}) {
   const port = process.env.PORT ?? "3000";
-  const ips = lanIpv4Addresses();
+  const ips = getLanIpv4Addresses();
   const b = "\x1b[1m";
   const y = "\x1b[33m";
   const g = "\x1b[32m";
@@ -73,6 +64,9 @@ if (ensure.status !== 0) {
 
 printLanBanner({ reminder: false });
 
+const { path: ipadOpenHtmlPath } = writeIpadOpenDevHtml(PROJECT_ROOT);
+printAirDropConsoleHint(ipadOpenHtmlPath);
+
 const nextCli = join(PROJECT_ROOT, "node_modules/next/dist/bin/next");
 const args = ["dev", "--hostname", "0.0.0.0"];
 if (stable) {
@@ -90,8 +84,11 @@ const child = spawn(process.execPath, [nextCli, ...args], {
   env,
 });
 
-// Next の「Local: localhost」表示の直後に目を向けられるよう、少し遅れて再掲
-setTimeout(() => printLanBanner({ reminder: true }), 4000);
+// Next の「Local: localhost」表示の直後に目を向けられるよう、少し遅れて再掲（Wi‑Fi 接続が遅い場合の IP 取り直し用に HTML も更新）
+setTimeout(() => {
+  writeIpadOpenDevHtml(PROJECT_ROOT);
+  printLanBanner({ reminder: true });
+}, 4000);
 
 child.on("exit", (code, signal) => {
   if (signal) process.exit(1);

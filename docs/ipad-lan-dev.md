@@ -9,6 +9,7 @@
 | **コード変更の即時反映（HMR）** | Turbopack が **WebSocket** で更新を送る。`allowedDevOrigins` と `dev:lan` で LAN から許可 | ターミナルに `Blocked cross-origin` が出たら `next.config` の `allowedDevOrigins` と dev 再起動を確認 |
 | **Safari のキャッシュ** | 古い JS が残ると「直ったつもりが古い画面」 | iPad で **アドレスバー横の更新を長押し → キャッシュを無視して再読み込み**（またはプライベートウィンドウで試す） |
 | **URL ミス** | iPad で `localhost` を開くと **iPad 自身** を指す | **`http://（MacのIP）:3000`** を使う（`npm run dev:lan` の緑の URL） |
+| **AirDrop で URL を渡す** | 手入力ミスを減らしたい | プロジェクト直下の **`ipad-open-dev.html`**（`dev:lan` 起動時に自動生成、`npm run ipad-open-html` で再生成）を Finder から AirDrop → iPad「ファイル」で開き、表示されたリンクをタップ |
 | **IP が変わった** | Wi‑Fi 再接続で Mac の IP が変わる | `allowedDevOrigins` は起動時に IP を読むため **`dev:lan` を再起動** |
 | **ファイアウォール** | Mac がポート 3000 の受信を拒否 | システム設定で Node / ターミナルを許可 |
 

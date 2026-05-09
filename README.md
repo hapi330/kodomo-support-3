@@ -12,6 +12,16 @@ npm run dev
 - Mac から: `http://localhost:3000`
 - iPad から（同一Wi-Fi）: `npm run dev:lan` を使い、表示された `http://192.168.x.x:3000` を開く
 
+### AirDrop で iPad に起動 URL を渡す（開発）
+
+`dev:lan` 起動時に、プロジェクト直下へ **`ipad-open-dev.html`** が自動で書き出されます（LAN の IP 入りのタップ用リンク）。
+
+1. Finder で `ipad-open-dev.html` を選ぶ → 共有 → **AirDrop** で iPad に送る  
+2. iPad の「ファイル」でその HTML をタップして開く（Safari で表示）  
+3. 画面の **`http://192.168.x.x:3000/`** リンクをタップしてアプリを開く  
+
+IP が変わったときは `npm run ipad-open-html` で HTML だけ再生成できます（`dev:lan` を動かしたままでも可）。
+
 ## 本番運用（公開URL + PWA）
 
 ネットワーク変更のたびに IP を確認しないため、公開URL運用を推奨します。
@@ -35,6 +45,22 @@ Vercel Project Settings -> Storage で Blob を作成し、Environment Variables
 - `PROBLEMS_BLOB_PATHNAME`（任意。未設定時は `kodomo-support/current_problems.json`）
 
 AI機能を使う場合は既存の API Key（OpenAI/Claude など）も Vercel 環境変数へ設定してください。
+
+### ローカルで追加した問題を Vercel に反映
+
+Mac のローカルブラウザで問題を追加したあと、本番の Vercel にも反映したい場合は次を実行します。
+
+```bash
+npm run sync:problems:vercel
+```
+
+初回だけ、Vercel の Blob トークンを `.env.local` に取り込んでから実行してください。
+
+```bash
+vercel env pull .env.local --environment=production --yes
+```
+
+同期は `src/data/current_problems.json` を Vercel Blob に送ります。Vercel 側にだけある問題は残し、同じ `id` の問題はローカル側を優先します。
 
 ### 3) iPad にホーム画面追加
 

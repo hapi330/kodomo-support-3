@@ -1,5 +1,2660 @@
 [
   {
+    "id": "content-1778309187084",
+    "title": "【学研国語】4-2-10",
+    "subject": "こくご",
+    "rawText": "[Target] 国語 4-2-10\n[Question ID] 2-(1)\n[Text] 松の **なみき** が道の両側に続く。（なみきを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.ならぶ, B.なみ, C.へいれつ]\n[Choices] 並木, 波木, 列木\n[Note] 「並」は、ならぶ、ならべる、という意味。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(2)\n[Text] チケットを買う列に **なら** ぶ。（ならぶを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.なみき, B.ならびに, C.へいこう]\n[Choices] 並ぶ, 列ぶ, 次ぶ\n[Note] 「並」は、二つ以上のものを横にならべることを表します。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(3)\n[Text] ぼくらは ようぎ を晴らした。（ようぎを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.内容, B.容器, C.美容]\n[Choices] 容疑, 用疑, 要疑\n[Note] 「容疑」は、犯罪などの疑い（うたがい）をかけられることをいいます。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(4)\n[Text] **ずつう** の薬をねる前に飲む。（ずつうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.いためる, C.あたま]\n[Choices] 頭痛, 頭通, 豆痛\n[Note] 「頭」はあたま、「痛」は苦しいこと。頭が痛い状態です。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(5)\n[Text] 高い **うんちん** におどろく。（うんちんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.やちん, B.ちんぎん, C.かぞく]\n[Choices] 運賃, 運沈, 運珍\n[Note] 「賃」は、何かをかりたり使ったりしたときに払うお金のことです。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(6)\n[Text] つき指の **いた** みがまだとれない。（いたみを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.ずつう, B.いためる, C.くるしい]\n[Choices] 痛み, 板み, 至み\n[Note] からだや心が苦しいと感じることです。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(7)\n[Text] 短歌と **はいく** の本を読む。（はいくを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.はいゆう, B.はいじん, C.はいせい]\n[Choices] 俳句, 俳九, 排句\n[Note] 五・七・五の定型詩を「俳句」といいます。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(8)\n[Text] **どひょう** の上ですもうをとる。（どひょうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.たわら, B.ひょう, C.ひょうり]\n[Choices] 土俵, 土表, 土地\n[Note] 「土俵」は、すもうをとるための円い場所のことです。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(9)\n[Text] 何よりも友情を **ゆうせん** する。（ゆうせんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.はいゆう, B.はいじん, C.ゆうれつ]\n[Choices] 優先, 有先, 優前\n[Note] 他のものより先に扱うことを「優先」といいます。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(10)\n[Text] **てんこ** をとって出発する。（てんこを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.こおう, B.こきゅう, C.よぶ]\n[Choices] 点呼, 天呼, 点子\n[Note] 一人ずつ名前をよんで、人数をたしかめることです。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(11)\n[Text] ほこりが窓に **きゅうちゃく** する。（きゅうちゃくを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.きゅうしゅう, B.きゅうにゅう, C.こきゅう]\n[Choices] 吸着, 救着, 球着\n[Note] すきまなく、ぴったりつくこと。\n\n[Target] 国語 4-2-10\n[Question ID] 2-(12)\n[Text] 鼻から酸素を **きゅうにゅう** する。（きゅうにゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.きゅうしゅう, B.きゅうちゃく, C.こきゅう]\n[Choices] 吸入, 救入, 球入\n[Note] 空気や薬を口や鼻から吸いこむことです。",
+    "editedText": "[Target] 国語 4-2-10 [Question ID] 2-(1)",
+    "uploadDate": "2026-05-09T06:46:27.084Z",
+    "questions": [
+      {
+        "id": "q-content-1778309187084-1",
+        "question": "問題 2-(1)\n松の **なみき** が道の両側に続く。（なみきを漢字に）",
+        "answer": "並木",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ならぶ, B.なみ, C.へいれつ]"
+        ],
+        "choices": [
+          "並木",
+          "波木",
+          "列木"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-2",
+        "question": "問題 2-(2)\nチケットを買う列に **なら** ぶ。（ならぶを漢字に）",
+        "answer": "並ぶ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.なみき, B.ならびに, C.へいこう]"
+        ],
+        "choices": [
+          "並ぶ",
+          "列ぶ",
+          "次ぶ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-3",
+        "question": "問題 2-(3)\nぼくらは ようぎ を晴らした。（ようぎを漢字に）",
+        "answer": "容疑",
+        "hints": [
+          "同じ漢字を使うのは？ [A.内容, B.容器, C.美容]"
+        ],
+        "choices": [
+          "容疑",
+          "用疑",
+          "要疑"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-4",
+        "question": "問題 2-(4)\n**ずつう** の薬をねる前に飲む。（ずつうを漢字に）",
+        "answer": "頭痛",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.いためる, C.あたま]"
+        ],
+        "choices": [
+          "頭痛",
+          "頭通",
+          "豆痛"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-5",
+        "question": "問題 2-(5)\n高い **うんちん** におどろく。（うんちんを漢字に）",
+        "answer": "運賃",
+        "hints": [
+          "同じ漢字を使うのは？ [A.やちん, B.ちんぎん, C.かぞく]"
+        ],
+        "choices": [
+          "運賃",
+          "運沈",
+          "運珍"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-6",
+        "question": "問題 2-(6)\nつき指の **いた** みがまだとれない。（いたみを漢字に）",
+        "answer": "痛み",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ずつう, B.いためる, C.くるしい]"
+        ],
+        "choices": [
+          "痛み",
+          "板み",
+          "至み"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-7",
+        "question": "問題 2-(7)\n短歌と **はいく** の本を読む。（はいくを漢字に）",
+        "answer": "俳句",
+        "hints": [
+          "同じ漢字を使うのは？ [A.はいゆう, B.はいじん, C.はいせい]"
+        ],
+        "choices": [
+          "俳句",
+          "俳九",
+          "排句"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-8",
+        "question": "問題 2-(8)\n**どひょう** の上ですもうをとる。（どひょうを漢字に）",
+        "answer": "土俵",
+        "hints": [
+          "同じ漢字を使うのは？ [A.たわら, B.ひょう, C.ひょうり]"
+        ],
+        "choices": [
+          "土俵",
+          "土表",
+          "土地"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-9",
+        "question": "問題 2-(9)\n何よりも友情を **ゆうせん** する。（ゆうせんを漢字に）",
+        "answer": "優先",
+        "hints": [
+          "同じ漢字を使うのは？ [A.はいゆう, B.はいじん, C.ゆうれつ]"
+        ],
+        "choices": [
+          "優先",
+          "有先",
+          "優前"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-10",
+        "question": "問題 2-(10)\n**てんこ** をとって出発する。（てんこを漢字に）",
+        "answer": "点呼",
+        "hints": [
+          "同じ漢字を使うのは？ [A.こおう, B.こきゅう, C.よぶ]"
+        ],
+        "choices": [
+          "点呼",
+          "天呼",
+          "点子"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-11",
+        "question": "問題 2-(11)\nほこりが窓に **きゅうちゃく** する。（きゅうちゃくを漢字に）",
+        "answer": "吸着",
+        "hints": [
+          "同じ漢字を使うのは？ [A.きゅうしゅう, B.きゅうにゅう, C.こきゅう]"
+        ],
+        "choices": [
+          "吸着",
+          "救着",
+          "球着"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778309187084-12",
+        "question": "問題 2-(12)\n鼻から酸素を **きゅうにゅう** する。（きゅうにゅうを漢字に）",
+        "answer": "吸入",
+        "hints": [
+          "同じ漢字を使うのは？ [A.きゅうしゅう, B.きゅうちゃく, C.こきゅう]"
+        ],
+        "choices": [
+          "吸入",
+          "救入",
+          "球入"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778308185608",
+    "title": "【学研国語】4-2-9",
+    "subject": "こくご",
+    "rawText": "[Target] 4-2集-9\n[Question ID] 1-(1)\n[Text] 有名な俳人の作品を教科書で習う。（俳人の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.俳優, B.俳句, C.俳聖]\n[Choices] はいじん, はいじ, はじん\n[Note] 俳句（はいく）を作る人のこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(2)\n[Text] 今回は我々のチームが優勝した。（我々の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.自我, B.我慢, C.我欲]\n[Choices] われわれ, がが, わわ\n[Note] 自分たちのこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(3)\n[Text] 兄は俳優になるための訓練をしている。（俳優の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.俳人, B.俳句, C.優劣]\n[Choices] はいゆう, はいゆ, はゆう\n[Note] 演劇（えんげき）や映画などでえんじる人のこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(4)\n[Text] 二階から母の呼ぶ声が聞こえる。（呼ぶの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.点呼, B.呼応, C.呼吸]\n[Choices] よぶ, こぶ, とぶ\n[Note] 声を出してまねきよせること。\n\n[Target] 4-2集-9\n[Question ID] 1-(5)\n[Text] 走ったあとは、呼吸が乱れる。（呼吸の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.吸入, B.呼応, C.点呼]\n[Choices] こきゅう, ごきゅう, こうきゅう\n[Note] 息を吸ったりはいたりすること。\n\n[Target] 4-2集-9\n[Question ID] 1-(6)\n[Text] 山のさわやかな空気をぼくは吸いこんだ。（吸いこんだの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.吸収, B.吸引, C.呼吸]\n[Choices] すいこんだ, はいこんだ, ふいこんだ\n[Note] 中に取り入れること。\n\n[Target] 4-2集-9\n[Question ID] 1-(7)\n[Text] おじは炭俵をかついで運んだ。（炭俵の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.土俵, B.一俵, C.石炭]\n[Choices] すみだわら, すみたわら, ずみだわら\n[Note] 炭を入れるための、わらで編んだ袋。\n\n[Target] 4-2集-9\n[Question ID] 1-(8)\n[Text] 疑問に思ったことは、どしどし質問したい。（疑問の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.疑念, B.半信半疑, C.問答]\n[Choices] ぎもん, ぎぶん, ぎせん\n[Note] 本当かどうかあやしいと思うこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(9)\n[Text] かれの勝利は疑いのない事実だ。（疑いの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.容疑, B.疑心, C.疑問]\n[Choices] うたがい, うらない, うたわい\n[Note] あやしいと思う気持ちのこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(10)-a\n[Text] 手術の傷あとが、今でも時々痛む。（傷あとの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.負傷, B.重傷, C.跡地]\n[Choices] きずあと, いたいあと, いたあと\n[Note] けがをしたあとのこと。\n\n[Target] 4-2集-9\n[Question ID] 1-(10)-b\n[Text] 手術の傷あとが、今でも時々痛む。（痛むの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.頭痛, B.苦痛, C.痛快]\n[Choices] いたむ, たたむ, うたむ\n[Note] からだや心が苦しく感じること。\n\n[Target] 4-2集-9\n[Question ID] 1-(11)\n[Text] 声優はのどを痛めやすいという話だ。（痛めの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.痛恨, C.頭痛]\n[Choices] いため, たため, めたけ\n[Note] 痛くすること、または痛く感じること。\n\n[Target] 4-2集-9\n[Question ID] 1-(12)\n[Text] 兄はアルバイトをして賃金をもらった。（賃金の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.家賃, B.運賃, C.金銭]\n[Choices] ちんぎん, じんぎん, てんぎん\n[Note] 働いたお礼としてもらうお金のこと。",
+    "editedText": "[Target] 4-2集-9 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T06:29:45.608Z",
+    "questions": [
+      {
+        "id": "q-content-1778308185608-1",
+        "question": "問題 1-(1)\n有名な俳人の作品を教科書で習う。（俳人の読みにチェック）",
+        "answer": "はいじん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.俳優, B.俳句, C.俳聖]"
+        ],
+        "choices": [
+          "はいじん",
+          "はいじ",
+          "はじん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-2",
+        "question": "問題 1-(2)\n今回は我々のチームが優勝した。（我々の読みにチェック）",
+        "answer": "われわれ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.自我, B.我慢, C.我欲]"
+        ],
+        "choices": [
+          "われわれ",
+          "がが",
+          "わわ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-3",
+        "question": "問題 1-(3)\n兄は俳優になるための訓練をしている。（俳優の読みにチェック）",
+        "answer": "はいゆう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.俳人, B.俳句, C.優劣]"
+        ],
+        "choices": [
+          "はいゆう",
+          "はいゆ",
+          "はゆう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-4",
+        "question": "問題 1-(4)\n二階から母の呼ぶ声が聞こえる。（呼ぶの読みにチェック）",
+        "answer": "よぶ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.点呼, B.呼応, C.呼吸]"
+        ],
+        "choices": [
+          "よぶ",
+          "こぶ",
+          "とぶ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-5",
+        "question": "問題 1-(5)\n走ったあとは、呼吸が乱れる。（呼吸の読みにチェック）",
+        "answer": "こきゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸入, B.呼応, C.点呼]"
+        ],
+        "choices": [
+          "こきゅう",
+          "ごきゅう",
+          "こうきゅう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-6",
+        "question": "問題 1-(6)\n山のさわやかな空気をぼくは吸いこんだ。（吸いこんだの読みにチェック）",
+        "answer": "すいこんだ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸収, B.吸引, C.呼吸]"
+        ],
+        "choices": [
+          "すいこんだ",
+          "はいこんだ",
+          "ふいこんだ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-7",
+        "question": "問題 1-(7)\nおじは炭俵をかついで運んだ。（炭俵の読みにチェック）",
+        "answer": "すみだわら",
+        "hints": [
+          "同じ漢字を使うのは？ [A.土俵, B.一俵, C.石炭]"
+        ],
+        "choices": [
+          "すみだわら",
+          "すみたわら",
+          "ずみだわら"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-8",
+        "question": "問題 1-(8)\n疑問に思ったことは、どしどし質問したい。（疑問の読みにチェック）",
+        "answer": "ぎもん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.疑念, B.半信半疑, C.問答]"
+        ],
+        "choices": [
+          "ぎもん",
+          "ぎぶん",
+          "ぎせん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-9",
+        "question": "問題 1-(9)\nかれの勝利は疑いのない事実だ。（疑いの読みにチェック）",
+        "answer": "うたがい",
+        "hints": [
+          "同じ漢字を使うのは？ [A.容疑, B.疑心, C.疑問]"
+        ],
+        "choices": [
+          "うたがい",
+          "うらない",
+          "うたわい"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-11",
+        "question": "問題 1-(10)-b\n手術の傷あとが、今でも時々痛む。（痛むの読みにチェック）",
+        "answer": "いたむ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.頭痛, B.苦痛, C.痛快]"
+        ],
+        "choices": [
+          "いたむ",
+          "たたむ",
+          "うたむ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-1778308490057-vxsbkcd",
+        "question": "問題 1-(11-1)\n声優はのどを痛めやすいという話だ。（声優の読みにチェック）",
+        "answer": "せいゆう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.声量, B.歌声, C.役者]",
+          "",
+          ""
+        ],
+        "choices": [
+          "はいゆう",
+          "せいゆう",
+          "やくしゃ"
+        ],
+        "correctIndex": 1,
+        "timesAnswered": 0,
+        "timesCorrect": 0,
+        "editorInserted": true
+      },
+      {
+        "id": "q-content-1778308185608-12",
+        "question": "問題 1-(11-2)\n声優はのどを痛めやすいという話だ。（痛めの読みにチェック）",
+        "answer": "いため",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.痛恨, C.頭痛]",
+          "",
+          ""
+        ],
+        "choices": [
+          "いため",
+          "たため",
+          "めたけ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778308185608-13",
+        "question": "問題 1-(12)\n兄はアルバイトをして賃金をもらった。（賃金の読みにチェック）",
+        "answer": "ちんぎん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.家賃, B.運賃, C.金銭]"
+        ],
+        "choices": [
+          "ちんぎん",
+          "じんぎん",
+          "てんぎん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778307788070",
+    "title": "【学研国語】4-2-6",
+    "subject": "こくご",
+    "rawText": "[Target] 4-2-6\n[Question ID] 1-(1)\n[Text] 大通りの桜の並木が大きくなった。（並木の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.ならぶ, B.なみ, C.へいれつ]\n[Choices] なみき, ならき, へいき\n[Note] 「並」は、ならぶ、ならべる、という意味。\n\n[Question ID] 1-(2)\n[Text] 自転車を並べて止める。（並べての読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.なみき, B.ならびに, C.へいこう]\n[Choices] ならべて, ならんで, ならびて\n[Note] 「並」は、二つ以上のものを横にならべることを表します。\n\n[Question ID] 1-(3)\n[Text] 朝礼で、縦二列に並ぶ。（並ぶの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.ひとなみ, B.ならべる, C.へいれつ]\n[Choices] ならぶ, ならび, ならべ\n[Note] 「並ぶ」は、列をつくることや、肩をならべることをいいます。\n\n[Question ID] 1-(4)\n[Text] 疑問の点は、先生に質問する。（疑問の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.うたがう, B.ぎねん, C.ようぎ]\n[Choices] ぎもん, ぎぶん, ぎせん\n[Note] 「疑」は、本当かどうかあやしいと思う、という意味。\n\n[Question ID] 1-(5)\n[Text] 意外な話に耳を疑う。（疑うの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.ぎもん, B.はんしんはんぎ, C.ようぎ]\n[Choices] うたがう, うらなう, うたがわ\n[Note] 「疑う」は、あやしいと思ったり、本当ではないかと思ったりすること。\n\n[Question ID] 1-(6)\n[Text] 炭俵を開けて、炭を取り出す。（俵の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.どひょう, B.こめだわら, C.いっぴょう]\n[Choices] だわら, たわら, ひょう\n[Note] 「俵」は、わらなどで編んだ入れ物のこと。\n\n[Question ID] 1-(7)\n[Text] 砂場に土俵を作り、すもうをとる。（土俵の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.たわら, B.ひょう, C.ひょうり]\n[Choices] どひょう, とひょう, つちだわら\n[Note] 「土俵」は、すもうをとるための円い場所のことです。\n\n[Question ID] 2-(1)\n[Text] 五年生ならびに六年生は集まりなさい。（ならびにを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.なみき, B.ならぶ, C.へいれつ]\n[Choices] 並びに, 並びに, 次びに\n[Note] 「並びに」は、AとB、のように二つをつなぐ言葉です。\n\n[Question ID] 2-(2)\n[Text] 本で調べたら、ぎねんが晴れた。（ぎねんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.ぎもん, B.うたがう, C.ようぎ]\n[Choices] 疑念, 義念, 偽念\n[Note] 「疑念」は、あやしいなと思う気持ちのことです。\n\n[Question ID] 2-(3)\n[Text] わたしはうわさ話の内容をうたがった。（うたがったを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.ぎもん, B.ぎねん, C.はんしんはんぎ]\n[Choices] 疑った, 疑った, 義った\n[Note] 「疑う」に「た」がついた形です。\n\n[Question ID] 2-(4)\n[Text] ぼくはテーブルの上にカードをならべた。（ならべたを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.なみき, B.ならぶ, C.へいれつ]\n[Choices] 並べた, 列べた, 次べた\n[Note] 「並べる」に「た」がついた形です。\n\n[Question ID] 2-(5)\n[Text] たわらに入れた米をトラックで運ぶ。（たわらを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.どひょう, B.ひょう, C.ひょうし]\n[Choices] 俵, 表, 袋\n[Note] お米などを入れるわらの袋を「俵」と書きます。",
+    "editedText": "[Target] 4-2-6 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T06:23:08.070Z",
+    "questions": [
+      {
+        "id": "q-content-1778307788070-1",
+        "question": "問題 1-(1)\n大通りの桜の並木が大きくなった。（並木の読みにチェック）",
+        "answer": "なみき",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ならぶ, B.なみ, C.へいれつ]"
+        ],
+        "choices": [
+          "なみき",
+          "ならき",
+          "へいき"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-2",
+        "question": "問題 1-(2)\n自転車を並べて止める。（並べての読みにチェック）",
+        "answer": "ならべて",
+        "hints": [
+          "同じ漢字を使うのは？ [A.なみき, B.ならびに, C.へいこう]"
+        ],
+        "choices": [
+          "ならべて",
+          "ならんで",
+          "ならびて"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-3",
+        "question": "問題 1-(3)\n朝礼で、縦二列に並ぶ。（並ぶの読みにチェック）",
+        "answer": "ならぶ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ひとなみ, B.ならべる, C.へいれつ]"
+        ],
+        "choices": [
+          "ならぶ",
+          "ならび",
+          "ならべ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-4",
+        "question": "問題 1-(4)\n疑問の点は、先生に質問する。（疑問の読みにチェック）",
+        "answer": "ぎもん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.うたがう, B.ぎねん, C.ようぎ]"
+        ],
+        "choices": [
+          "ぎもん",
+          "ぎぶん",
+          "ぎせん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-5",
+        "question": "問題 1-(5)\n意外な話に耳を疑う。（疑うの読みにチェック）",
+        "answer": "うたがう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ぎもん, B.はんしんはんぎ, C.ようぎ]"
+        ],
+        "choices": [
+          "うたがう",
+          "うらなう",
+          "うたがわ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-6",
+        "question": "問題 1-(6)\n炭俵を開けて、炭を取り出す。（俵の読みにチェック）",
+        "answer": "だわら",
+        "hints": [
+          "同じ漢字を使うのは？ [A.どひょう, B.こめだわら, C.いっぴょう]"
+        ],
+        "choices": [
+          "だわら",
+          "たわら",
+          "ひょう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-7",
+        "question": "問題 1-(7)\n砂場に土俵を作り、すもうをとる。（土俵の読みにチェック）",
+        "answer": "どひょう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.たわら, B.ひょう, C.ひょうり]"
+        ],
+        "choices": [
+          "どひょう",
+          "とひょう",
+          "つちだわら"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-8",
+        "question": "問題 2-(1)\n五年生ならびに六年生は集まりなさい。（ならびにを漢字に）",
+        "answer": "並びに",
+        "hints": [
+          "同じ漢字を使うのは？ [A.なみき, B.ならぶ, C.へいれつ]"
+        ],
+        "choices": [
+          "並びに",
+          "次びに",
+          "候補3"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-9",
+        "question": "問題 2-(2)\n本で調べたら、ぎねんが晴れた。（ぎねんを漢字に）",
+        "answer": "疑念",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ぎもん, B.うたがう, C.ようぎ]"
+        ],
+        "choices": [
+          "疑念",
+          "義念",
+          "偽念"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-10",
+        "question": "問題 2-(3)\nわたしはうわさ話の内容をうたがった。（うたがったを漢字に）",
+        "answer": "疑った",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ぎもん, B.ぎねん, C.はんしんはんぎ]"
+        ],
+        "choices": [
+          "疑った",
+          "義った",
+          "候補3"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-11",
+        "question": "問題 2-(4)\nぼくはテーブルの上にカードをならべた。（ならべたを漢字に）",
+        "answer": "並べた",
+        "hints": [
+          "同じ漢字を使うのは？ [A.なみき, B.ならぶ, C.へいれつ]"
+        ],
+        "choices": [
+          "並べた",
+          "列べた",
+          "次べた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307788070-12",
+        "question": "問題 2-(5)\nたわらに入れた米をトラックで運ぶ。（たわらを漢字に）",
+        "answer": "俵",
+        "hints": [
+          "同じ漢字を使うのは？ [A.どひょう, B.ひょう, C.ひょうし]"
+        ],
+        "choices": [
+          "俵",
+          "表",
+          "袋"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778307185487",
+    "title": "【学研国語】4-2-8",
+    "subject": "こくご",
+    "rawText": "[Target] 国語 4-2-8\n[Question ID] 1-(1)\n[Text] 足首の痛み（いたみ）が、まだぬけない。\n[Hint 1] 同じ漢字を使うのは？ [A.ずつう, B.いためる, C.いし]\n[Choices] いたみ, うらみ, ねたみ\n[Note] 「痛」は、からだや心が苦しいと感じることです。\n\n[Question ID] 1-(2)\n[Text] 頭痛（ずつう）がなかなか治まらない。\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.あたま, C.ぶんぷ]\n[Choices] ずつう, づつう, ずとう\n[Note] 「頭」はあたま、「痛」は苦しいこと。頭が痛くなることをいいます。\n\n[Question ID] 1-(3)\n[Text] 指にとげがささって、ちくちく痛む（いたむ）。\n[Hint 1] 同じ漢字を使うのは？ [A.ずつう, B.いたみ, C.じゅんび]\n[Choices] いたむ, たたむ, うたむ\n[Note] からだがズキズキしたり、心が苦しくなったりすることです。\n\n[Question ID] 1-(4)\n[Text] 病気で長期欠席する友達に心を痛める（いためる）。\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.ずつう, C.ふくざつ]\n[Choices] いためる, ゆでめる, さためる\n[Note] 心をなやませたり、からだをきずつけたりすることです。\n\n[Question ID] 1-(5)\n[Text] アパートの家賃（やちん）を銀行にふりこむ。\n[Hint 1] 同じ漢字を使うのは？ [A.うんちん, B.ちんぎん, C.かぞく]\n[Choices] やちん, かちん, いえちん\n[Note] 「賃」は、何かをかりたり使ったりしたときに払うお金のことです。\n\n[Question ID] 1-(6)\n[Text] 母は在宅の仕事で賃金（ちんぎん）をもらっている。\n[Hint 1] 同じ漢字を使うのは？ [A.やちん, B.うんちん, C.きんじょ]\n[Choices] ちんぎん, じんぎん, てんぎん\n[Note] 働いたお礼としてもらうお金のことです。\n\n[Question ID] 1-(7)\n[Text] おばはタクシーの運賃（うんちん）をはらった。\n[Hint 1] 同じ漢字を使うのは？ [A.ちんぎん, B.やちん, C.うんてん]\n[Choices] うんちん, うんち, うんてん\n[Note] 電車やバス、タクシーに乗ったときに払うお金のことです。\n\n[Question ID] 2-(1)\n[Text] 兄は母の代理でやちんを持って行った。（やちんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.うんちん, B.ちんぎん, C.かぞく]\n[Choices] 家賃, 家賃, 宅賃\n[Note] 「家」はいえ、「賃」はお金のこと。家をかりて払うお金です。\n\n[Question ID] 2-(2)\n[Text] 姉はちんぎんの高いアルバイトについた。（ちんぎんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.やちん, B.うんちん, C.きんぞく]\n[Choices] 賃金, 賃銀, 賃近\n[Note] 「賃」はお金、「金」もおかね。働いた分のお金のことです。\n\n[Question ID] 2-(3)\n[Text] 薬局でずつうの薬を買う。（ずつうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.いためる, C.あたま]\n[Choices] 頭痛, 頭通, 豆痛\n[Note] 「頭」はあたま、「痛」はくるしいこと。頭が痛い状態です。\n\n[Question ID] 2-(4)\n[Text] わたしは体育の時間に手首をいためた。（いためたを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.いたみ, B.ずつう, C.いためる]\n[Choices] 痛めた, 板めた, 至めた\n[Note] からだをきずつけたり、苦しいと感じたりすることです。\n\n[Question ID] 2-(5)\n[Text] この町のバスはうんちんがとても安い。（うんちんを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.ちんぎん, B.やちん, C.うんてん]\n[Choices] 運賃, 運沈, 運珍\n[Note] 「運」ははこぶ、「賃」はお金。乗り物に乗るお金のことです。",
+    "editedText": "[Target] 国語 4-2-8 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T06:13:05.487Z",
+    "questions": [
+      {
+        "id": "q-content-1778307185487-1",
+        "question": "問題 1-(1)\n足首の痛み（いたみ）が、まだぬけない。",
+        "answer": "いたみ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ずつう, B.いためる, C.いし]"
+        ],
+        "choices": [
+          "いたみ",
+          "うらみ",
+          "ねたみ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-2",
+        "question": "問題 1-(2)\n頭痛（ずつう）がなかなか治まらない。",
+        "answer": "ずつう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.あたま, C.ぶんぷ]"
+        ],
+        "choices": [
+          "ずつう",
+          "づつう",
+          "ずとう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-3",
+        "question": "問題 1-(3)\n指にとげがささって、ちくちく痛む（いたむ）。",
+        "answer": "いたむ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ずつう, B.いたみ, C.じゅんび]"
+        ],
+        "choices": [
+          "いたむ",
+          "たたむ",
+          "うたむ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-4",
+        "question": "問題 1-(4)\n病気で長期欠席する友達に心を痛める（いためる）。",
+        "answer": "いためる",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.ずつう, C.ふくざつ]"
+        ],
+        "choices": [
+          "いためる",
+          "ゆでめる",
+          "さためる"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-5",
+        "question": "問題 1-(5)\nアパートの家賃（やちん）を銀行にふりこむ。",
+        "answer": "やちん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.うんちん, B.ちんぎん, C.かぞく]"
+        ],
+        "choices": [
+          "やちん",
+          "かちん",
+          "いえちん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-6",
+        "question": "問題 1-(6)\n母は在宅の仕事で賃金（ちんぎん）をもらっている。",
+        "answer": "ちんぎん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.やちん, B.うんちん, C.きんじょ]"
+        ],
+        "choices": [
+          "ちんぎん",
+          "じんぎん",
+          "てんぎん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-7",
+        "question": "問題 1-(7)\nおばはタクシーの運賃（うんちん）をはらった。",
+        "answer": "うんちん",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ちんぎん, B.やちん, C.うんてん]"
+        ],
+        "choices": [
+          "うんちん",
+          "うんち",
+          "うんてん"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-8",
+        "question": "問題 2-(1)\n兄は母の代理でやちんを持って行った。（やちんを漢字に）",
+        "answer": "家賃",
+        "hints": [
+          "同じ漢字を使うのは？ [A.うんちん, B.ちんぎん, C.かぞく]"
+        ],
+        "choices": [
+          "家賃",
+          "宅賃",
+          "候補3"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-9",
+        "question": "問題 2-(2)\n姉はちんぎんの高いアルバイトについた。（ちんぎんを漢字に）",
+        "answer": "賃金",
+        "hints": [
+          "同じ漢字を使うのは？ [A.やちん, B.うんちん, C.きんぞく]"
+        ],
+        "choices": [
+          "賃金",
+          "賃銀",
+          "賃近"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-10",
+        "question": "問題 2-(3)\n薬局でずつうの薬を買う。（ずつうを漢字に）",
+        "answer": "頭痛",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.いためる, C.あたま]"
+        ],
+        "choices": [
+          "頭痛",
+          "頭通",
+          "豆痛"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-11",
+        "question": "問題 2-(4)\nわたしは体育の時間に手首をいためた。（いためたを漢字に）",
+        "answer": "痛めた",
+        "hints": [
+          "同じ漢字を使うのは？ [A.いたみ, B.ずつう, C.いためる]"
+        ],
+        "choices": [
+          "痛めた",
+          "板めた",
+          "至めた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778307185487-12",
+        "question": "問題 2-(5)\nこの町のバスはうんちんがとても安い。（うんちんを漢字に）",
+        "answer": "運賃",
+        "hints": [
+          "同じ漢字を使うのは？ [A.ちんぎん, B.やちん, C.うんてん]"
+        ],
+        "choices": [
+          "運賃",
+          "運沈",
+          "運珍"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778306500351",
+    "title": "【学研国語】 4-2-4",
+    "subject": "こくご",
+    "rawText": "[Question ID] 1-(1)\n[Text] 先生が児童を点呼する。（点呼の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.呼応, B.点数, C.呼吸]\n[Choices] てんこ, てんご, てんき\n[Note] 一人ずつ名前をよんで、人数をたしかめること。\n\n[Question ID] 1-(2)\n[Text] サイレンに呼応するように犬がほえる。（呼応の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.点呼, B.応答, C.呼吸]\n[Choices] こおう, こごう, こよう\n[Note] 相手のよびかけにこたえて、動作をすること。\n\n[Question ID] 1-(3)\n[Text] くじらやいるかは、肺で呼吸する。（呼吸の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.呼応, B.吸入, C.点呼]\n[Choices] こきゅう, こうきゅう, ごきゅう\n[Note] 息を吸ったり、はいたりすること。\n\n[Question ID] 1-(4)\n[Text] 路上で兄に大声で呼び止められる。（呼び止めの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.呼応, B.停止, C.点呼]\n[Choices] よびとめ, よびどめ, よびため\n[Note] よんで、行くのを止めさせること。\n\n[Question ID] 1-(5)\n[Text] 本を読んで知識を吸収する。（吸収の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.吸入, B.収穫, C.呼吸]\n[Choices] きゅうしゅう, きゅうしゅ, きゅうじゅう\n[Note] 外にあるものを取り入れること。\n\n[Question ID] 1-(6)\n[Text] そうじ機のフィルターにほこりが吸着する。（吸着の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.吸収, B.着物, C.呼吸]\n[Choices] きゅうちゃく, きゅうさく, きゅうじゃく\n[Note] すいよせられて、ぴったりつくこと。\n\n[Question ID] 1-(7)\n[Text] 息をうまく吸って泳ぐのは難しい。（吸っての読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.吸収, B.呼吸, C.吸着]\n[Choices] すって, はいて, ふいて\n[Note] 口や鼻から空気などを中に入れること。\n\n[Question ID] 2-(1)\n[Text] わたしは先生に名前をよばれた。（よばれたを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.点呼, B.呼吸, C.呼応]\n[Choices] 呼ばれた, 吸ばれた, 吐ばれた\n[Note] 声を出して人をまねきよせること。\n\n[Question ID] 2-(2)\n[Text] きゅうにゅうした空気をはき出す。（きゅうにゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.吸収, B.入学, C.呼吸]\n[Choices] 吸入, 呼入, 収入\n[Note] 空気や薬を口や鼻から吸いこむこと。\n\n[Question ID] 2-(3)\n[Text] ぼくはジュースをストローですって飲む。（すってを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.吸入, B.吸収, C.吸着]\n[Choices] 吸って, 呼って, 吐って\n[Note] 口の中に引き入れること。\n\n[Question ID] 2-(4)\n[Text] 先生の合図にこおうして、ぼくらが動く。（こおうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.点呼, B.応答, C.呼ぶ]\n[Choices] 呼応, 呼吸, 呼応\n[Note] よびかけに答えて、いっしょに動くこと。\n\n[Question ID] 2-(5)\n[Text] 魚はえらでこきゅうをしている。（こきゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.呼ぶ, B.吸う, C.点呼]\n[Choices] 呼吸, 呼及, 吸呼\n[Note] 息を吸うこととはくことのくり返し。",
+    "editedText": "[Question ID] 1-(1) [Text] 先生が児童を点呼する。（点呼の読みにチェック）",
+    "uploadDate": "2026-05-09T06:01:40.351Z",
+    "questions": [
+      {
+        "id": "q-content-1778306500351-1",
+        "question": "問題 1-(1)\n先生が児童を点呼する。（点呼の読みにチェック）",
+        "answer": "てんこ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.呼応, B.点数, C.呼吸]"
+        ],
+        "choices": [
+          "てんこ",
+          "てんご",
+          "てんき"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-2",
+        "question": "問題 1-(2)\nサイレンに呼応するように犬がほえる。（呼応の読みにチェック）",
+        "answer": "こおう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.点呼, B.応答, C.呼吸]"
+        ],
+        "choices": [
+          "こおう",
+          "こごう",
+          "こよう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-3",
+        "question": "問題 1-(3)\nくじらやいるかは、肺で呼吸する。（呼吸の読みにチェック）",
+        "answer": "こきゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.呼応, B.吸入, C.点呼]"
+        ],
+        "choices": [
+          "こきゅう",
+          "こうきゅう",
+          "ごきゅう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-4",
+        "question": "問題 1-(4)\n路上で兄に大声で呼び止められる。（呼び止めの読みにチェック）",
+        "answer": "よびとめ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.呼応, B.停止, C.点呼]"
+        ],
+        "choices": [
+          "よびとめ",
+          "よびどめ",
+          "よびため"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-5",
+        "question": "問題 1-(5)\n本を読んで知識を吸収する。（吸収の読みにチェック）",
+        "answer": "きゅうしゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸入, B.収穫, C.呼吸]"
+        ],
+        "choices": [
+          "きゅうしゅう",
+          "きゅうしゅ",
+          "きゅうじゅう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-6",
+        "question": "問題 1-(6)\nそうじ機のフィルターにほこりが吸着する。（吸着の読みにチェック）",
+        "answer": "きゅうちゃく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸収, B.着物, C.呼吸]"
+        ],
+        "choices": [
+          "きゅうちゃく",
+          "きゅうさく",
+          "きゅうじゃく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-7",
+        "question": "問題 1-(7)\n息をうまく吸って泳ぐのは難しい。（吸っての読みにチェック）",
+        "answer": "すって",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸収, B.呼吸, C.吸着]"
+        ],
+        "choices": [
+          "すって",
+          "はいて",
+          "ふいて"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-8",
+        "question": "問題 2-(1)\nわたしは先生に名前をよばれた。（よばれたを漢字に）",
+        "answer": "呼ばれた",
+        "hints": [
+          "同じ漢字を使うのは？ [A.点呼, B.呼吸, C.呼応]"
+        ],
+        "choices": [
+          "呼ばれた",
+          "吸ばれた",
+          "吐ばれた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-9",
+        "question": "問題 2-(2)\nきゅうにゅうした空気をはき出す。（きゅうにゅうを漢字に）",
+        "answer": "吸入",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸収, B.入学, C.呼吸]"
+        ],
+        "choices": [
+          "吸入",
+          "呼入",
+          "収入"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-10",
+        "question": "問題 2-(3)\nぼくはジュースをストローですって飲む。（すってを漢字に）",
+        "answer": "吸って",
+        "hints": [
+          "同じ漢字を使うのは？ [A.吸入, B.吸収, C.吸着]"
+        ],
+        "choices": [
+          "吸って",
+          "呼って",
+          "吐って"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-11",
+        "question": "問題 2-(4)\n先生の合図にこおうして、ぼくらが動く。（こおうを漢字に）",
+        "answer": "呼応",
+        "hints": [
+          "同じ漢字を使うのは？ [A.点呼, B.応答, C.呼ぶ]",
+          "",
+          ""
+        ],
+        "choices": [
+          "呼応",
+          "呼吸",
+          "候補"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306500351-12",
+        "question": "問題 2-(5)\n魚はえらでこきゅうをしている。（こきゅうを漢字に）",
+        "answer": "呼吸",
+        "hints": [
+          "同じ漢字を使うのは？ [A.呼ぶ, B.吸う, C.点呼]"
+        ],
+        "choices": [
+          "呼吸",
+          "呼及",
+          "吸呼"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778306031709",
+    "title": "【学研算数】5-8-7/8",
+    "subject": "さんすう",
+    "rawText": "[Target] 5-8集-7\n[Question ID] 1-(1)\n[Text] 右の三角形ABCについて、辺BCを底辺としたとき、高さは何cmですか。（底辺8cm, たて6cm, ななめ10cm）\n[Hint 1] 底辺（下の横線）に対して、直角（90度）に立っている線の長さを探します。\n[Hint 2] 辺BCの端っこ（点C）から、真上にのびている線ACの長さを読み取ります。\n[Choices] 6cm, 10cm, 8cm\n[Formula] (図形から直角な辺を特定)\n[Result] 6cm\n[Note] 直角マークがついているので、ACが高さになります。\n\n[Target] 5-8集-7\n[Question ID] 1-(2)\n[Text] 右の三角形ABCについて、辺ACを底辺としたとき、高さは何cmですか。\n[Hint 1] 辺AC（たての線）を「底」としたときに、直角に交わっている線の長さを探します。\n[Hint 2] 辺ACに対して、横にまっすぐのびている辺BCの長さを読み取ります。\n[Choices] 8cm, 6cm, 10cm\n[Formula] (図形から直角な辺を特定)\n[Result] 8cm\n[Note]\n\n[Target] 5-8集-8\n[Question ID] 2-(1)\n[Text] 下の図の三角形の面積を求めましょう。（底辺10cm, 高さ5cm, ななめ8cm）\n[Hint 1] 三角形の面積 = 底辺 × 高さ ÷ 2\n[Hint 2] 底辺10cm、高さ5cmです。ななめの「8cm」は使いません。\n[Choices] 25cm2, 50cm2, 40cm2\n[Formula] 10 × 5 ÷ 2 = 25\n[Result] 25cm2\n[Note]\n\n[Target] 5-8集-8\n[Question ID] 2-(2)\n[Text] 下の図の三角形の面積を求めましょう。（底辺6cm, 高さ8cm, ななめ9cm）\n[Hint 1] 底辺 × 高さ ÷ 2。直角マークがついている「8cm」が高さです。\n[Hint 2] 6 × 8 を計算して、最後に2でわります。\n[Choices] 24cm2, 48cm2, 27cm2\n[Formula] 6 × 8 ÷ 2 = 24\n[Result] 24cm2\n[Note]\n\n[Target] 5-8集-8\n[Question ID] 2-(3)\n[Text] 下の図の三角形の面積を求めましょう。（底辺10cm, 高さ15cm, ななめ17cm）\n[Hint 1] 底辺 × 高さ ÷ 2。\n[Hint 2] 10 × 15 を計算して、その答えを半分（÷2）にします。\n[Choices] 85cm2, 170cm2, 75cm2\n[Formula] 10 × 15 ÷ 2 = 75\n[Result] 75cm2\n[Note]\n\n[Target] 5-8集-8\n[Question ID] 2-(4)\n[Text] 下の図の三角形の面積を求めましょう。（底辺12cm, 高さ5cm, ななめ13cm）\n[Hint 1] 底辺 × 高さ ÷ 2。\n[Hint 2] 底辺12cm、高さ5cmです。13cmは使いません。\n[Choices] 32.5cm2, 65cm2, 30cm2\n[Formula] 12 × 5 ÷ 2 = 30\n[Result] 30cm2\n[Note]\n\n[Target] 5-8集-8\n[Question ID] 3\n[Text] 右の図の三角形ABCの面積は6cm2です。辺BC（5cm）を底辺としたときの高さは何cmですか。\n[Hint 1] 面積の公式をぎゃくに考えます。 「底辺 × 高さ = 面積 × 2」 になります。\n[Hint 2] 5 × □ = 6 × 2 なので、 12 ÷ 5 を計算します。\n[Choices] 2.4cm, 1.2cm, 15cm\n[Formula] 6 × 2 ÷ 5 = 2.4\n[Result] 2.4cm\n[Note] □に入る数： 6 × 2 = 12。 12 ÷ 5 = 2.4。",
+    "editedText": "[Target] 5-8集-7 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T05:53:51.709Z",
+    "questions": [
+      {
+        "id": "q-content-1778306031709-1",
+        "question": "問題 1-(1)\n右の三角形ABCについて、辺BCを底辺としたとき、高さは何cmですか。（底辺8cm, たて6cm, ななめ10cm）",
+        "answer": "6cm",
+        "hints": [
+          "底辺（下の横線）に対して、直角（90度）に立っている線の長さを探します。",
+          "辺BCの端っこ（点C）から、真上にのびている線ACの長さを読み取ります。"
+        ],
+        "choices": [
+          "6cm",
+          "10cm",
+          "8cm"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-2",
+        "question": "問題 1-(2)\n右の三角形ABCについて、辺ACを底辺としたとき、高さは何cmですか。",
+        "answer": "8cm",
+        "hints": [
+          "辺AC（たての線）を「底」としたときに、直角に交わっている線の長さを探します。",
+          "辺ACに対して、横にまっすぐのびている辺BCの長さを読み取ります。"
+        ],
+        "choices": [
+          "8cm",
+          "6cm",
+          "10cm"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-3",
+        "question": "問題 2-(1)\n下の図の三角形の面積を求めましょう。（底辺10cm, 高さ5cm, ななめ8cm）",
+        "answer": "25cm2",
+        "hints": [
+          "三角形の面積 = 底辺 × 高さ ÷ 2",
+          "底辺10cm、高さ5cmです。ななめの「8cm」は使いません。"
+        ],
+        "choices": [
+          "25cm2",
+          "50cm2",
+          "40cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-4",
+        "question": "問題 2-(2)\n下の図の三角形の面積を求めましょう。（底辺6cm, 高さ8cm, ななめ9cm）",
+        "answer": "24cm2",
+        "hints": [
+          "底辺 × 高さ ÷ 2。直角マークがついている「8cm」が高さです。",
+          "6 × 8 を計算して、最後に2でわります。"
+        ],
+        "choices": [
+          "24cm2",
+          "48cm2",
+          "27cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-5",
+        "question": "問題 2-(3)\n下の図の三角形の面積を求めましょう。（底辺10cm, 高さ15cm, ななめ17cm）",
+        "answer": "75cm2",
+        "hints": [
+          "底辺 × 高さ ÷ 2。",
+          "10 × 15 を計算して、その答えを半分（÷2）にします。"
+        ],
+        "choices": [
+          "85cm2",
+          "170cm2",
+          "75cm2"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-6",
+        "question": "問題 2-(4)\n下の図の三角形の面積を求めましょう。（底辺12cm, 高さ5cm, ななめ13cm）",
+        "answer": "30cm2",
+        "hints": [
+          "底辺 × 高さ ÷ 2。",
+          "底辺12cm、高さ5cmです。13cmは使いません。"
+        ],
+        "choices": [
+          "32.5cm2",
+          "65cm2",
+          "30cm2"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778306031709-7",
+        "question": "問題 3\n右の図の三角形ABCの面積は6cm2です。辺BC（5cm）を底辺としたときの高さは何cmですか。",
+        "answer": "2.4cm",
+        "hints": [
+          "面積の公式をぎゃくに考えます。 「底辺 × 高さ = 面積 × 2」 になります。",
+          "5 × □ = 6 × 2 なので、 12 ÷ 5 を計算します。"
+        ],
+        "choices": [
+          "2.4cm",
+          "1.2cm",
+          "15cm"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778304375156",
+    "title": "【学研算数】5-8-3/4",
+    "subject": "こくご",
+    "rawText": "[Target] 5-8集-3\n[Question ID] 1-(1)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 平行四辺形の面積 = 底辺 × 高さ。直角（90度）のしるしがついている線を探しましょう。\n[Hint 2] 底辺は3cm、高さは4cmです。ななめの辺の「6cm」は高さではないので使いません。\n[Choices] 12cm2, 18cm2, 7cm2\n[Formula] 3 × 4 = 12\n[Result] 12cm2\n[Note] 高さが図形の外側にあっても、底辺をのばした線と垂直ならそれが高さになります。\n\n[Target] 5-8集-3\n[Question ID] 1-(2)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。図形が横向きでも、直角マークがついている数字をかけ合わせます。\n[Hint 2] 底辺は8cm、高さは7cmです。「2cm」は高さを測るための補助線なので使いません。\n[Choices] 56cm2, 16cm2, 15cm2\n[Formula] 8 × 7 = 56\n[Result] 56cm2\n[Note]\n\n[Target] 5-8集-4\n[Question ID] 2-(1)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。直角マークのついた「9cm」が高さです。\n[Hint 2] 底辺は8cm、高さは9cmです。ななめの14cmは使いません。\n[Choices] 72cm2, 112cm2, 17cm2\n[Formula] 8 × 9 = 72\n[Result] 72cm2\n[Note]\n\n[Target] 5-8集-4\n[Question ID] 2-(2)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。直角マークがついているところを見つけましょう。\n[Hint 2] 底辺は18cm、高さは6cmです。ななめの19cmは使いません。\n[Choices] 108cm2, 114cm2, 24cm2\n[Formula] 18 × 6 = 108\n[Result] 108cm2\n[Note]\n\n[Target] 5-8集-4\n[Question ID] 3\n[Text] 右の図の平行四辺形ABCDの面積は120cm2です。辺BCを底辺としたときの高さは何cmですか。\n[Hint 1] 面積 = 底辺 × 高さ。この公式にわかっている数字をあてはめて逆算します。\n[Hint 2] 8 × □ = 120 になるので、120 ÷ 8 を計算して高さを出します。\n[Choices] 15cm, 960cm, 112cm\n[Formula] 120 ÷ 8 = 15\n[Result] 15cm\n[Note] 24cmは斜めの辺の長さなので、面積から高さを出すときには使いません。\n\n[Target] 5-8集-4\n[Question ID] 4\n[Text] 右の図の3つの平行四辺形の面積はみんな等しいです。そのわけを答えましょう。\n[Hint 1] 図を見て、3つの図形の「底辺」と「高さ」の数字を確認しましょう。\n[Hint 2] どの図形も、底辺が（　）cmで、高さが（　）cmで同じだから面積も同じになります。\n[Choices] 底辺3cm・高さ8cm, 底辺8cm・高さ3cm, 面積が同じに見えるから\n[Formula] 全て 3 × 8 = 24\n[Result] 底辺が3cm, 高さが8cmで等しいから\n[Note] 形がちがっても、底辺と高さが同じなら面積は等しくなります。",
+    "editedText": "[Target] 5-8集-3 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T05:26:15.156Z",
+    "questions": [
+      {
+        "id": "q-content-1778304375156-1",
+        "question": "問題 1-(1)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "12cm2",
+        "hints": [
+          "平行四辺形の面積 = 底辺 × 高さ。直角（90度）のしるしがついている線を探しましょう。",
+          "底辺は3cm、高さは4cmです。ななめの辺の「6cm」は高さではないので使いません。"
+        ],
+        "choices": [
+          "12cm2",
+          "18cm2",
+          "7cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778304375156-2",
+        "question": "問題 1-(2)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "14cm2",
+        "hints": [
+          "底辺 × 高さ。図形が横向きでも、直角マークがついている数字をかけ合わせます。",
+          "底辺は2cm、高さは7cmです。「8cm」は高さを測るための補助線なので使いません。",
+          ""
+        ],
+        "choices": [
+          "14cm2",
+          "56cm2",
+          "16cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778304375156-3",
+        "question": "問題 2-(1)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "72cm2",
+        "hints": [
+          "底辺 × 高さ。直角マークのついた「9cm」が高さです。",
+          "底辺は8cm、高さは9cmです。ななめの14cmは使いません。"
+        ],
+        "choices": [
+          "72cm2",
+          "112cm2",
+          "17cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778304375156-4",
+        "question": "問題 2-(2)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "108cm2",
+        "hints": [
+          "底辺 × 高さ。直角マークがついているところを見つけましょう。",
+          "底辺は18cm、高さは6cmです。ななめの19cmは使いません。"
+        ],
+        "choices": [
+          "108cm2",
+          "114cm2",
+          "24cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778304375156-5",
+        "question": "問題 3\n右の図の平行四辺形ABCDの面積は120cm2です。辺BCを底辺としたときの高さは何cmですか。",
+        "answer": "15cm",
+        "hints": [
+          "面積 = 底辺 × 高さ。この公式にわかっている数字をあてはめて逆算します。",
+          "8 × □ = 120 になるので、120 ÷ 8 を計算して高さを出します。"
+        ],
+        "choices": [
+          "15cm",
+          "960cm",
+          "112cm"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778304375156-6",
+        "question": "問題 4\n右の図の3つの平行四辺形の面積はみんな等しいです。そのわけを答えましょう。",
+        "answer": "底辺が3cm, 高さが8cmで等しいから",
+        "hints": [
+          "図を見て、3つの図形の「底辺」と「高さ」の数字を確認しましょう。",
+          "どの図形も、底辺が（　）cmで、高さが（　）cmで同じだから面積も同じになります。"
+        ],
+        "choices": [
+          "底辺が3cm, 高さが8cmで等しいから",
+          "底辺3cm・高さ8cm",
+          "底辺8cm・高さ3cm"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778303922770",
+    "title": "【学研算数】5-8-1/2",
+    "subject": "さんすう",
+    "rawText": "[Target] 5-8集-1\n[Question ID] 1-(1)\n[Text] 右の図の平行四辺形ABCDについて、辺BCを底辺とするとき、高さはどの直線ですか。\n[Hint 1] 底辺（下の横線）に対して、垂直（90度）に立っている線を探します。\n[Hint 2] 底辺BCの線の上で、四角い「直角マーク」がついている点Fから、上にのびている線を選びます。\n[Choices] 直線EF, 直線AG, 直線BC\n[Formula] (図形から垂直な線を特定)\n[Result] 直線EF\n[Note]\n\n[Target] 5-8集-1\n[Question ID] 1-(2)\n[Text] 辺CDを底辺とするとき、高さはどの直線ですか。\n[Hint 1] ななめの辺CDを「底」として見たときに、直角（90度）に交わっている線を探します。\n[Hint 2] 図の右下にある、辺CDの延長線と垂直に交わっている線を選びます。\n[Choices] 直線GH, 直線EF, 直線AG\n[Formula] (図形から垂直な線を特定)\n[Result] 直線GH\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 2-(1)\n[Text] 下の図の方眼の1目もりは1cmです。平行四辺形の面積を求めましょう。\n[Hint 1] 平行四辺形の面積 = 底辺 × 高さ。横のマス目と、たてのマス目を数えます。\n[Hint 2] 横（底辺）は6マス、たて（高さ）は5マスあります。\n[Choices] 30cm2, 11cm2, 300cm2\n[Formula] 6 × 5 = 30\n[Result] 30cm2\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 2-(2)\n[Text] 下の図の方眼の1目もりは1cmです。平行四辺形の面積を求めましょう。\n[Hint 1] 平行四辺形の面積 = 底辺 × 高さ。横のマス目と、たてのマス目を数えます。\n[Hint 2] 横（底辺）は9マス、たて（高さ）は3マスあります。\n[Choices] 27cm2, 12cm2, 270cm2\n[Formula] 9 × 3 = 27\n[Result] 27cm2\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 3-(1)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。直角（90度）のしるしがついている数字をかけ合わせます。\n[Hint 2] 底辺は6cm、高さは3cmです。ななめの4cmは使いません。\n[Choices] 18cm2, 24cm2, 9cm2\n[Formula] 6 × 3 = 18\n[Result] 18cm2\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 3-(2)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。図がななめを向いていても、直角マークを探します。\n[Hint 2] 底辺は12cm、高さは5cmです。13cmは使いません。\n[Choices] 60cm2, 156cm2, 600cm2\n[Formula] 12 × 5 = 60\n[Result] 60cm2\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 3-(3)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。\n[Hint 2] 底辺は6cm、高さは4cmです。ななめの10cmは使いません。\n[Choices] 24cm2, 60cm2, 10cm2\n[Formula] 6 × 4 = 24\n[Result] 24cm2\n[Note]\n\n[Target] 5-8集-2\n[Question ID] 3-(4)\n[Text] 下の図の平行四辺形の面積を求めましょう。\n[Hint 1] 底辺 × 高さ。\n[Hint 2] 底辺は12cm、高さは8cmです。ななめの10cmは使いません。\n[Choices] 96cm2, 120cm2, 20cm2\n[Formula] 12 × 8 = 96\n[Result] 96cm2\n[Note]",
+    "editedText": "[Target] 5-8集-1 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-09T05:18:42.770Z",
+    "questions": [
+      {
+        "id": "q-content-1778303922770-1",
+        "question": "問題 1-(1)\n右の図の平行四辺形ABCDについて、辺BCを底辺とするとき、高さはどの直線ですか。",
+        "answer": "直線EF",
+        "hints": [
+          "底辺（下の横線）に対して、垂直（90度）に立っている線を探します。",
+          "底辺BCの線の上で、四角い「直角マーク」がついている点Fから、上にのびている線を選びます。"
+        ],
+        "choices": [
+          "直線EF",
+          "直線AG",
+          "直線BC"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-2",
+        "question": "問題 1-(2)\n辺CDを底辺とするとき、高さはどの直線ですか。",
+        "answer": "直線GH",
+        "hints": [
+          "ななめの辺CDを「底」として見たときに、直角（90度）に交わっている線を探します。",
+          "図の右下にある、辺CDの延長線と垂直に交わっている線を選びます。"
+        ],
+        "choices": [
+          "直線GH",
+          "直線EF",
+          "直線AG"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-3",
+        "question": "問題 2-(1)\n下の図の方眼の1目もりは1cmです。平行四辺形の面積を求めましょう。",
+        "answer": "30cm2",
+        "hints": [
+          "平行四辺形の面積 = 底辺 × 高さ。横のマス目と、たてのマス目を数えます。",
+          "横（底辺）は6マス、たて（高さ）は5マスあります。"
+        ],
+        "choices": [
+          "30cm2",
+          "11cm2",
+          "300cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-4",
+        "question": "問題 2-(2)\n下の図の方眼の1目もりは1cmです。平行四辺形の面積を求めましょう。",
+        "answer": "27cm2",
+        "hints": [
+          "平行四辺形の面積 = 底辺 × 高さ。横のマス目と、たてのマス目を数えます。",
+          "横（底辺）は9マス、たて（高さ）は3マスあります。"
+        ],
+        "choices": [
+          "27cm2",
+          "12cm2",
+          "270cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-5",
+        "question": "問題 3-(1)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "18cm2",
+        "hints": [
+          "底辺 × 高さ。直角（90度）のしるしがついている数字をかけ合わせます。",
+          "底辺は6cm、高さは3cmです。ななめの4cmは使いません。"
+        ],
+        "choices": [
+          "18cm2",
+          "24cm2",
+          "9cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-6",
+        "question": "問題 3-(2)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "60cm2",
+        "hints": [
+          "底辺 × 高さ。図がななめを向いていても、直角マークを探します。",
+          "底辺は12cm、高さは5cmです。13cmは使いません。"
+        ],
+        "choices": [
+          "60cm2",
+          "156cm2",
+          "600cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-7",
+        "question": "問題 3-(3)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "24cm2",
+        "hints": [
+          "底辺 × 高さ。",
+          "底辺は6cm、高さは4cmです。ななめの10cmは使いません。"
+        ],
+        "choices": [
+          "24cm2",
+          "60cm2",
+          "10cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778303922770-8",
+        "question": "問題 3-(4)\n下の図の平行四辺形の面積を求めましょう。",
+        "answer": "96cm2",
+        "hints": [
+          "底辺 × 高さ。",
+          "底辺は12cm、高さは8cmです。ななめの10cmは使いません。"
+        ],
+        "choices": [
+          "96cm2",
+          "120cm2",
+          "20cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778164309166",
+    "title": "【学研算数】5-8-5/6",
+    "subject": "さんすう",
+    "rawText": "[Target] 5-8集-5\n[Question ID] 1\n[Text] 右の三角形ABCの面積の求め方を考えましょう。三角形ABCと同じ三角形を2つくっつけて、平行四辺形をつくったとき、三角形の面積はどうなりますか。\n[Hint 1] 【図解】2つの三角形を逆さまに合わせると、底辺6cm、高さ4cmの「平行四辺形」になります。三角形はその「半分」の形です。\n[Hint 2] 平行四辺形の面積（底辺×高さ）を計算してから、2でわります。\n[Choices] 12cm2, 24cm2, 6cm2\n[Formula] 6 × 4 ÷ 2 = 12\n[Result] 12cm2\n[Note] \n\n[Target] 5-8集-5\n[Question ID] 2\n[Text] 三角形を2つの直角三角形に分け、それぞれを2倍にして長方形をつくったとき、面積はどうなりますか。\n[Hint 1] 【図解】三角形を縦の線（高さ）で分けると、2つの小さな長方形の中に三角形がぴったり半分ずつ入ります。全体の長方形（たて4cm、よこ6cm）の「半分」になります。\n[Hint 2] 長方形の面積（たて×よこ）を計算してから、2でわります。\n[Choices] 12cm2, 24cm2, 48cm2\n[Formula] 4 × 6 ÷ 2 = 12\n[Result] 12cm2\n[Note] \n\n[Target] 5-8集-5\n[Question ID] 3\n[Text] 三角形の上の部分を切り取って移動させ、平行四辺形をつくったとき、面積はどうなりますか。\n[Hint 1] 【図解】三角形の高さを半分（4cm÷2=2cm）のところで横に切り、上の角を横にずらしてくっつけると、高さが「2cm」の平行四辺形に変身します。\n[Hint 2] 底辺（6cm）はそのままに、高さを半分（2cm）にして計算します。\n[Choices] 12cm2, 24cm2, 6cm2\n[Formula] 6 × (4 ÷ 2) = 12\n[Result] 12cm2\n[Note] \n\n[Target] 5-8集-6\n[Question ID] 1-(1)\n[Text] 次の黒くぬった三角形の面積を求めましょう。方眼の1目もりは1cmです。\n[Hint 1] 【図解】三角形の右側に同じ形を逆さまにくっつけると、底辺3cm、高さ4cmの「平行四辺形」になります。\n[Hint 2] 平行四辺形の面積（底辺3×高さ4）を出して、2でわります。\n[Choices] 6cm2, 12cm2, 3cm2\n[Formula] 3 × 4 ÷ 2 = 6\n[Result] 6cm2\n[Note] \n\n[Target] 5-8集-6\n[Question ID] 1-(2)\n[Text] 次の黒くぬった三角形の面積を求めましょう。\n[Hint 1] 【図解】三角形を囲む大きな長方形（たて4cm、よこ6cm）をイメージします。三角形はこの長方形の面積の「半分」です。\n[Hint 2] 長方形の面積（よこ6×たて4）を出して、2でわります。\n[Choices] 12cm2, 24cm2, 6cm2\n[Formula] 6 × 4 ÷ 2 = 12\n[Result] 12cm2\n[Note] \n\n[Target] 5-8集-6\n[Question ID] 1-(3)\n[Text] 次の黒くぬった三角形の面積を求めましょう。\n[Hint 1] 【図解】三角形のてっぺんを横に切り取って、右下のすき間に移動させると、底辺3cm、高さ2cm（高さ4cmの半分）の平行四辺形になります。\n[Hint 2] 底辺3cm × 高さ2cm で計算します。\n[Choices] 6cm2, 12cm2, 3cm2\n[Formula] 3 × (4 ÷ 2) = 6\n[Result] 6cm2\n[Note] \n\n[Target] 5-8集-6\n[Question ID] 2-(1)\n[Text] 次の三角形の面積を求めましょう。\n[Hint 1] 【図解】底辺（下の横線）が方眼6つ分(6cm)、高さ（てっぺんから底までの垂直な線）が方眼4つ分(4cm)です。\n[Hint 2] 三角形の面積の公式「底辺 × 高さ ÷ 2」にあてはめます。\n[Choices] 12cm2, 24cm2, 10cm2\n[Formula] 6 × 4 ÷ 2 = 12\n[Result] 12cm2\n[Note] \n\n[Target] 5-8集-6\n[Question ID] 2-(2)\n[Text] 次の三角形の面積を求めましょう。\n[Hint 1] 【図解】底辺（左側の縦の線）が方眼3つ分(3cm)、高さ（右の角から底辺までの横の線）が方眼8つ分(8cm)です。\n[Hint 2] 三角形が横向きですが、公式「底辺 × 高さ ÷ 2」はそのまま使えます。\n[Choices] 12cm2, 24cm2, 11cm2\n[Formula] 3 × 8 ÷ 2 = 12\n[Result] 12cm2\n[Note]",
+    "editedText": "[Target] 5-8集-5 [Question ID] 1",
+    "uploadDate": "2026-05-07T14:31:49.166Z",
+    "questions": [
+      {
+        "id": "q-content-1778164309166-1",
+        "question": "問題 1\n右の三角形ABCの面積の求め方を考えましょう。三角形ABCと同じ三角形を2つくっつけて、平行四辺形をつくったとき、三角形の面積はどうなりますか。",
+        "answer": "2",
+        "hints": [
+          "【図解】2つの三角形を逆さまに合わせると、底辺6cm、高さ4cmの「平行四辺形」になります。三角形はその「半分」の形です。",
+          "平行四辺形の面積（底辺×高さ）を計算してから、2でわります。",
+          ""
+        ],
+        "choices": [
+          "2",
+          "4",
+          "6"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-2",
+        "question": "問題 2\n三角形を2つの直角三角形に分け、それぞれを2倍にして長方形をつくったとき、面積はどうなりますか。",
+        "answer": "2",
+        "hints": [
+          "【図解】三角形を縦の線（高さ）で分けると、2つの小さな長方形の中に三角形がぴったり半分ずつ入ります。全体の長方形（たて4cm、よこ6cm）の「半分」になります。",
+          "長方形の面積（たて×よこ）を計算してから、2でわります。",
+          ""
+        ],
+        "choices": [
+          "2",
+          "4",
+          "6"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-3",
+        "question": "問題 3\n三角形の上の部分を切り取って移動させ、平行四辺形をつくったとき、面積はどうなりますか。",
+        "answer": "2",
+        "hints": [
+          "【図解】三角形の高さを半分（4cm÷2=2cm）のところで横に切り、上の角を横にずらしてくっつけると、高さが「2cm」の平行四辺形に変身します。",
+          "底辺（6cm）はそのままに、高さを半分（2cm）にして計算します。",
+          ""
+        ],
+        "choices": [
+          "2",
+          "4",
+          "6"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-4",
+        "question": "問題 1-(1)\n次の黒くぬった三角形の面積を求めましょう。方眼の1目もりは1cmです。",
+        "answer": "10cm2",
+        "hints": [
+          "【図解】三角形の右側に同じ形を逆さまにくっつけると、底辺4cm、高さ5cmの「平行四辺形」になります。",
+          "平行四辺形の面積（底辺4×高さ5）を出して、2でわります。",
+          ""
+        ],
+        "choices": [
+          "6cm2",
+          "10cm2",
+          "3cm2"
+        ],
+        "correctIndex": 1,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-5",
+        "question": "問題 1-(2)\n次の黒くぬった三角形の面積を求めましょう。",
+        "answer": "20cm2",
+        "hints": [
+          "【図解】三角形を囲む大きな長方形（たて5cm、よこ8cm）をイメージします。三角形はこの長方形の面積の「半分」です。",
+          "長方形の面積（よこ8×たて5）を出して、2でわります。",
+          ""
+        ],
+        "choices": [
+          "12cm2",
+          "24cm2",
+          "20cm2"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-6",
+        "question": "問題 1-(3)\n次の黒くぬった三角形の面積を求めましょう。",
+        "answer": "18cm2",
+        "hints": [
+          "【図解】三角形のてっぺんを横に切り取って、右下のすき間に移動させると、底辺6cm、高さ3cm（高さ3cmの半分）の平行四辺形になります。",
+          "底辺6cm × 高さ3cm で計算します。",
+          ""
+        ],
+        "choices": [
+          "6cm2",
+          "12cm2",
+          "18cm2"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-7",
+        "question": "問題 2-(1)\n次の三角形の面積を求めましょう。",
+        "answer": "22.5cm2",
+        "hints": [
+          "【図解】底辺（下の横線）が方眼9つ分(9cm)、高さ（てっぺんから底までの垂直な線）が方眼5つ分(5cm)です。",
+          "三角形の面積の公式「底辺 × 高さ ÷ 2」にあてはめます。",
+          ""
+        ],
+        "choices": [
+          "22.5cm2",
+          "24.5cm2",
+          "26.5cm2"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778164309166-8",
+        "question": "問題 2-(2)\n次の三角形の面積を求めましょう。",
+        "answer": "25cm2",
+        "hints": [
+          "【図解】底辺（左側の縦の線）が方眼5つ分(5cm)、高さ（右の角から底辺までの横の線）が方眼10つ分(10cm)です。",
+          "三角形が横向きですが、公式「底辺 × 高さ ÷ 2」はそのまま使えます。",
+          ""
+        ],
+        "choices": [
+          "20cm2",
+          "25cm2",
+          "30cm2"
+        ],
+        "correctIndex": 1,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778163700960",
+    "title": "【学研国語】4-1-22",
+    "subject": "こくご",
+    "rawText": "[Target] 4-1集-22\n\n[Question ID] 1-(1)\n[Text] 陸上競技の世界大会が開幕する。（開幕の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.幕府, B.幕末, C.暗幕]\n[Choices] かいまく, あけまく, かいぼく\n[Note] 幕（まく）を開けて、行事などが始まること。\n\n[Question ID] 1-(2)\n[Text] 江戸幕府は二百六十数年の間、続いた。（幕府の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.開幕, B.暗幕, C.幕末]\n[Choices] ばくふ, まくふ, まくぶ\n[Note] 武士（ぶし）が政治を行う場所のこと。\n\n[Question ID] 1-(3)\n[Text] 体育館に暗幕を張る。（暗幕の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.開幕, B.幕府, C.幕末]\n[Choices] あんまく, くらまく, あんぼく\n[Note] 光を通さないようにするための、黒い幕のこと。\n\n[Question ID] 1-(4)\n[Text] 年の暮れは、いそがしい。（暮れの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.暮らし, B.日暮れ, C.夕暮れ]\n[Choices] くれ, まれ, あけ\n[Note] 一年の終わりの時期のこと。\n\n[Question ID] 1-(5)\n[Text] 姉は独りの暮らしを楽しんでいる。（暮らしの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.暮れ, B.日暮れ, C.夕暮れ]\n[Choices] くらし, まらし, あらし\n[Note] 毎日を生活すること。\n\n[Question ID] 1-(6)\n[Text] 規模の大きい建物が造られている。（規模の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.模型, B.模様, C.模範]\n[Choices] きぼ, きま, きのう\n[Note] 物事の大きさや、仕組みのこと。\n\n[Question ID] 1-(7)\n[Text] いろいろな機関車の模型を作る。（模型の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.規模, B.模様, C.模範]\n[Choices] もけい, もがた, ぼけい\n[Note] 本物そっくりに、形をまねて作ったもの。\n\n[Question ID] 2-(1)\n[Text] わたしは日のくれるころが好きだ。（くれるを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.暮らし, B.日暮れ, C.一日の終わり]\n[Choices] 暮れる, 幕れる, 墓れる\n[Note] 日がしずむ、または時間がすぎるという意味。\n\n[Question ID] 2-(2)\n[Text] 兄のしゅ味はもけいの組み立てだ。（もけいを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.規模, B.模様, C.模範]\n[Choices] 模型, 墓型, 幕型\n[Note] 実物を小さくして形をまねたもの。\n\n[Question ID] 2-(3)\n[Text] 姉の服はもようが美しい。（もようを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.規模, B.模型, C.模範]\n[Choices] 模様, 模用, 模洋\n[Note] 布などについている飾りや、ものの様子。\n\n[Question ID] 2-(4)\n[Text] ばくまつに活やくした人が有名になった。（ばくまつを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.幕府, B.開幕, C.暗幕]\n[Choices] 幕末, 幕未, 膜末\n[Note] 江戸幕府（えどばくふ）が終わるころの時代。\n\n[Question ID] 2-(5)\n[Text] 弟は国体のかいまくの様子を会場で見た。（かいまくを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.幕末, B.幕府, C.暗幕]\n[Choices] 開幕, 改幕, 開膜\n[Note] 行事や大会が始まること。",
+    "editedText": "[Target] 4-1集-22 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-07T14:21:40.960Z",
+    "questions": [
+      {
+        "id": "q-content-1778163700960-1",
+        "question": "問題 1-(1)\n陸上競技の世界大会が開幕する。（開幕の読みにチェック）",
+        "answer": "かいまく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.幕府, B.幕末, C.暗幕]"
+        ],
+        "choices": [
+          "かいまく",
+          "あけまく",
+          "かいぼく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-2",
+        "question": "問題 1-(2)\n江戸幕府は二百六十数年の間、続いた。（幕府の読みにチェック）",
+        "answer": "ばくふ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.開幕, B.暗幕, C.幕末]"
+        ],
+        "choices": [
+          "ばくふ",
+          "まくふ",
+          "まくぶ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-3",
+        "question": "問題 1-(3)\n体育館に暗幕を張る。（暗幕の読みにチェック）",
+        "answer": "あんまく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.開幕, B.幕府, C.幕末]"
+        ],
+        "choices": [
+          "あんまく",
+          "くらまく",
+          "あんぼく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-4",
+        "question": "問題 1-(4)\n年の暮れは、いそがしい。（暮れの読みにチェック）",
+        "answer": "くれ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.暮らし, B.日暮れ, C.夕暮れ]"
+        ],
+        "choices": [
+          "くれ",
+          "まれ",
+          "あけ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-5",
+        "question": "問題 1-(5)\n姉は独りの暮らしを楽しんでいる。（暮らしの読みにチェック）",
+        "answer": "くらし",
+        "hints": [
+          "同じ漢字を使うのは？ [A.暮れ, B.日暮れ, C.夕暮れ]"
+        ],
+        "choices": [
+          "くらし",
+          "まらし",
+          "あらし"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-6",
+        "question": "問題 1-(6)\n規模の大きい建物が造られている。（規模の読みにチェック）",
+        "answer": "きぼ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.模型, B.模様, C.模範]"
+        ],
+        "choices": [
+          "きぼ",
+          "きま",
+          "きのう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-7",
+        "question": "問題 1-(7)\nいろいろな機関車の模型を作る。（模型の読みにチェック）",
+        "answer": "もけい",
+        "hints": [
+          "同じ漢字を使うのは？ [A.規模, B.模様, C.模範]"
+        ],
+        "choices": [
+          "もけい",
+          "もがた",
+          "ぼけい"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-8",
+        "question": "問題 2-(1)\nわたしは日のくれるころが好きだ。（くれるを漢字に）",
+        "answer": "暮れる",
+        "hints": [
+          "同じ漢字を使うのは？ [A.暮らし, B.日暮れ, C.一日の終わり]"
+        ],
+        "choices": [
+          "暮れる",
+          "幕れる",
+          "墓れる"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-9",
+        "question": "問題 2-(2)\n兄のしゅ味はもけいの組み立てだ。（もけいを漢字に）",
+        "answer": "模型",
+        "hints": [
+          "同じ漢字を使うのは？ [A.規模, B.模様, C.模範]"
+        ],
+        "choices": [
+          "模型",
+          "墓型",
+          "幕型"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-10",
+        "question": "問題 2-(3)\n姉の服はもようが美しい。（もようを漢字に）",
+        "answer": "模様",
+        "hints": [
+          "同じ漢字を使うのは？ [A.規模, B.模型, C.模範]"
+        ],
+        "choices": [
+          "模様",
+          "模用",
+          "模洋"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-11",
+        "question": "問題 2-(4)\nばくまつに活やくした人が有名になった。（ばくまつを漢字に）",
+        "answer": "幕末",
+        "hints": [
+          "同じ漢字を使うのは？ [A.幕府, B.開幕, C.暗幕]"
+        ],
+        "choices": [
+          "幕末",
+          "幕未",
+          "膜末"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163700960-12",
+        "question": "問題 2-(5)\n弟は国体のかいまくの様子を会場で見た。（かいまくを漢字に）",
+        "answer": "開幕",
+        "hints": [
+          "同じ漢字を使うのは？ [A.幕末, B.幕府, C.暗幕]"
+        ],
+        "choices": [
+          "開幕",
+          "改幕",
+          "開膜"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778163518798",
+    "title": "【学研国語】4-1-20",
+    "subject": "こくご",
+    "rawText": "[Target] 4-1集-20\n[Question ID] 1-(1)\n[Text] 家の戸じまりを厳重にする。（厳重の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.厳格, B.厳守, C.厳密]\n[Choices] げんじゅう, げんしゅう, げんちょう\n[Note] 「厳」はいかめしい、「重」はかさなる、という意味。\n\n[Target] 4-1集-20\n[Question ID] 1-(2)\n[Text] 集合の時間を厳守する。（厳守の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳格, C.厳密]\n[Choices] げんしゅ, げんじゅ, げんし\n[Note] 「厳守」は、きびしく、かならず守ることをいいます。\n\n[Target] 4-1集-20\n[Question ID] 1-(3)\n[Text] 厳格なしつけを受ける。（厳格の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳密]\n[Choices] げんかく, げんがく, げんらく\n[Note] 「厳格」は、手かげんをせず、きびしい様子をいいます。\n\n[Target] 4-1集-20\n[Question ID] 1-(4)\n[Text] 厳しい暑さが身にこたえる。（厳しいの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]\n[Choices] きびしい, はげしい, むなしい\n[Note] 「厳」は、おごそかで、いいかげんにしないという意味があります。\n\n[Target] 4-1集-20\n[Question ID] 1-(5)\n[Text] 机をかべに密着させる。（密着の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.密接, B.密集, C.秘密]\n[Choices] みっちゃく, みつちゃく, みっちゃ\n[Note] 「密」はすきまがない、「着」はつく、という意味です。\n\n[Target] 4-1集-20\n[Question ID] 1-(6)\n[Text] 友達と密接なつながりを持つ。（密接の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.密着, B.密集, C.密度]\n[Choices] みっせつ, みつせつ, みっせい\n[Note] 「密接」は、すきまのないほど、深い関係にあることです。\n\n[Target] 4-1集-20\n[Question ID] 1-(7)\n[Text] 機械の厳密な検査が行われた。（厳密の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]\n[Choices] げんみつ, げんみち, げんびつ\n[Note] 「密」は、こまかいところまで行き届く、という意味があります。\n\n[Target] 4-1集-20\n[Question ID] 2-(1)\n[Text] 駅の周辺は家がみっしゅうしている。（みっしゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.密着, B.密接, C.密度]\n[Choices] 密集, 密接, 密着\n[Note] 「密」はすきまなく、「集」はあつまる、という意味です。\n\n[Target] 4-1集-20\n[Question ID] 2-(2)\n[Text] ぼくは自分自身をきびしく見つめる。（きびしくを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]\n[Choices] 厳しく, 激しく, 険しく\n[Note] 手かげんをせず、はげしい様子を「厳しい」と書きます。\n\n[Target] 4-1集-20\n[Question ID] 2-(3)\n[Text] 人口の調査はげんみつに行われた。（げんみつを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳守, C.密度]\n[Choices] 厳密, 厳実, 厳充\n[Note] こまかいところまで、きびしく正確なことを「厳密」といいます。\n\n[Target] 4-1集-20\n[Question ID] 2-(4)\n[Text] 幹線道路はげんじゅうに調べられた。（げんじゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.厳守, B.厳格, C.重要]\n[Choices] 厳重, 厳従, 厳十\n[Note] 「厳」も「重」も、いいかげんにしない、という意味があります。\n\n[Target] 4-1集-20\n[Question ID] 2-(5)\n[Text] 父はいつも約束の時間をげんしゅする。（げんしゅを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.厳重, B.厳密, C.守備]\n[Choices] 厳守, 厳取, 厳種\n[Note] きびしく、かならず守ることを「厳守」といいます。",
+    "editedText": "[Target] 4-1集-20 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-07T14:18:38.798Z",
+    "questions": [
+      {
+        "id": "q-content-1778163518798-1",
+        "question": "問題 1-(1)\n家の戸じまりを厳重にする。（厳重の読みにチェック）",
+        "answer": "げんじゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳格, B.厳守, C.厳密]"
+        ],
+        "choices": [
+          "げんじゅう",
+          "げんしゅう",
+          "げんちょう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-2",
+        "question": "問題 1-(2)\n集合の時間を厳守する。（厳守の読みにチェック）",
+        "answer": "げんしゅ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳格, C.厳密]"
+        ],
+        "choices": [
+          "げんしゅ",
+          "げんじゅ",
+          "げんし"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-3",
+        "question": "問題 1-(3)\n厳格なしつけを受ける。（厳格の読みにチェック）",
+        "answer": "げんかく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳密]"
+        ],
+        "choices": [
+          "げんかく",
+          "げんがく",
+          "げんらく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-4",
+        "question": "問題 1-(4)\n厳しい暑さが身にこたえる。（厳しいの読みにチェック）",
+        "answer": "きびしい",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]"
+        ],
+        "choices": [
+          "きびしい",
+          "はげしい",
+          "むなしい"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-5",
+        "question": "問題 1-(5)\n机をかべに密着させる。（密着の読みにチェック）",
+        "answer": "みっちゃく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.密接, B.密集, C.秘密]"
+        ],
+        "choices": [
+          "みっちゃく",
+          "みつちゃく",
+          "みっちゃ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-6",
+        "question": "問題 1-(6)\n友達と密接なつながりを持つ。（密接の読みにチェック）",
+        "answer": "みっせつ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.密着, B.密集, C.密度]"
+        ],
+        "choices": [
+          "みっせつ",
+          "みつせつ",
+          "みっせい"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-7",
+        "question": "問題 1-(7)\n機械の厳密な検査が行われた。（厳密の読みにチェック）",
+        "answer": "げんみつ",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]"
+        ],
+        "choices": [
+          "げんみつ",
+          "げんみち",
+          "げんびつ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-8",
+        "question": "問題 2-(1)\n駅の周辺は家がみっしゅうしている。（みっしゅうを漢字に）",
+        "answer": "密集",
+        "hints": [
+          "同じ漢字を使うのは？ [A.密着, B.密接, C.密度]"
+        ],
+        "choices": [
+          "密集",
+          "密接",
+          "密着"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-9",
+        "question": "問題 2-(2)\nぼくは自分自身をきびしく見つめる。（きびしくを漢字に）",
+        "answer": "厳しく",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳守, C.厳格]"
+        ],
+        "choices": [
+          "厳しく",
+          "激しく",
+          "険しく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-10",
+        "question": "問題 2-(3)\n人口の調査はげんみつに行われた。（げんみつを漢字に）",
+        "answer": "厳密",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳守, C.密度]"
+        ],
+        "choices": [
+          "厳密",
+          "厳実",
+          "厳充"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-11",
+        "question": "問題 2-(4)\n幹線道路はげんじゅうに調べられた。（げんじゅうを漢字に）",
+        "answer": "厳重",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳守, B.厳格, C.重要]"
+        ],
+        "choices": [
+          "厳重",
+          "厳従",
+          "厳十"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163518798-12",
+        "question": "問題 2-(5)\n父はいつも約束の時間をげんしゅする。（げんしゅを漢字に）",
+        "answer": "厳守",
+        "hints": [
+          "同じ漢字を使うのは？ [A.厳重, B.厳密, C.守備]"
+        ],
+        "choices": [
+          "厳守",
+          "厳取",
+          "厳種"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778163022739",
+    "title": "【学研国語】4-1-18",
+    "subject": "こくご",
+    "rawText": "[Target] 4-1集-18\n\n[Question ID] 1-(1)\n[Text] 古い新聞を回収する小型トラックが来た。（回収の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうにゅう, B.かいたく, C.しゅうりょう]\n[Choices] かいしゅう, かいそう, かいじゅう\n[Note] 「収」は、取り入れる、中に入れおさめるという意味。\n\n[Question ID] 1-(2)\n[Text] 五万人の観客を収容する競技場を見学した。（収容の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうかく, B.ようしゃ, C.ようい]\n[Choices] しゅうよう, しゅうり, しゅうこう\n[Note] 「収容」は、一定の場所の中に入れ入れることです。\n\n[Question ID] 1-(3)\n[Text] めずらしい切手を収集する。（収集の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうごう, B.しゅうし, C.しゅうせい]\n[Choices] しゅうしゅう, しゅうきゅう, しゅうき\n[Note] 「収集」は、バラバラのものを集めることです。\n\n[Question ID] 1-(4)\n[Text] テストでよい成績を収めた。（収めたの読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.りょうしゅう, B.かんりょう, C.せいじ]\n[Choices] おさめた, かためた, とどめた\n[Note] 良い結果を手に入れたり、成果を上げたりするときは「収」を使います。\n\n[Question ID] 1-(5)\n[Text] 遠足の費用を納入する。（納入の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.のうひん, B.のうとく, C.にゅうりょく]\n[Choices] のうにゅう, のうにん, のうりょく\n[Note] 「納」は、受け取って中に入れる、おさめるという意味。\n\n[Question ID] 1-(6)\n[Text] 納税は国民の義務だと、父は言う。（納税の読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.すいのう, B.のうぜい, C.せいげん]\n[Choices] のうぜい, のうせい, のうじ\n[Note] 「納税」は、国などに税金を納めることです。\n\n[Question ID] 1-(7)\n[Text] 喜びを心の内に納めておく。（納めての読みにチェック）\n[Hint 1] 同じ漢字を使うのは？ [A.すいのう, B.あんない, C.なおる]\n[Choices] おさめて, かためた, とどめた\n[Note] 決まった場所に入れたり、心の中にしまったりするときは「納」を使います。\n\n[Question ID] 2-(1)\n[Text] 父は仕事で大きな成果をおさめた。（おさめたを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうにゅう, B.のうひん, C.ちすい]\n[Choices] 収めた, 納めた, 治めた\n[Note] 良い結果を手に入れるときは「収」を書きます。\n\n[Question ID] 2-(2)\n[Text] 母は衣類のしゅうのうに苦心している。（しゅうのうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.のうひん, B.しゅうかん, C.のうりょく]\n[Choices] 収納, 習能, 終能\n[Note] 中に入れて片付けることを「収納」といいます。\n\n[Question ID] 2-(3)\n[Text] 全校生徒を講堂にしゅうようする。（しゅうようを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうかく, B.ようい, C.じゅうよう]\n[Choices] 収容, 周用, 終要\n[Note] 決まった場所に入れることを「収容」といいます。\n\n[Question ID] 2-(4)\n[Text] 父のしゅうにゅうで家計を支える。（しゅうにゅうを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.しゅうしゅう, B.しゅうかん, C.ちゅうにゅう]\n[Choices] 収入, 習入, 終入\n[Note] お金が入ってくることを「収入」といいます。\n\n[Question ID] 2-(5)\n[Text] 父は毎年きちんと税金をおさめている。（おさめているを漢字に）\n[Hint 1] 同じ漢字を使うのは？ [A.すいのう, B.しゅうめる, C.おさめる]\n[Choices] 納めている, 収めている, 修めている\n[Note] 税金や会費などを支払うときは「納める」と書きます。",
+    "editedText": "問題 1-(1) 古い新聞を回収する小型トラックが来た。（回収の読みにチェック）",
+    "uploadDate": "2026-05-07T14:10:22.739Z",
+    "questions": [
+      {
+        "id": "q-content-1778163022739-1",
+        "question": "問題 1-(1)\n古い新聞を回収する小型トラックが来た。（回収の読みにチェック）",
+        "answer": "かいしゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうにゅう, B.かいたく, C.しゅうりょう]"
+        ],
+        "choices": [
+          "かいしゅう",
+          "かいそう",
+          "かいじゅう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-2",
+        "question": "問題 1-(2)\n五万人の観客を収容する競技場を見学した。（収容の読みにチェック）",
+        "answer": "しゅうよう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうかく, B.ようしゃ, C.ようい]"
+        ],
+        "choices": [
+          "しゅうよう",
+          "しゅうり",
+          "しゅうこう"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-3",
+        "question": "問題 1-(3)\nめずらしい切手を収集する。（収集の読みにチェック）",
+        "answer": "しゅうしゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうごう, B.しゅうし, C.しゅうせい]"
+        ],
+        "choices": [
+          "しゅうしゅう",
+          "しゅうきゅう",
+          "しゅうき"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-4",
+        "question": "問題 1-(4)\nテストでよい成績を収めた。（収めたの読みにチェック）",
+        "answer": "おさめた",
+        "hints": [
+          "同じ漢字を使うのは？ [A.りょうしゅう, B.かんりょう, C.せいじ]"
+        ],
+        "choices": [
+          "おさめた",
+          "かためた",
+          "とどめた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-5",
+        "question": "問題 1-(5)\n遠足の費用を納入する。（納入の読みにチェック）",
+        "answer": "のうにゅう",
+        "hints": [
+          "同じ漢字を使うのは？ [A.のうひん, B.のうとく, C.にゅうりょく]"
+        ],
+        "choices": [
+          "のうにゅう",
+          "のうにん",
+          "のうりょく"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-6",
+        "question": "問題 1-(6)\n納税は国民の義務だと、父は言う。（納税の読みにチェック）",
+        "answer": "のうぜい",
+        "hints": [
+          "同じ漢字を使うのは？ [A.すいのう, B.のうぜい, C.せいげん]"
+        ],
+        "choices": [
+          "のうぜい",
+          "のうせい",
+          "のうじ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-7",
+        "question": "問題 1-(7)\n喜びを心の内に納めておく。（納めての読みにチェック）",
+        "answer": "おさめて",
+        "hints": [
+          "同じ漢字を使うのは？ [A.すいのう, B.あんない, C.なおる]"
+        ],
+        "choices": [
+          "おさめて",
+          "かためた",
+          "とどめた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-8",
+        "question": "問題 2-(1)\n父は仕事で大きな成果をおさめた。（おさめたを漢字に）",
+        "answer": "収めた",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうにゅう, B.のうひん, C.ちすい]"
+        ],
+        "choices": [
+          "収めた",
+          "納めた",
+          "治めた"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-9",
+        "question": "問題 2-(2)\n母は衣類のしゅうのうに苦心している。（しゅうのうを漢字に）",
+        "answer": "収納",
+        "hints": [
+          "同じ漢字を使うのは？ [A.のうひん, B.しゅうかん, C.のうりょく]"
+        ],
+        "choices": [
+          "収納",
+          "習能",
+          "終能"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-10",
+        "question": "問題 2-(3)\n全校生徒を講堂にしゅうようする。（しゅうようを漢字に）",
+        "answer": "収容",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうかく, B.ようい, C.じゅうよう]"
+        ],
+        "choices": [
+          "収容",
+          "周用",
+          "終要"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-11",
+        "question": "問題 2-(4)\n父のしゅうにゅうで家計を支える。（しゅうにゅうを漢字に）",
+        "answer": "収入",
+        "hints": [
+          "同じ漢字を使うのは？ [A.しゅうしゅう, B.しゅうかん, C.ちゅうにゅう]"
+        ],
+        "choices": [
+          "収入",
+          "習入",
+          "終入"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778163022739-12",
+        "question": "問題 2-(5)\n父は毎年きちんと税金をおさめている。（おさめているを漢字に）",
+        "answer": "納めている",
+        "hints": [
+          "同じ漢字を使うのは？ [A.すいのう, B.しゅうめる, C.おさめる]"
+        ],
+        "choices": [
+          "納めている",
+          "収めている",
+          "修めている"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778162259458",
+    "title": "【学研算数】5-9-12",
+    "subject": "こくご",
+    "rawText": "[Target] 5-9集-12\n[Question ID] 1-(1)\n[Text] 1mあたりの重さが15gのはりがねがあります。このはりがね4.8mの重さは何gですか。\n[Hint 1] 全体の重さ = 1mあたりの重さ × 長さ\n[Hint 2] 15 × 4.8 を計算します。\n[Choices] 72g, 7.2g, 720g\n[Formula] 15 × 4.8 = 72\n[Result] 72g\n[Note] \n\n[Target] 5-9集-12\n[Question ID] 1-(2)\n[Text] このはりがねをたばねて重さをはかったら、126gありました。たばねたはりがねの長さは何mですか。\n[Hint 1] 長さ = 全体の重さ ÷ 1mあたりの重さ\n[Hint 2] 126 ÷ 15 を計算します。\n[Choices] 8.4m, 84m, 0.84m\n[Formula] 126 ÷ 15 = 8.4\n[Result] 8.4m\n[Note] \n\n[Target] 5-9集-12\n[Question ID] 2\n[Text] ある町の面積は58km2で、人口密度は360人です。この町の人口はおよそ何人ですか。四捨五入して、上から2けたのがい数で求めましょう。\n[Hint 1] 人口 = 人口密度 × 面積\n[Hint 2] 360 × 58 を計算し、出てきた答えの「左から3ばん目の数字」を四捨五入します。\n[Choices] 21000人, 20880人, 2100人\n[Formula] 360 × 58 = 20880 → 21000\n[Result] 21000人\n[Note] 20880の3けた目（8）を切り上げるので、21000になります。\n\n[Target] 5-9集-12\n[Question ID] 3\n[Text] 1mあたりの重さが2.5kgの太い鉄のぼうと1.8kgの細い鉄のぼうがあります。この2本の鉄のぼうの重さが、どちらも9kgのとき、長さのちがいは何mですか。\n[Hint 1] それぞれの長さを「重さ ÷ 1mあたりの重さ」で出してから、ひき算します。\n[Hint 2] 9 ÷ 1.8（細いぼう）と 9 ÷ 2.5（太いぼう）をそれぞれ計算します。\n[Choices] 1.4m, 5m, 3.6m\n[Formula] 9 ÷ 1.8 = 5, 9 ÷ 2.5 = 3.6, 5 - 3.6 = 1.4\n[Result] 1.4m\n[Note] 細いぼうは5m、太いぼうは3.6mになります。",
+    "editedText": "[Target] 5-9集-12 [Question ID] 1-(1)",
+    "uploadDate": "2026-05-07T13:57:39.458Z",
+    "questions": [
+      {
+        "id": "q-content-1778162259458-1",
+        "question": "問題 1-(1)\n1mあたりの重さが15gのはりがねがあります。このはりがね4.8mの重さは何gですか。",
+        "answer": "72g",
+        "hints": [
+          "全体の重さ = 1mあたりの重さ × 長さ",
+          "15 × 4.8 を計算します。"
+        ],
+        "choices": [
+          "72g",
+          "7.2g",
+          "720g"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162259458-2",
+        "question": "問題 1-(2)\nこのはりがねをたばねて重さをはかったら、126gありました。たばねたはりがねの長さは何mですか。",
+        "answer": "8.4m",
+        "hints": [
+          "長さ = 全体の重さ ÷ 1mあたりの重さ",
+          "126 ÷ 15 を計算します。"
+        ],
+        "choices": [
+          "8.4m",
+          "84m",
+          "0.84m"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162259458-3",
+        "question": "問題 2\nある町の面積は58km2で、人口密度は360人です。この町の人口はおよそ何人ですか。四捨五入して、上から2けたのがい数で求めましょう。",
+        "answer": "21000人",
+        "hints": [
+          "人口 = 人口密度 × 面積",
+          "360 × 58 を計算し、出てきた答えの「左から3ばん目の数字」を四捨五入します。"
+        ],
+        "choices": [
+          "21000人",
+          "20880人",
+          "2100人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162259458-4",
+        "question": "問題 3\n1mあたりの重さが2.5kgの太い鉄のぼうと1.8kgの細い鉄のぼうがあります。この2本の鉄のぼうの重さが、どちらも9kgのとき、長さのちがいは何mですか。",
+        "answer": "1.4m",
+        "hints": [
+          "それぞれの長さを「重さ ÷ 1mあたりの重さ」で出してから、ひき算します。",
+          "9 ÷ 1.8（細いぼう）と 9 ÷ 2.5（太いぼう）をそれぞれ計算します。"
+        ],
+        "choices": [
+          "1.4m",
+          "5m",
+          "3.6m"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778162014824",
+    "title": "【学研算数】5-9-9/10",
+    "subject": "さんすう",
+    "rawText": "[Target] 5-9集-9\n[Question ID] 1-A\n[Text] A町の面積は225km2、人口は12150人です。A町の人口密度を求めましょう。\n[Hint 1] 人口密度 = 人口 ÷ 面積(km2)\n[Hint 2] 12150 ÷ 225 を計算します。\n[Choices] 54人, 5.4人, 540人\n[Formula] 12150 ÷ 225 = 54\n[Result] 54人\n[Note] 1km2あたりに何人住んでいるかを表します。\n\n[Target] 5-9集-9\n[Question ID] 1-B\n[Text] B町の面積は130km2、人口は10530人です。B町の人口密度を求めましょう。\n[Hint 1] 人口密度 = 人口 ÷ 面積(km2)\n[Hint 2] 10530 ÷ 130 を計算します。\n[Choices] 81人, 8.1人, 810人\n[Formula] 10530 ÷ 130 = 81\n[Result] 81人\n[Note] \n\n[Target] 5-9集-10\n[Question ID] 2\n[Text] ゆみ子さんの住む県の面積は6408km2で、人口は199万人です。この県の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。\n[Hint 1] 199万人は1990000人として計算します。\n[Hint 2] 1990000 ÷ 6408 = 310.5... の上から3けた目（0）を四捨五入します。\n[Choices] 310人, 31人, 310.5人\n[Formula] 1990000 ÷ 6408 = 310.54... → 310\n[Result] 310人\n[Note] 上から2けたにするため、3けた目の「0」を切り捨てます。\n\n[Target] 5-9集-10\n[Question ID] 3-(1)-A\n[Text] A町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積150km2、人口21500人）\n[Hint 1] 人口 ÷ 面積 を計算します。\n[Hint 2] 21500 ÷ 150 = 143.3... の上から3けた目（3）を四捨五入します。\n[Choices] 140人, 143人, 14人\n[Formula] 21500 ÷ 150 = 143.3... → 140\n[Result] 140人\n[Note] \n\n[Target] 5-9集-10\n[Question ID] 3-(1)-B\n[Text] B町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積75km2、人口13000人）\n[Hint 1] 人口 ÷ 面積 を計算します。\n[Hint 2] 13000 ÷ 75 = 173.3... の上から3けた目（3）を四捨五入します。\n[Choices] 170人, 173人, 17人\n[Formula] 13000 ÷ 75 = 173.3... → 170\n[Result] 170人\n[Note] \n\n[Target] 5-9集-10\n[Question ID] 3-(1)-C\n[Text] C町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積85km2、人口24000人）\n[Hint 1] 人口 ÷ 面積 を計算します。\n[Hint 2] 24000 ÷ 85 = 282.3... の上から3けた目（2）を四捨五入します。\n[Choices] 280人, 282人, 28人\n[Formula] 24000 ÷ 85 = 282.3... → 280\n[Result] 280人\n[Note] \n\n[Target] 5-9集-10\n[Question ID] 3-(2)\n[Text] A, B, Cの中で面積のわりに人口が多いのはどの町ですか。\n[Hint 1] 計算した人口密度の数字が一番大きい町を選びます。\n[Hint 2] A(140人), B(170人), C(280人)をくらべます。\n[Choices] C町, B町, A町\n[Formula] 140 < 170 < 280\n[Result] C町\n[Note] 人口密度が高いほど「こんでいる（人口が多い）」といえます。\n\n[Target] 5-9集-10\n[Question ID] 3-(3)\n[Text] C町の人口密度は、A町の人口密度のおよそ何倍ですか。\n[Hint 1] C町の密度 ÷ A町の密度 を計算します。\n[Hint 2] がい数を使って 280 ÷ 140 を計算します。\n[Choices] 2倍, 3倍, 1.5倍\n[Formula] 280 ÷ 140 = 2\n[Result] 2倍\n[Note]",
+    "editedText": "[Target] 5-9集-9 [Question ID] 1-A",
+    "uploadDate": "2026-05-07T13:53:34.824Z",
+    "questions": [
+      {
+        "id": "q-content-1778162014824-1",
+        "question": "問題 1-A\nA町の面積は225km2、人口は12150人です。A町の人口密度を求めましょう。",
+        "answer": "54人",
+        "hints": [
+          "人口密度 = 人口 ÷ 面積(km2)",
+          "12150 ÷ 225 を計算します。"
+        ],
+        "choices": [
+          "54人",
+          "5.4人",
+          "540人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-2",
+        "question": "問題 1-B\nB町の面積は130km2、人口は10530人です。B町の人口密度を求めましょう。",
+        "answer": "81人",
+        "hints": [
+          "人口密度 = 人口 ÷ 面積(km2)",
+          "10530 ÷ 130 を計算します。"
+        ],
+        "choices": [
+          "81人",
+          "8.1人",
+          "810人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-3",
+        "question": "問題 2\nゆみ子さんの住む県の面積は6408km2で、人口は199万人です。この県の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。",
+        "answer": "310人",
+        "hints": [
+          "199万人は1990000人として計算します。",
+          "1990000 ÷ 6408 = 310.5... の上から3けた目（0）を四捨五入します。"
+        ],
+        "choices": [
+          "310人",
+          "31人",
+          "310.5人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-4",
+        "question": "問題 3-(1)-A\nA町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積150km2、人口21500人）",
+        "answer": "140人",
+        "hints": [
+          "人口 ÷ 面積 を計算します。",
+          "21500 ÷ 150 = 143.3... の上から3けた目（3）を四捨五入します。"
+        ],
+        "choices": [
+          "140人",
+          "143人",
+          "14人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-5",
+        "question": "問題 3-(1)-B\nB町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積75km2、人口13000人）",
+        "answer": "170人",
+        "hints": [
+          "人口 ÷ 面積 を計算します。",
+          "13000 ÷ 75 = 173.3... の上から3けた目（3）を四捨五入します。"
+        ],
+        "choices": [
+          "170人",
+          "173人",
+          "17人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-6",
+        "question": "問題 3-(1)-C\nC町の人口密度を計算し、四捨五入して上から2けたのがい数で求めましょう。（面積85km2、人口24000人）",
+        "answer": "280人",
+        "hints": [
+          "人口 ÷ 面積 を計算します。",
+          "24000 ÷ 85 = 282.3... の上から3けた目（2）を四捨五入します。"
+        ],
+        "choices": [
+          "280人",
+          "282人",
+          "28人"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-7",
+        "question": "問題 3-(2)\nA, B, Cの中で面積のわりに人口が多いのはどの町ですか。",
+        "answer": "C町",
+        "hints": [
+          "計算した人口密度の数字が一番大きい町を選びます。",
+          "A(140人), B(170人), C(280人)をくらべます。"
+        ],
+        "choices": [
+          "C町",
+          "B町",
+          "A町"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778162014824-8",
+        "question": "問題 3-(3)\nC町の人口密度は、A町の人口密度のおよそ何倍ですか。",
+        "answer": "2倍",
+        "hints": [
+          "C町の密度 ÷ A町の密度 を計算します。",
+          "がい数を使って 280 ÷ 140 を計算します。"
+        ],
+        "choices": [
+          "2倍",
+          "3倍",
+          "1.5倍"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1778065556631",
+    "title": "【学研算数】5-9-8",
+    "subject": "さんすう",
+    "rawText": "## 画像（5-9集-8）の解析データ\n\n[Target] 5-9集-8\n[Question ID] 2-(1)\n[Text] 自動車AとBがあります。Aは5Lのガソリンで60km走れ、Bは8Lのガソリンで104km走れます。1Lのガソリンで走れる道のりを求めて比べましょう。\n[Hint 1] 1Lあたりの道のり = 全体の道のり ÷ ガソリンの量\n[Hint 2] Aは 60 ÷ 5、Bは 104 ÷ 8 を計算して比べます。\n[Choices] B, A, 同じ\n[Formula] A: 60 ÷ 5 = 12(km), B: 104 ÷ 8 = 13(km)\n[Result] B\n[Note] 1Lで走れる距離が長い方が「よく走れる」といえます。\n\n[Target] 5-9集-8\n[Question ID] 2-(2)\n[Text] 1km走るのに使うガソリンの量を求めて比べましょう。計算の答えは四捨五入して、1/1000の位まで求めましょう。\n[Hint 1] 1kmあたりのガソリン = ガソリンの量 ÷ 全体の道のり\n[Hint 2] Aは 5 ÷ 60、Bは 8 ÷ 104 を計算し、小数第4位を四捨五入します。\n[Choices] B, A, 同じ\n[Formula] A: 5 ÷ 60 = 0.0833... → 0.083(L), B: 8 ÷ 104 = 0.0769... → 0.077(L)\n[Result] B\n[Note] 1km走るのに使うガソリンが少ない方が「効率がいい」といえます。\n\n[Target] 5-9集-8\n[Question ID] 3\n[Text] ななみさんの家では、70m2の畑からにんじんが63kgとれました。しんごさんの家では、50m2の畑からにんじんが55kgとれました。にんじんがよくとれたといえるのは、どちらの家の畑ですか。\n[Hint 1] 1m2あたりの重さ = とれた重さ ÷ 畑の面積\n[Hint 2] ななみさんは 63 ÷ 70、しんごさんは 55 ÷ 50 を計算して比べます。\n[Choices] しんごさんの家, ななみさんの家, 同じ\n[Formula] ななみ: 63 ÷ 70 = 0.9(kg), しんご: 55 ÷ 50 = 1.1(kg)\n[Result] しんごさんの家\n[Note] 1.1kg > 0.9kg なので、しんごさんの家の方がよくとれています。",
+    "editedText": "問題 2-(1) 自動車AとBがあります。Aは5Lのガソリンで60km走れ、Bは8Lのガソリンで104km走れます。1Lのガソリンで走れる道のりを求めて比べましょう。",
+    "uploadDate": "2026-05-06T11:05:56.631Z",
+    "questions": [
+      {
+        "id": "q-content-1778065556631-1",
+        "question": "問題 2-(1)\n自動車AとBがあります。Aは5Lのガソリンで60km走れ、Bは8Lのガソリンで104km走れます。1Lのガソリンで走れる道のりを求めて比べましょう。",
+        "answer": "B",
+        "hints": [
+          "1Lあたりの道のり = 全体の道のり ÷ ガソリンの量",
+          "Aは 60 ÷ 5、Bは 104 ÷ 8 を計算して比べます。"
+        ],
+        "choices": [
+          "B",
+          "A",
+          "同じ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778065556631-2",
+        "question": "問題 2-(2)\n1km走るのに使うガソリンの量を求めて比べましょう。計算の答えは四捨五入して、1/1000の位まで求めましょう。",
+        "answer": "B",
+        "hints": [
+          "1kmあたりのガソリン = ガソリンの量 ÷ 全体の道のり",
+          "Aは 5 ÷ 60、Bは 8 ÷ 104 を計算し、小数第4位を四捨五入します。"
+        ],
+        "choices": [
+          "B",
+          "A",
+          "同じ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1778065556631-3",
+        "question": "問題 3\nななみさんの家では、70m2の畑からにんじんが63kgとれました。しんごさんの家では、50m2の畑からにんじんが55kgとれました。にんじんがよくとれたといえるのは、どちらの家の畑ですか。",
+        "answer": "しんごさんの家",
+        "hints": [
+          "1m2あたりの重さ = とれた重さ ÷ 畑の面積",
+          "ななみさんは 63 ÷ 70、しんごさんは 55 ÷ 50 を計算して比べます。"
+        ],
+        "choices": [
+          "しんごさんの家",
+          "ななみさんの家",
+          "同じ"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": true,
+    "studyClearedAt": "2026-05-07T13:50:12.461Z"
+  },
+  {
+    "id": "content-1777385060841",
+    "title": "【学研国語】5-1-27",
+    "subject": "こくご",
+    "rawText": "作文 自分を主人公にして物語を書く ②\n5-10集-27\n\n物語を書くときに気をつけること\n物語を書くときは、自分が考えた登場人物や物語の中の世界を、読み手に分かりやすく伝えることが大切です。そのため、次の三つのことに気をつけましょう。\n\n●人物の様子や行動をくわしく書く\n人物の顔つきや様子、行動や性格などが分かるように、くわしく書きましょう。\n\n●周りの様子や景色などをびょう写する\n絵をえがくように文章でくわしくえがくことをびょう写といいます。物語の様子が読み手に伝わるように、周りの様子や景色をくわしくびょう写しましょう。においや色、音などを読み手が感じられるように、五感を使って表したり、何かにたとえる表現を使って表したりしましょう。\n\n●登場人物の気持ちを書く\n登場人物の気持ちや感じたことをくわしく書くと、読み手に共感してもらうことができます。\n\n① 物語を書くときに気をつけるとよいことを次から三つ選び、〇をつけなさい。\n\nア（　）グラフや表から、考えの根きょとなる数などを読み取って書く。\nイ（　）周りの様子や景色などをびょう写する。\nウ（　）お客を引きつけるキャッチコピーを考えて書く。\nエ（　）登場人物の気持ちを書く。\nオ（　）かん潔に短い文で事実だけを書く。\nカ（　）人物の様子や行動をくわしく書く。\n\n周りの様子や人物の気持ちが分かるように書くといいんだね。",
+    "editedText": "作文 自分を主人公にして物語を書く ② 5-10集-27",
+    "uploadDate": "2026-04-28T14:04:20.841Z",
+    "questions": [
+      {
+        "id": "q-content-1777385060841-1",
+        "question": "① 物語を書くときに気をつけるとよいことを次から三つ選び、〇をつけなさい。\n\nア（　）グラフや表から、考えの根きょとなる数などを読み取って書く。\nイ（　）周りの様子や景色などをびょう写する。\nウ（　）お客を引きつけるキャッチコピーを考えて書く。\nエ（　）登場人物の気持ちを書く。\nオ（　）かん潔に短い文で事実だけを書く。\nカ（　）人物の様子や行動をくわしく書く。",
+        "answer": "イ、エ、カ",
+        "hints": [
+          "教材の「物語を書くときに気をつけること」の三つのポイントを確認する",
+          "「周りの様子や景色などをびょう写する」「登場人物の気持ちを書く」「人物の様子や行動をくわしく書く」が該当する"
+        ],
+        "choices": [
+          "ア、イ、ウ",
+          "ア、ウ、オ",
+          "イ、エ、カ"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1777300259350",
+    "title": "no-key-fallback-test",
+    "subject": "算数",
+    "rawText": "(1) 2/5 + 1/3\n(2) 5/6 - 1/4",
+    "editedText": "(1) 2/5 + 1/3 (2) 5/6 - 1/4",
+    "uploadDate": "2026-04-27T14:30:59.350Z",
+    "questions": [
+      {
+        "id": "q-content-1777300259350-1",
+        "question": "(1) 2/5 + 1/3",
+        "answer": "11/15",
+        "hints": [
+          "通分する: 2/5 = 6/15, 1/3 = 5/15"
+        ],
+        "choices": [
+          "11/15",
+          "3/8",
+          "7/15"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1777300259350-2",
+        "question": "(2) 5/6 - 1/4",
+        "answer": "7/12",
+        "hints": [
+          "通分する: 5/6 = 10/12, 1/4 = 3/12"
+        ],
+        "choices": [
+          "7/12",
+          "2/3",
+          "5/12"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1777299704884",
+    "title": "fraction-test",
+    "subject": "算数",
+    "rawText": "問題1 次の計算をしましょう。\n(1) 2/5 + 1/3\n(2) 8/15 + 3/10\n(3) 5/6 - 1/4\n(4) 2/3 - 5/12",
+    "editedText": "問題1 次の計算をしましょう。 (1) 2/5 + 1/3",
+    "uploadDate": "2026-04-27T14:21:44.884Z",
+    "questions": [
+      {
+        "id": "q-content-1777299704884-1",
+        "question": "問題1 次の計算をしましょう。\n(1) 2/5 + 1/3",
+        "answer": "11/15",
+        "hints": [
+          "通分する: 2/5 = 6/15, 1/3 = 5/15"
+        ],
+        "choices": [
+          "3/8",
+          "11/15",
+          "7/15"
+        ],
+        "correctIndex": 1,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1777299704884-2",
+        "question": "問題1 次の計算をしましょう。\n(2) 8/15 + 3/10",
+        "answer": "25/30",
+        "hints": [
+          "通分する: 8/15 = 16/30, 3/10 = 9/30"
+        ],
+        "choices": [
+          "25/30",
+          "11/25",
+          "5/6"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1777299704884-3",
+        "question": "問題1 次の計算をしましょう。\n(3) 5/6 - 1/4",
+        "answer": "7/12",
+        "hints": [
+          "通分する: 5/6 = 10/12, 1/4 = 3/12"
+        ],
+        "choices": [
+          "4/2",
+          "7/12",
+          "1/3"
+        ],
+        "correctIndex": 1,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      },
+      {
+        "id": "q-content-1777299704884-4",
+        "question": "問題1 次の計算をしましょう。\n(4) 2/3 - 5/12",
+        "answer": "3/12",
+        "hints": [
+          "通分する: 2/3 = 8/12"
+        ],
+        "choices": [
+          "1/6",
+          "1/4",
+          "3/12"
+        ],
+        "correctIndex": 2,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
+    "id": "content-1777299637433",
+    "title": "test",
+    "subject": "算数",
+    "rawText": "問題1 2+3",
+    "editedText": "問題1 2+3",
+    "uploadDate": "2026-04-27T14:20:37.433Z",
+    "questions": [
+      {
+        "id": "q-content-1777299637433-1",
+        "question": "問題1 2+3",
+        "answer": "5",
+        "hints": [
+          "2+3"
+        ],
+        "choices": [
+          "5",
+          "6",
+          "4"
+        ],
+        "correctIndex": 0,
+        "timesAnswered": 0,
+        "timesCorrect": 0
+      }
+    ],
+    "studyCleared": false
+  },
+  {
     "id": "content-1777213121396",
     "title": "【学研算数】4-1-5-6",
     "subject": "さんすう",

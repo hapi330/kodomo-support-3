@@ -13,6 +13,20 @@ import { clientApiUrl } from "@/lib/problems-client";
 type TaskSaveStatus = { type: "ok" | "err" | "info"; msg: string };
 const OCR_SUCCESS_MESSAGE = "✅ 暫定文字起こしを作成しました。内容確認後に確定してください。";
 const OCR_FINALIZE_MESSAGE = "✅ 最終確定テキストを反映しました。保存を実行してください。";
+const QUEST_INPUT_TEMPLATE = `[Target] 定着 4-1集-14
+[Question ID] 2-(1)
+[Text] 次の図のような直方体の体積を求めましょう。（たて3cm, よこ5cm, 高さ3.6cm）
+[Hint 1] 体積 = たて × よこ × 高さ
+[Hint 2] 3 × 5 × 3.6 を計算
+[Choices] 54cm3, 45cm3, 5.4cm3
+[Note] 単位は cm3
+
+[Question ID] 2-(2)
+[Text] 2 and 1/2 + 1 and 2/3
+[Hint 1] 2つの分母の最小公倍数を求める
+[Hint 2] 通分してから足し算する
+[Choices] 4 and 1/6, 3 and 7/6, 4 and 7/6
+[Note] 帯分数は a and b/c 形式`;
 const SAVE_SUCCESS_MESSAGE = "✅ クエストを生成しました。学習タブでそのまま挑戦できます。";
 
 interface AdminModeProps {
@@ -331,13 +345,16 @@ export default function AdminMode({ defaultTargetName }: AdminModeProps) {
         <div>
           <label className="text-xs mb-1 block" style={{ color: "#9CA3AF" }}>
             本文テキスト
-            <span style={{ color: "#6B7280" }}> （スマホのOCRや手打ちで抽出したテキストを貼り付けてください）</span>
+            <span style={{ color: "#6B7280" }}>
+              {" "}
+              （`[Target]` / `[Question ID]` / `[Text]` / `[Hint 1]` / `[Hint 2]` / `[Choices]` / `[Note]` 形式で貼り付け）
+            </span>
           </label>
           <textarea
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
-            rows={8}
-            placeholder={"例:\n問1. 次の漢字の読み方を書きましょう。\n(1) 宿題\n(2) 計算\n..."}
+            rows={14}
+            placeholder={QUEST_INPUT_TEMPLATE}
             className="w-full p-3 rounded text-sm resize-y"
             style={{
               background: "#0D0D1A",

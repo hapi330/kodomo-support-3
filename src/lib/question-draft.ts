@@ -1,3 +1,4 @@
+import { normalizeHintStepsArray } from "@/lib/normalize-hint-steps";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 
 /** 編集画面で追加する空の問題（保存前に本文・正解・選択肢を埋める） */
@@ -85,6 +86,7 @@ export function normalizeQuestion(q: GeneratedQuestion): GeneratedQuestion {
               Number.isFinite(hs.h)
           )
       : undefined,
+    hintSteps: normalizeHintStepsArray(q.hintSteps),
   };
 }
 

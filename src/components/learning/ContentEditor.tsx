@@ -538,10 +538,16 @@ export default function ContentEditor({
                 className="w-full px-3 py-2 rounded-lg text-sm"
                 style={{ background: "#0D0D1A", border: "2px solid #4A4A6A", color: "#E8E8E8" }}
               />
+              {(nq.diagramImageUrl?.trim() ?? "") !== "" && (
+                <p className="text-xs leading-relaxed -mt-1" style={{ color: "#93C5FD" }}>
+                  図式問題では、ヒント1・2・3を<strong>別々の欄</strong>に書くと学習画面で順に表示されます（1つの欄に「1.…
+                  2.…」と詰めても自動で分かれます）。
+                </p>
+              )}
               {[0, 1, 2].map((si) => (
                 <div key={`step-${si}`}>
                   <label className="block text-xs font-bold" style={{ color: "#9CA3AF" }}>
-                    解き方ステップ {si + 1}（任意）
+                    ヒント {si + 1}（やさしい順・最大3）
                   </label>
                   <textarea
                     value={nq.hints[si] ?? ""}
@@ -553,7 +559,7 @@ export default function ContentEditor({
                     rows={2}
                     className="w-full px-3 py-2 rounded-lg text-sm"
                     style={{ background: "#0D0D1A", border: "2px solid #3B82F6", color: "#E8E8E8" }}
-                    placeholder="例: 0.45 = 9/20"
+                    placeholder="やさしいヒントから順に"
                   />
                 </div>
               ))}

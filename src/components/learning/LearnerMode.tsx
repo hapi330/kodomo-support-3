@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { formatJaDateTime } from "@/lib/format-ja-datetime";
 import { GeneratedQuestion, StudyRecord, UploadedContent, type StudySessionCompletePayload } from "@/lib/storage";
-import { playCorrect, playExplosion, playPingPong, playWrong } from "@/lib/sounds";
+import { getAudioContext, playCorrect, playExplosion, playPingPong, playWrong } from "@/lib/sounds";
 import {
   setStudySessionBgmMuted,
   startStudySessionBgm,
@@ -37,6 +37,11 @@ import {
 } from "@/lib/bgm-roulette";
 import { BgmRouletteSpinModal, RouletteChooseModal } from "@/components/learning/RouletteStartModals";
 import ReadingPassagePanel from "@/components/learning/ReadingPassagePanel";
+import { FractionHintGuide } from "@/components/learning/FractionHintGuide";
+import { buildFractionHintPlan, FRACTION_HINT_PASS_POINTS } from "@/lib/fraction-hint-plan";
+import { buildQuizHintSteps } from "@/lib/expand-study-hint-steps";
+import { shuffledChoiceOrder } from "@/lib/shuffle";
+import { QUIZ_RETRY_RESET_MS, STEP_SCROLL_DELAY_MS, STEP_WRONG_RESET_MS } from "@/lib/study-ui-timing";
 
 const CHOICE_BADGE_COLORS = ["#3B82F6", "#D97706", "#EF4444"] as const;
 const LETTERS = ["A", "B", "C"] as const;
@@ -46,9 +51,6 @@ const SR_ONLY =
 const DIAGRAM_ACTIVE_BG = "rgba(34,197,94,0.35)";
 const DIAGRAM_IDLE_BG = "rgba(34,197,94,0.12)";
 const getNowMs = (): number => Date.now();
-const STEP_SCROLL_DELAY_MS = 220;
-const STEP_WRONG_RESET_MS = 500;
-const QUIZ_RETRY_RESET_MS = 700;
 function assistiveQuestionText(q: GeneratedQuestion): string {
   const extra =
     q.questionFurigana && q.questionFurigana !== q.question
@@ -157,19 +159,6 @@ function QuestionCard({ q, speechEnabled = false }: { q: GeneratedQuestion; spee
   );
 }
 
-function collectStudySteps(q: GeneratedQuestion): string[] {
-  const seen = new Set<string>();
-  return (q.hints ?? [])
-    .map((h) => String(h).trim())
-    .filter(Boolean)
-    .filter((step) => {
-      const key = step.toLowerCase().replace(/\s+/g, "");
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-}
-
 function splitStudyFormula(text: string): { left: string; right: string | null } {
   const normalized = text.replace(/\s+/g, " ").trim();
   const eqIndex = normalized.indexOf("=");
@@ -178,6 +167,15 @@ function splitStudyFormula(text: string): { left: string; right: string | null }
   const right = normalized.slice(eqIndex + 1).trim();
   if (!left || !right) return { left: normalized, right: null };
   return { left, right };
+}
+
+function inferQuestCategoryKey(content: UploadedContent): "こくご" | "さんすう" | "その他" {
+  const title = String(content.title ?? "");
+  if (/(算数|さんすう)/.test(title)) return "さんすう";
+  if (/(国語|こくご)/.test(title)) return "こくご";
+  const bySubject = getSubject(content.subject).key;
+  if (bySubject === "さんすう" || bySubject === "こくご") return bySubject;
+  return "その他";
 }
 
 function buildStepQuizChoices(answerRaw: string, index: number): string[] {
@@ -239,10 +237,10 @@ function StudyStepGuide({
       className="p-4 rounded-xl space-y-3"
       style={{ background: "#0D0D1A", border: "2px solid #3B82F6" }}
       role="region"
-      aria-label="とき方ステップ"
+      aria-label="ヒント（やさしい順）"
     >
       <div className="text-sm font-black" style={{ color: "#93C5FD" }}>
-        💡 とき方ステップ
+        💡 ヒント（1→2→3 の順）
       </div>
       {visibleSteps.map((step, i) => {
         const isOpen = i === activeOpenIndex;
@@ -261,9 +259,9 @@ function StudyStepGuide({
               aria-expanded={isOpen}
             >
               <span className="text-xs font-black px-2 py-0.5 rounded" style={{ background: "#2563EB", color: "#EFF6FF" }}>
-                {`(${i + 1})`}
+                {`ヒント${i + 1}`}
               </span>
-              <span className="text-sm font-bold flex-1">ステップ {i + 1}</span>
+              <span className="text-sm font-bold flex-1">ヒント {i + 1}</span>
               <span className="text-xs" style={{ color: "#BFDBFE" }}>{isOpen ? "▲" : "▼"}</span>
             </button>
             {isOpen && (
@@ -321,7 +319,7 @@ function StudyStepGuide({
                                         if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
                                       }, STEP_SCROLL_DELAY_MS);
                                     } else {
-                                      setStepResultText((prev) => ({ ...prev, [i]: "❌ ちがうよ。もう一度ステップを読もう。" }));
+                                      setStepResultText((prev) => ({ ...prev, [i]: "❌ ちがうよ。もう一度ヒントを読もう。" }));
                                       window.setTimeout(() => {
                                         setStepSelectedChoice((prev) => ({ ...prev, [i]: null }));
                                       }, STEP_WRONG_RESET_MS);
@@ -363,7 +361,7 @@ function StudyStepGuide({
         disabled={done}
         className="mc-btn mc-btn-blue w-full py-2 text-sm font-black disabled:opacity-50"
       >
-        {done ? "すべて表示しました" : `つぎのステップを見る (${revealedCount + 1}/${steps.length})`}
+        {done ? "ヒントはすべて表示しました" : `つぎのヒントを見る (${revealedCount + 1}/${steps.length})`}
       </button>
     </div>
   );
@@ -381,11 +379,13 @@ type TripleChoiceMode = "practice" | "final";
 
 function TripleChoiceButtons({
   choices,
+  choiceOrder,
   mode,
   onPick,
   finalState,
 }: {
   choices: string[];
+  choiceOrder?: number[];
   mode: TripleChoiceMode;
   onPick: (index: number) => void;
   /** mode === "final" のとき、選択後の正誤表示に使う */
@@ -399,16 +399,21 @@ function TripleChoiceButtons({
   const correctIdx = finalState?.correctIndex ?? 0;
   const picked = sel !== null;
   const isFinal = mode === "final";
+  const displayOrder =
+    choiceOrder && choiceOrder.length === choices.length
+      ? choiceOrder
+      : choices.map((_, idx) => idx);
 
   return (
     <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full" role="group" aria-label="三択">
-      {choices.map((choice, i) => {
+      {displayOrder.map((originalIdx, i) => {
+        const choice = choices[originalIdx] ?? "";
         const badgeBg = CHOICE_BADGE_COLORS[i] ?? "#4B5563";
         let bg = "#2D2D44";
         let border = "#4A4A6A";
         if (isFinal && picked && finalState) {
-          const showGreen = i === correctIdx;
-          const isSelected = sel === i;
+          const showGreen = originalIdx === correctIdx;
+          const isSelected = sel === originalIdx;
           if (isSelected) {
             bg = finalState.isCorrect ? "#0D3A0D" : "#3A0D0D";
             border = finalState.isCorrect ? "#17DD62" : "#EF4444";
@@ -420,9 +425,9 @@ function TripleChoiceButtons({
 
         return (
           <button
-            key={`${mode}-${i}`}
+            key={`${mode}-${originalIdx}-${i}`}
             type="button"
-            onClick={() => onPick(i)}
+            onClick={() => onPick(originalIdx)}
             disabled={isFinal && picked}
             className={`flex flex-col items-center justify-start gap-1.5 sm:gap-2 min-h-[7.5rem] sm:min-h-[8.5rem] p-2 sm:p-3 rounded-xl font-bold text-center transition-all touch-manipulation ${
               isFinal && picked ? "disabled:cursor-not-allowed" : "active:scale-[0.98]"
@@ -535,22 +540,45 @@ export default function LearnerMode({
     onLeaveEditMode: leaveEditMode,
   });
 
-  /** クエスト一覧: 未クリア / クリア済み */
-  const [questListTab, setQuestListTab] = useState<"challenge" | "cleared">("challenge");
-  const { challengeList, clearedList } = useMemo(() => {
-    const ch: UploadedContent[] = [];
+  /** クエスト一覧: チャレンジ（国語/算数/その他） + クリア済み */
+  const [questListTab, setQuestListTab] = useState<
+    "challengeKokugo" | "challengeSansu" | "challengeOther" | "cleared"
+  >("challengeKokugo");
+  const { challengeKokugoList, challengeSansuList, challengeOtherList, clearedList } = useMemo(() => {
+    const chK: UploadedContent[] = [];
+    const chS: UploadedContent[] = [];
+    const chO: UploadedContent[] = [];
     const cl: UploadedContent[] = [];
     for (const c of quest.content) {
-      if (c.studyCleared) cl.push(c);
-      else ch.push(c);
+      if (c.studyCleared) {
+        cl.push(c);
+        continue;
+      }
+      const subjectKey = inferQuestCategoryKey(c);
+      if (subjectKey === "こくご") chK.push(c);
+      else if (subjectKey === "さんすう") chS.push(c);
+      else chO.push(c);
     }
-    return { challengeList: ch, clearedList: cl };
+    return {
+      challengeKokugoList: chK,
+      challengeSansuList: chS,
+      challengeOtherList: chO,
+      clearedList: cl,
+    };
   }, [quest.content]);
-  const displayedQuests = questListTab === "challenge" ? challengeList : clearedList;
+  const displayedQuests =
+    questListTab === "challengeKokugo"
+      ? challengeKokugoList
+      : questListTab === "challengeSansu"
+        ? challengeSansuList
+        : questListTab === "challengeOther"
+          ? challengeOtherList
+          : clearedList;
 
   const [selectedContent, setSelectedContent] = useState<UploadedContent | null>(null);
   const [currentQ, setCurrentQ] = useState<GeneratedQuestion | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+  const [quizChoiceOrder, setQuizChoiceOrder] = useState<number[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showExplosion, setShowExplosion] = useState(false);
   const [xpGained, setXpGained] = useState(0);
@@ -585,6 +613,18 @@ export default function LearnerMode({
   const [revealedStepCount, setRevealedStepCount] = useState(0);
   const [retryNotice, setRetryNotice] = useState("");
 
+  const ensureAudioUnlocked = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      if (ctx.state !== "running") {
+        void ctx.resume();
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [soundEnabled]);
+
   /** 勉強中の「やめる」・エラー戻り・最終問題クリア後に共通 */
   const leaveStudySessionToSelect = useCallback(() => {
     setStudyCycleClockStart(null);
@@ -612,6 +652,7 @@ export default function LearnerMode({
     const isPrep = bgmRoulette.minutes === PREP_SESSION_MINUTES;
     startStudySessionBgm({
       cycleMinutes: bgmRoulette.minutes,
+      muted: studyBgmMuted,
       onCycleEndPulse: isPrep
         ? undefined
         : () => {
@@ -625,7 +666,7 @@ export default function LearnerMode({
     return () => {
       stopStudySessionBgm();
     };
-  }, [soundEnabled, selectedContent, bgmRoulette]);
+  }, [soundEnabled, selectedContent, bgmRoulette, studyBgmMuted]);
 
   /** ルーレット画面中は一定間隔で 8/10/12 を回転表示（「する」を選んだあとだけ） */
   useEffect(() => {
@@ -698,12 +739,14 @@ export default function LearnerMode({
 
   /** 予習：3択で進行。プリント清書なし（アプリのみ） */
   const startPrepSession = (c: UploadedContent) => {
+    ensureAudioUnlocked();
     startContent(c, PREP_BGM_RESULT);
   };
 
   /** しない → 12分・×1.0 で即スタート */
   const startStudyWithoutRoulette = () => {
     if (!pendingStartContent) return;
+    ensureAudioUnlocked();
     startContent(pendingStartContent, DEFAULT_BGM_WITHOUT_ROULETTE);
   };
 
@@ -729,6 +772,7 @@ export default function LearnerMode({
 
   const confirmRouletteStart = () => {
     if (!pendingStartContent || !bgmRoulette) return;
+    ensureAudioUnlocked();
     startContent(pendingStartContent, bgmRoulette);
   };
 
@@ -752,8 +796,9 @@ export default function LearnerMode({
     setSelectedChoice(null);
     setIsCorrect(null);
     setStartTime(getNowMs());
-    setRevealedStepCount(0);
+    setRevealedStepCount(buildQuizHintSteps(q).length > 0 ? 1 : 0);
     setRetryNotice("");
+    setQuizChoiceOrder(shuffledChoiceOrder(q.choices));
   };
 
   const handleAnswer = (choiceIdx: number) => {
@@ -808,6 +853,7 @@ export default function LearnerMode({
       window.setTimeout(() => {
         setSelectedChoice(null);
         setIsCorrect(null);
+        setQuizChoiceOrder(shuffledChoiceOrder(currentQ.choices));
       }, QUIZ_RETRY_RESET_MS);
       setStep("quiz");
       return;
@@ -865,11 +911,14 @@ export default function LearnerMode({
       }
       if (contentAtEnd && !skipBonus) {
         onXPGain(XP_FIRST_CONTENT_CLEAR_BONUS);
+        quest.markContentCleared(contentAtEnd.id, clearedAt);
         void saveProblemContent({
           ...contentAtEnd,
           studyCleared: true,
           studyClearedAt: clearedAt,
         }).then(() => {
+          void quest.refreshContent();
+        }).catch(() => {
           void quest.refreshContent();
         });
       }
@@ -1036,7 +1085,7 @@ export default function LearnerMode({
         </div>
 
         <div
-          className="flex rounded-xl overflow-hidden border-2 w-full max-w-xl"
+          className="grid grid-cols-2 sm:grid-cols-4 rounded-xl overflow-hidden border-2 w-full max-w-4xl"
           style={{ borderColor: "#4A4A6A" }}
           role="tablist"
           aria-label="クエストの表示切替"
@@ -1044,24 +1093,54 @@ export default function LearnerMode({
           <button
             type="button"
             role="tab"
-            aria-selected={questListTab === "challenge"}
-            onClick={() => setQuestListTab("challenge")}
-            className="flex-1 py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
+            aria-selected={questListTab === "challengeKokugo"}
+            onClick={() => setQuestListTab("challengeKokugo")}
+            className="py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
             style={{
-              background: questListTab === "challenge" ? "#1E3A14" : "#1A1A2E",
-              color: questListTab === "challenge" ? "#86EFAC" : "#9CA3AF",
-              borderBottom: questListTab === "challenge" ? "3px solid #22C55E" : "3px solid transparent",
+              background: questListTab === "challengeKokugo" ? "#1E3A14" : "#1A1A2E",
+              color: questListTab === "challengeKokugo" ? "#86EFAC" : "#9CA3AF",
+              borderBottom: questListTab === "challengeKokugo" ? "3px solid #22C55E" : "3px solid transparent",
             }}
           >
-            ⚔️ チャレンジ！
-            <span className="text-xs font-bold opacity-90 ml-1">({challengeList.length})</span>
+            ⚔️ 国語
+            <span className="text-xs font-bold opacity-90 ml-1">({challengeKokugoList.length})</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={questListTab === "challengeSansu"}
+            onClick={() => setQuestListTab("challengeSansu")}
+            className="py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
+            style={{
+              background: questListTab === "challengeSansu" ? "#1E3A14" : "#1A1A2E",
+              color: questListTab === "challengeSansu" ? "#86EFAC" : "#9CA3AF",
+              borderBottom: questListTab === "challengeSansu" ? "3px solid #22C55E" : "3px solid transparent",
+            }}
+          >
+            ⚔️ 算数
+            <span className="text-xs font-bold opacity-90 ml-1">({challengeSansuList.length})</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={questListTab === "challengeOther"}
+            onClick={() => setQuestListTab("challengeOther")}
+            className="py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
+            style={{
+              background: questListTab === "challengeOther" ? "#1E3A14" : "#1A1A2E",
+              color: questListTab === "challengeOther" ? "#86EFAC" : "#9CA3AF",
+              borderBottom: questListTab === "challengeOther" ? "3px solid #22C55E" : "3px solid transparent",
+            }}
+          >
+            ⚔️ その他
+            <span className="text-xs font-bold opacity-90 ml-1">({challengeOtherList.length})</span>
           </button>
           <button
             type="button"
             role="tab"
             aria-selected={questListTab === "cleared"}
             onClick={() => setQuestListTab("cleared")}
-            className="flex-1 py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
+            className="py-2.5 px-2 text-sm sm:text-base font-black transition-colors"
             style={{
               background: questListTab === "cleared" ? "#14532D" : "#1A1A2E",
               color: questListTab === "cleared" ? "#BBF7D0" : "#9CA3AF",
@@ -1118,14 +1197,18 @@ export default function LearnerMode({
             className="text-center py-10 px-4 rounded-xl text-sm sm:text-base leading-relaxed"
             style={{ background: "#1A1A2E", border: "2px dashed #4A4A6A", color: "#9CA3AF" }}
           >
-            {questListTab === "challenge"
-              ? "チャレンジできる教材はまだありません。管理者の「クエスト作成」で追加してね。"
-              : "まだクリアした教材がありません。勉強で最後まで終えるとここに表示されます。"}
+            {questListTab === "cleared"
+              ? "まだクリアした教材がありません。勉強で最後まで終えるとここに表示されます。"
+              : questListTab === "challengeKokugo"
+                ? "チャレンジできる国語教材はまだありません。管理者の「クエスト作成」で追加してね。"
+                : questListTab === "challengeSansu"
+                  ? "チャレンジできる算数教材はまだありません。管理者の「クエスト作成」で追加してね。"
+                  : "チャレンジできるその他教材はまだありません。管理者の「クエスト作成」で追加してね。"}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3">
             {displayedQuests.map((c) => {
-              const sub = getSubject(c.subject);
+              const sub = getSubject(inferQuestCategoryKey(c));
               return (
                 <div
                   key={c.id}
@@ -1241,7 +1324,12 @@ export default function LearnerMode({
   const isMathSubject = selectedContent
     ? getSubject(selectedContent.subject).key === "さんすう"
     : false;
-  const studySteps = currentQ ? collectStudySteps(currentQ) : [];
+  const studySteps = currentQ ? buildQuizHintSteps(currentQ) : [];
+  /** 図式＋テキストヒントがあるときは段階ヒントを優先（それ以外は従来どおり分数 hintSteps / 自動通分など） */
+  let fractionHintPlan = isMathSubject ? buildFractionHintPlan(currentQ) : null;
+  if (currentQ.diagramImageUrl && studySteps.length > 0) {
+    fractionHintPlan = null;
+  }
 
   const isPrepSession = bgmRoulette?.minutes === PREP_SESSION_MINUTES;
   const missPenaltyPointsShown = isPrepSession ? Math.abs(XP_PREP_MISS) : Math.abs(XP_QUIZ_MISS);
@@ -1366,15 +1454,25 @@ export default function LearnerMode({
             <ReadingPassagePanel q={currentQ} speechEnabled={speechEnabled} />
             <QuestionBody q={currentQ} />
           </div>
-          {isMathSubject && (
-            <StudyStepGuide
-              steps={studySteps}
-              revealedCount={revealedStepCount}
-              onRevealNext={() => setRevealedStepCount((n) => Math.min(n + 1, studySteps.length))}
-            />
-          )}
+          {(fractionHintPlan || studySteps.length > 0) &&
+            (fractionHintPlan ? (
+              <FractionHintGuide
+                key={`fraction-hints-${currentQ.id}`}
+                plan={fractionHintPlan}
+                soundEnabled={soundEnabled}
+                onPenalty={() => onXPGain(-1)}
+                onPass={() => onXPGain(FRACTION_HINT_PASS_POINTS)}
+              />
+            ) : (
+              <StudyStepGuide
+                steps={studySteps}
+                revealedCount={revealedStepCount}
+                onRevealNext={() => setRevealedStepCount((n) => Math.min(n + 1, studySteps.length))}
+              />
+            ))}
           <TripleChoiceButtons
             choices={currentQ.choices}
+            choiceOrder={quizChoiceOrder}
             mode="final"
             onPick={handleAnswer}
             finalState={{

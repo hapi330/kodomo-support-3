@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# AirDrop 用（dev:lan / npm run ipad-open-html が Mac の LAN IP で再生成）
+/ipad-open-dev.html
+
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -20,6 +20,11 @@ type QuestListCrudOptions = {
 
 const AI_ENRICH_ACTION_LABEL = "三択・解き方ステップを AI で生成";
 
+/** Safari 15.3 以前に `structuredClone` が無いため JSON で複製（教材 JSON はシリアライズ可能） */
+function cloneUploadedContent(value: UploadedContent): UploadedContent {
+  return JSON.parse(JSON.stringify(value)) as UploadedContent;
+}
+
 /**
  * 学習タブ「まなぶ」クエスト一覧の取得・編集・削除・パスワードゲート
  */
@@ -42,6 +47,16 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
     const data = await fetchProblems();
     setContent(sortUploadedContentForStudyList(data));
     setFetchError("");
+  }, []);
+
+  const markContentCleared = useCallback((contentId: string, clearedAtIso: string) => {
+    setContent((prev) =>
+      sortUploadedContentForStudyList(
+        prev.map((item) =>
+          item.id === contentId ? { ...item, studyCleared: true, studyClearedAt: clearedAtIso } : item
+        )
+      )
+    );
   }, []);
 
   /** 手動リカバリー用（ボタンから） */
@@ -69,7 +84,7 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
 
   const openEdit = useCallback(
     (c: UploadedContent) => {
-      setEditDraft(structuredClone(c));
+      setEditDraft(cloneUploadedContent(c));
       onEnterEditMode();
     },
     [onEnterEditMode]
@@ -120,7 +135,7 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
       alertEnrichFailures(enrichmentFailures);
       const data = await fetchProblems();
       const next = data.find((c) => c.id === editDraft.id);
-      if (next) setEditDraft(structuredClone(next));
+      if (next) setEditDraft(cloneUploadedContent(next));
       await refreshContent();
     } catch (e) {
       alert(
@@ -179,6 +194,7 @@ export function useStudyQuestListCrud(adminPassword: string, options: QuestListC
     isLoading,
     fetchError,
     refreshContent,
+    markContentCleared,
     retryLoad,
     editDraft,
     setEditDraft,

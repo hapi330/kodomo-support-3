@@ -1,4 +1,5 @@
 import type Anthropic from "@anthropic-ai/sdk";
+import { normalizeHintStepsArray } from "@/lib/normalize-hint-steps";
 import type { GeneratedQuestion, UploadedContent } from "@/lib/storage";
 import {
   assistantTextFromMessage,
@@ -138,6 +139,7 @@ ${params.rawText}
       question: q.question,
       answer: q.answer,
       hints: studySteps,
+      hintSteps: q.hintSteps,
       choices,
       correctIndex,
       timesAnswered: 0,
@@ -163,15 +165,32 @@ type ClaudeQuestionPayload = {
   choices?: string[];
   steps?: string[];
   hints?: string[];
+  hintSteps?: {
+    prompt?: string;
+    explanation?: string;
+    choices?: { text?: string; isCorrect?: boolean }[];
+  }[];
 };
 
 type ParsedWrapper = { questions?: ClaudeQuestionPayload[] };
+
+function pickFallbackAnswer(result: string, choices: string[]): string {
+  const byResult = result.trim();
+  if (byResult) return byResult;
+  // 一部のOCR指示書は [Result] を持たないため、先頭選択肢を暫定正解として成立させる
+  return choices[0] ?? "";
+}
 
 function normalizePayload(raw: ClaudeQuestionPayload): {
   question: string;
   answer: string;
   choices: string[];
   studySteps: string[];
+  hintSteps?: {
+    prompt: string;
+    explanation?: string;
+    choices: { text: string; isCorrect: boolean }[];
+  }[];
   questionFurigana?: string;
   answerFurigana?: string;
 } | null {
@@ -194,11 +213,14 @@ function normalizePayload(raw: ClaudeQuestionPayload): {
       ? raw.hints.map((h) => String(h).trim())
       : [];
 
+  const hintSteps = normalizeHintStepsArray(raw.hintSteps);
+
   return {
     question,
     answer,
     choices: choicesIn,
     studySteps: stepsIn,
+    hintSteps,
     questionFurigana: optionalFurigana(raw.questionFurigana),
     answerFurigana: optionalFurigana(raw.answerFurigana),
   };
@@ -206,12 +228,20 @@ function normalizePayload(raw: ClaudeQuestionPayload): {
 
 /** 教材どおりの問題文を残すため、指示行の削除はしない（空白・改行のみ整える） */
 function sanitizeQuestion(q: string): string {
-  return q
+  const cleaned = q
     .trim()
     .split("\n")
+    .filter((line) => {
+      const t = line.trim();
+      if (!t) return false;
+      if (/^##\s*画像.*解析データ/i.test(t)) return false;
+      if (/^\[(Target|Question ID|Hint\s*\d+|Choices|Formula|Result|Note)\]\s*/i.test(t)) return false;
+      return true;
+    })
     .map((l) => l.trimEnd())
     .join("\n")
     .replace(/\n{3,}/g, "\n\n");
+  return cleaned || q.trim();
 }
 
 function parseQuestionsJson(raw: string): ParsedWrapper {
@@ -360,9 +390,100 @@ function buildFallbackQuestions(rawText: string, subject: string, contentId: str
 }
 
 function buildLocalQuestionsFallback(rawText: string, subject: string, contentId: string): GeneratedQuestion[] {
+  const structured = buildStructuredAnalysisFallback(rawText, contentId);
+  if (structured.length > 0) return structured;
+
   const math = buildFallbackQuestions(rawText, subject, contentId);
   if (math.length > 0) return math;
   return buildGenericQuestionsFromText(rawText, contentId);
+}
+
+function buildStructuredAnalysisFallback(rawText: string, contentId: string): GeneratedQuestion[] {
+  const lines = rawText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (!lines.some((line) => /^\[Question ID\]/i.test(line))) return [];
+
+  type ParsedBlock = {
+    questionId?: string;
+    text?: string;
+    result?: string;
+    choices?: string[];
+    hints: string[];
+  };
+  const blocks: ParsedBlock[] = [];
+  let current: ParsedBlock | null = null;
+
+  for (const line of lines) {
+    const id = line.match(/^\[Question ID\]\s*(.+)$/i);
+    if (id) {
+      if (current) blocks.push(current);
+      current = { questionId: id[1].trim(), hints: [] };
+      continue;
+    }
+    if (!current) continue;
+
+    const text = line.match(/^\[Text\]\s*(.+)$/i);
+    if (text) {
+      current.text = text[1].trim();
+      continue;
+    }
+    const result = line.match(/^\[Result\]\s*(.+)$/i);
+    if (result) {
+      current.result = result[1].trim();
+      continue;
+    }
+    const choices = line.match(/^\[Choices\]\s*(.+)$/i);
+    if (choices) {
+      current.choices = choices[1]
+        .split(/[、,]/)
+        .map((x) => x.trim())
+        .filter(Boolean);
+      continue;
+    }
+    const hint = line.match(/^\[Hint\s*\d+\]\s*(.+)$/i);
+    if (hint) {
+      current.hints.push(hint[1].trim());
+    }
+  }
+  if (current) blocks.push(current);
+
+  const out: GeneratedQuestion[] = [];
+  for (const b of blocks) {
+    const rawChoices = Array.isArray(b.choices) ? b.choices : [];
+    const dedup = Array.from(new Set(rawChoices.filter(Boolean)));
+    const answer = pickFallbackAnswer(String(b.result ?? ""), dedup);
+    const question = sanitizeQuestion(
+      [b.questionId ? `問題 ${b.questionId}` : "", b.text ?? ""].filter(Boolean).join("\n")
+    );
+    if (!question || !answer) continue;
+
+    const choices = dedup.includes(answer) ? dedup : [answer, ...dedup];
+    while (choices.length < 3) {
+      choices.push(`候補${choices.length + 1}`);
+    }
+    const three = choices.slice(0, 3);
+    const correctIndex = three.findIndex((c) => c === answer);
+    if (correctIndex < 0) {
+      three[0] = answer;
+    }
+    out.push({
+      id: `q-${contentId}-${out.length + 1}`,
+      question,
+      answer,
+      hints:
+        b.hints.length > 0
+          ? b.hints.slice(0, 3)
+          : ["問題文の条件を整理しよう", "単位をそろえて計算しよう", "結果を比べて判断しよう"],
+      choices: three,
+      correctIndex: Math.max(0, three.findIndex((c) => c === answer)),
+      timesAnswered: 0,
+      timesCorrect: 0,
+    });
+    if (out.length >= MAX_QUESTIONS) break;
+  }
+  return out;
 }
 
 function buildGenericQuestionsFromText(rawText: string, contentId: string): GeneratedQuestion[] {

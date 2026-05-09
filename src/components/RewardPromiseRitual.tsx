@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { playClick, playCorrect, playPingPong, speak } from "@/lib/sounds";
 import { mcField } from "@/lib/mc-styles";
 import { TARGET_REWARD_MILESTONE_XP } from "@/lib/xp-economy";
@@ -31,15 +31,6 @@ export default function RewardPromiseRitual({
   const [draft, setDraft] = useState(initialText);
   const [parentCommitted, setParentCommitted] = useState(false);
   const [childCommitted, setChildCommitted] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setStep("intro");
-      setDraft(initialText);
-      setParentCommitted(false);
-      setChildCommitted(false);
-    }
-  }, [open, initialText]);
 
   if (!open) return null;
 

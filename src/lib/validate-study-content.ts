@@ -1,5 +1,6 @@
 import { resolveAnswerInChoices } from "@/lib/question-claude-helpers";
 import { getSubject } from "@/lib/config";
+import { buildQuizHintSteps } from "@/lib/expand-study-hint-steps";
 import {
   formatQuestionBlockTitle,
   normalizeQuestion,
@@ -49,8 +50,46 @@ function validateQuestion(q: GeneratedQuestion, index: number, draft: UploadedCo
   }
   const isMath = getSubject(draft.subject).key === "さんすう";
   const stepCount = (nq.hints ?? []).map((h) => String(h).trim()).filter(Boolean).length;
-  if (isMath && stepCount === 0) {
+  const richStepCount = Array.isArray(nq.hintSteps) ? nq.hintSteps.length : 0;
+  const diagramUrl = String(nq.diagramImageUrl ?? "").trim();
+  if (isMath && diagramUrl.length > 0) {
+    const quizHintSteps = buildQuizHintSteps(nq).length;
+    if (quizHintSteps > 0 && quizHintSteps < 3) {
+      push(
+        issues,
+        "warning",
+        index,
+        `「${label}」: 図式問題のヒントが ${quizHintSteps} 段階です。発達支援のため、ヒント欄を3つ埋めるか、「1. … 2. … 3. …」の形で段階を分けるとよいです。`
+      );
+    }
+  }
+  if (isMath && stepCount === 0 && richStepCount === 0) {
     push(issues, "warning", index, `「${label}」: 算数は解き方ステップが未設定です。`);
+  }
+  if (Array.isArray(nq.hintSteps)) {
+    nq.hintSteps.forEach((step, si) => {
+      if (!step.prompt?.trim() && !step.explanation?.trim()) {
+        push(
+          issues,
+          "error",
+          index,
+          `「${label}」: ヒントステップ${si + 1}の問い（prompt）か説明（explanation）のどちらかが必要です。`
+        );
+      }
+      if (!Array.isArray(step.choices) || step.choices.length !== 3) {
+        push(issues, "error", index, `「${label}」: ヒントステップ${si + 1}は3択（3件）が必要です。`);
+        return;
+      }
+      const correctCount = step.choices.filter((c) => c.isCorrect).length;
+      if (correctCount !== 1) {
+        push(
+          issues,
+          "error",
+          index,
+          `「${label}」: ヒントステップ${si + 1}は正解フラグ isCorrect=true を1つだけ設定してください。`
+        );
+      }
+    });
   }
 
   const choices = padChoices(nq.choices ?? []);

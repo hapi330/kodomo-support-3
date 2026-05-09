@@ -59,6 +59,7 @@ export async function writeProblemsJson(items: UploadedContent[]): Promise<void>
     await put(PROBLEMS_BLOB_PATHNAME, JSON.stringify(items, null, 2), {
       access: "public",
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: "application/json; charset=utf-8",
       token: BLOB_TOKEN,
     });

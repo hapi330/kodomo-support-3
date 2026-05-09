@@ -110,6 +110,15 @@ export interface GeneratedQuestion {
   answerFurigana?: string;
   /** 3段階ヒント（やさしい順） */
   hints: string[];
+  /** 分数などの段階ヒント（表示順）。各ステップに3択を持てる。 */
+  hintSteps?: {
+    prompt: string;
+    explanation?: string;
+    choices: {
+      text: string;
+      isCorrect: boolean;
+    }[];
+  }[];
   /** 3択の選択肢 */
   choices: string[];
   /** 正解インデックス (0/1/2) */

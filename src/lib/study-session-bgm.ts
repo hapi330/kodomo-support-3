@@ -120,15 +120,31 @@ export type StudySessionBgmOptions = {
   cycleMinutes?: BgmCycleMinutes;
   /** サイクル終端のたび（2 回目以降のサイクル境界）。爆発音・画面演出はここで行う */
   onCycleEndPulse?: () => void;
+  /** 開始時のミュート状態を明示（UI状態とのズレ防止） */
+  muted?: boolean;
 };
 
-let timeoutId: number | null = null;
-let stopped = true;
-let tickIndex = 0;
-let sessionStartedAt = 0;
-let lastCycleIndex = -1;
-let optsRef: StudySessionBgmOptions = {};
-let cycleMsRef = 12 * MINUTE_MS;
+type BgmRuntimeState = {
+  timeoutId: number | null;
+  stopped: boolean;
+  tickIndex: number;
+  sessionStartedAt: number;
+  lastCycleIndex: number;
+  opts: StudySessionBgmOptions;
+  cycleMs: number;
+  lastResumeAttemptAt: number;
+};
+
+const bgmState: BgmRuntimeState = {
+  timeoutId: null,
+  stopped: true,
+  tickIndex: 0,
+  sessionStartedAt: 0,
+  lastCycleIndex: -1,
+  opts: {},
+  cycleMs: 12 * MINUTE_MS,
+  lastResumeAttemptAt: 0,
+};
 /** 勉強中の UI から切り替え（ノートは鳴らさない） */
 let bgmMuted = false;
 
@@ -164,71 +180,92 @@ function playChipNote(
   }
 }
 
-function scheduleTick(): void {
-  if (stopped) return;
-
-  const elapsed = Date.now() - sessionStartedAt;
-  const cycleIndex = Math.floor(elapsed / cycleMsRef);
-
-  if (cycleIndex > lastCycleIndex) {
-    if (cycleIndex >= 1) {
-      optsRef.onCycleEndPulse?.();
+function requestAudioContextResume(force = false): void {
+  const now = Date.now();
+  // Safari で resume が不安定なことがあるため、一定間隔で再試行する
+  if (!force && now - bgmState.lastResumeAttemptAt < 1200) return;
+  bgmState.lastResumeAttemptAt = now;
+  try {
+    const ctx = getAudioContext();
+    if (ctx.state !== "running") {
+      void ctx.resume();
     }
-    tickIndex = 0;
-    lastCycleIndex = cycleIndex;
+  } catch {
+    /* ignore */
+  }
+}
+
+function scheduleTick(): void {
+  if (bgmState.stopped) return;
+
+  const elapsed = Date.now() - bgmState.sessionStartedAt;
+  const cycleIndex = Math.floor(elapsed / bgmState.cycleMs);
+
+  if (cycleIndex > bgmState.lastCycleIndex) {
+    if (cycleIndex >= 1) {
+      bgmState.opts.onCycleEndPulse?.();
+    }
+    bgmState.tickIndex = 0;
+    bgmState.lastCycleIndex = cycleIndex;
   }
 
-  const tInCycle = elapsed % cycleMsRef;
-  const section = sectionAt(tInCycle, cycleMsRef);
+  const tInCycle = elapsed % bgmState.cycleMs;
+  const section = sectionAt(tInCycle, bgmState.cycleMs);
   const p = paramsForSection(section);
 
   const tickMs = p.tickMs;
-  const mi = tickIndex % MELODY.length;
-  const bi = tickIndex % BASS.length;
+  const mi = bgmState.tickIndex % MELODY.length;
+  const bi = bgmState.tickIndex % BASS.length;
   const melFreq = MELODY[mi] * p.pitchScale;
   const bassFreq = BASS[bi] * p.pitchScale;
 
   if (!bgmMuted) {
+    requestAudioContextResume(false);
     if (melFreq > 0) {
       playChipNote(melFreq, p.noteDur, p.vol, p.melType);
     }
-    if (bassFreq > 0 && tickIndex % p.bassModulo === 0) {
+    if (bassFreq > 0 && bgmState.tickIndex % p.bassModulo === 0) {
       playChipNote(bassFreq, p.bassDur, p.bassVol, p.bassType);
     }
   }
 
-  tickIndex += 1;
-  timeoutId = window.setTimeout(scheduleTick, tickMs) as number;
+  bgmState.tickIndex += 1;
+  bgmState.timeoutId = window.setTimeout(scheduleTick, tickMs) as number;
+}
+
+function resetRuntimeState(options?: StudySessionBgmOptions): void {
+  bgmState.opts = options ?? {};
+  bgmState.cycleMs = (bgmState.opts.cycleMinutes ?? 12) * MINUTE_MS;
+  bgmState.stopped = false;
+  bgmState.tickIndex = 0;
+  bgmState.lastCycleIndex = -1;
+  bgmState.sessionStartedAt = Date.now();
+  bgmState.lastResumeAttemptAt = 0;
 }
 
 export function startStudySessionBgm(options?: StudySessionBgmOptions): void {
-  const keepMuted = bgmMuted;
+  const startMuted = options?.muted;
   stopStudySessionBgm();
-  bgmMuted = keepMuted;
-  optsRef = options ?? {};
-  cycleMsRef = (optsRef.cycleMinutes ?? 12) * MINUTE_MS;
-  stopped = false;
-  tickIndex = 0;
-  lastCycleIndex = -1;
-  sessionStartedAt = Date.now();
+  if (typeof startMuted === "boolean") {
+    bgmMuted = startMuted;
+  }
+  resetRuntimeState(options);
 
   try {
-    const ctx = getAudioContext();
-    void ctx.resume();
+    requestAudioContextResume(true);
   } catch {
     /* ignore */
   }
 
-  timeoutId = window.setTimeout(scheduleTick, 80) as number;
+  bgmState.timeoutId = window.setTimeout(scheduleTick, 80) as number;
 }
 
 export function stopStudySessionBgm(): void {
-  stopped = true;
-  optsRef = {};
-  lastCycleIndex = -1;
-  bgmMuted = false;
-  if (timeoutId !== null) {
-    clearTimeout(timeoutId);
-    timeoutId = null;
+  bgmState.stopped = true;
+  bgmState.opts = {};
+  bgmState.lastCycleIndex = -1;
+  if (bgmState.timeoutId !== null) {
+    clearTimeout(bgmState.timeoutId);
+    bgmState.timeoutId = null;
   }
 }
